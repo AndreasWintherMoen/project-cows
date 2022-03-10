@@ -1,0 +1,266 @@
+[
+  [
+    {
+      "id": 0,
+      "type": "stone",
+      "position": {
+        "x": 14,
+        "y": 9
+      }
+    },
+    {
+      "id": 1,
+      "type": "wood",
+      "position": {
+        "x": 12,
+        "y": 7
+      }
+    }
+  ],
+  [
+    {
+      "id": 2,
+      "type": "footman"
+    },
+    {
+      "id": 3,
+      "type": "footman"
+    },
+    {
+      "id": 4,
+      "type": "runner"
+    }
+  ],
+  [
+    [
+      {
+        "subject": 2,
+        "verb": "spawn",
+        "object": {
+          "x": 16,
+          "y": 10
+        }
+      },
+      {
+        "subject": 2,
+        "verb": "move",
+        "object": {
+          "x": 15,
+          "y": 10
+        }
+      }
+    ],
+    [],
+    [],
+    [],
+    [
+      {
+        "subject": 2,
+        "verb": "move",
+        "object": {
+          "x": 14,
+          "y": 10
+        }
+      }
+    ],
+    [],
+    [
+      {
+        "subject": 3,
+        "verb": "spawn",
+        "object": {
+          "x": 16,
+          "y": 10
+        }
+      },
+      {
+        "subject": 3,
+        "verb": "move",
+        "object": {
+          "x": 15,
+          "y": 10
+        }
+      }
+    ],
+    [],
+    [
+      {
+        "subject": 2,
+        "verb": "move",
+        "object": {
+          "x": 13,
+          "y": 10
+        }
+      }
+    ],
+    [],
+    [
+      {
+        "subject": 3,
+        "verb": "move",
+        "object": {
+          "x": 14,
+          "y": 10
+        }
+      },
+      {
+        "subject": 0,
+        "verb": "target",
+        "object": 2
+      },
+      {
+        "subject": 0,
+        "verb": "attack",
+        "object": null
+      }
+    ],
+    [],
+    [
+      {
+        "subject": 2,
+        "verb": "move",
+        "object": {
+          "x": 13,
+          "y": 11
+        }
+      },
+      {
+        "subject": 0,
+        "verb": "attack",
+        "object": null
+      },
+      {
+        "subject": 4,
+        "verb": "spawn",
+        "object": {
+          "x": 16,
+          "y": 10
+        }
+      },
+      {
+        "subject": 4,
+        "verb": "move",
+        "object": {
+          "x": 15,
+          "y": 10
+        }
+      }
+    ],
+    [],
+    [
+      {
+        "subject": 3,
+        "verb": "move",
+        "object": {
+          "x": 13,
+          "y": 10
+        }
+      },
+      {
+        "subject": 0,
+        "verb": "attack",
+        "object": null
+      },
+      {
+        "subject": 2,
+        "verb": "die",
+        "object": null
+      }
+    ],
+    [
+      {
+        "subject": 4,
+        "verb": "move",
+        "object": {
+          "x": 14,
+          "y": 10
+        }
+      },
+      {
+        "subject": 0,
+        "verb": "target",
+        "object": 3
+      }
+    ],
+    [
+      {
+        "subject": 0,
+        "verb": "attack",
+        "object": null
+      }
+    ],
+    [],
+    [
+      {
+        "subject": 4,
+        "verb": "move",
+        "object": {
+          "x": 13,
+          "y": 10
+        }
+      },
+      {
+        "subject": 0,
+        "verb": "attack",
+        "object": null
+      }
+    ],
+    [],
+    [
+      {
+        "subject": 0,
+        "verb": "attack",
+        "object": null
+      },
+      {
+        "subject": 3,
+        "verb": "die",
+        "object": null
+      }
+    ],
+    [
+      {
+        "subject": 0,
+        "verb": "target",
+        "object": 4
+      },
+      {
+        "subject": 4,
+        "verb": "move",
+        "object": {
+          "x": 13,
+          "y": 11
+        }
+      }
+    ],
+    [],
+    [
+      {
+        "subject": 0,
+        "verb": "attack",
+        "object": null
+      }
+    ],
+    [],
+    [
+      {
+        "subject": 4,
+        "verb": "move",
+        "object": {
+          "x": 13,
+          "y": 12
+        }
+      },
+      {
+        "subject": 0,
+        "verb": "attack",
+        "object": null
+      },
+      {
+        "subject": 4,
+        "verb": "die",
+        "object": null
+      }
+    ]
+  ]
+]
