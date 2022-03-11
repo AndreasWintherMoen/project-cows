@@ -6,22 +6,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.ScreenUtils
 
 class Application : ApplicationAdapter() {
-    var batch: SpriteBatch? = null
-    var img: Texture? = null
+    companion object {
+        const val WIDTH = 1024
+        const val HEIGHT = 1024
+    }
     override fun create() {
-        batch = SpriteBatch()
-        img = Texture("badlogic.jpg")
     }
 
     override fun render() {
-        ScreenUtils.clear(1f, 0f, 0f, 1f)
-        batch!!.begin()
-        batch!!.draw(img, 0f, 0f)
-        batch!!.end()
+        Renderer.instance.render()
     }
 
     override fun dispose() {
-        batch!!.dispose()
-        img!!.dispose()
+        Renderer.instance.dispose()
     }
 }
