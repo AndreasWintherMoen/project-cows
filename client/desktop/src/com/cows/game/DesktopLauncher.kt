@@ -9,6 +9,7 @@ object DesktopLauncher {
     @JvmStatic
     fun main(arg: Array<String>) {
         val config = Lwjgl3ApplicationConfiguration()
+        config.setWindowSizeLimits(Application.WIDTH.toInt(), Application.HEIGHT.toInt(), Application.WIDTH.toInt(), Application.HEIGHT.toInt())
         config.setForegroundFPS(60)
         Lwjgl3Application(Application(), config)
     }
