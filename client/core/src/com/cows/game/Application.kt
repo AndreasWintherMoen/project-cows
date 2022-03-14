@@ -13,12 +13,13 @@ class Application : ApplicationAdapter() {
     }
 
     private lateinit var map: Map
+    private lateinit var gameLoopSimulator: GameLoopSimulator
 
     override fun create() {
         map = Map()
         val parsedFile = readRoundSimFileAsString("roundSimulation.json")
         val roundSimulation = RoundSimulationDeserializer.deserialize(parsedFile)
-        println("deserialized result: $roundSimulation")
+        gameLoopSimulator = GameLoopSimulator(roundSimulation)
     }
 
     override fun render() {

@@ -1,4 +1,7 @@
 package com.cows.game.views
 
-abstract class UnitView {
+import com.cows.game.models.Unit
+
+class UnitView (val model: Unit) {
+    // TODO: Implement this like the TowerView
 }

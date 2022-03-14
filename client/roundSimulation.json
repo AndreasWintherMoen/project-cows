@@ -4,8 +4,8 @@
       "id": 0,
       "type": "stone",
       "position": {
-        "x": 14,
-        "y": 9
+        "x": 7,
+        "y": 4
       }
     },
     {
@@ -13,7 +13,7 @@
       "type": "wood",
       "position": {
         "x": 12,
-        "y": 7
+        "y": 3
       }
     }
   ],
@@ -37,18 +37,12 @@
         {
           "subject": 2,
           "verb": "spawn",
-          "obj": {
-            "x": 16,
-            "y": 10
-          }
+          "obj": 0
         },
         {
           "subject": 2,
           "verb": "move",
-          "obj": {
-            "x": 15,
-            "y": 10
-          }
+          "obj": 1
         }
       ]
     }

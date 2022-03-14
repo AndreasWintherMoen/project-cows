@@ -14,5 +14,6 @@ enum class ActionTypes {
 data class Action (
     val subject: Int,
     val verb: String,
-    val obj: Coordinate
+    val obj: Int?
  )
+
