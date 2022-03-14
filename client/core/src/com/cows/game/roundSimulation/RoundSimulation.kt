@@ -2,8 +2,8 @@ package com.cows.game.roundSimulation
 
 import com.cows.game.models.Tower
 
-class RoundSimulation {
-    private lateinit var towerList: List<Tower>
-    private lateinit var unitList: List<Unit>
-    private lateinit var eventLog: EventLog
-}
+data class RoundSimulation(
+    val towerList: List<Tower>?,
+    val unitList: List<Unit>?,
+    val eventLog: List<Action>?
+)

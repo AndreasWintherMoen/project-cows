@@ -1,4 +1,6 @@
 package com.cows.game.models
 
-abstract class Unit {
-}
+data class Unit (
+    val id: Int,
+    val type: String
+)

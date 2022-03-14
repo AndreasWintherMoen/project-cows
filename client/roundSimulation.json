@@ -1,0 +1,56 @@
+{
+  "towerList": [
+    {
+      "id": 0,
+      "type": "stone",
+      "position": {
+        "x": 14,
+        "y": 9
+      }
+    },
+    {
+      "id": 1,
+      "type": "wood",
+      "position": {
+        "x": 12,
+        "y": 7
+      }
+    }
+  ],
+  "unitList": [
+    {
+      "id": 2,
+      "type": "footman"
+    },
+    {
+      "id": 3,
+      "type": "footman"
+    },
+    {
+      "id": 4,
+      "type": "runner"
+    }
+  ],
+  "eventLog": [
+    {
+      "actions": [
+        {
+          "subject": 2,
+          "verb": "spawn",
+          "obj": {
+            "x": 16,
+            "y": 10
+          }
+        },
+        {
+          "subject": 2,
+          "verb": "move",
+          "obj": {
+            "x": 15,
+            "y": 10
+          }
+        }
+      ]
+    }
+  ]
+}
