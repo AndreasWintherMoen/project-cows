@@ -5,7 +5,7 @@ import com.google.gson.Gson
 class RoundSimulationDeserializer {
     companion object {
         fun deserialize(rawJsonRoundSimulation: String): RoundSimulation {
-            println("deserializing round sim from json. Input: $rawJsonRoundSimulation")
+//            println("deserializing round sim from json. Input: $rawJsonRoundSimulation")
             val gson = Gson()
             return gson.fromJson(rawJsonRoundSimulation, RoundSimulation::class.java)
         };

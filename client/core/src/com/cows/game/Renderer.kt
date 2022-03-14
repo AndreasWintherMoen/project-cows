@@ -19,8 +19,7 @@ class Renderer {
         cam.setToOrtho(false, Application.WIDTH, Application.HEIGHT)
     }
 
-    fun render() {
-        val deltaTime = Gdx.graphics.deltaTime
+    fun render(deltaTime: Float) {
         ScreenUtils.clear(0f, 0f, 0f, 1f)
         batch.projectionMatrix = cam.combined
         batch.begin()

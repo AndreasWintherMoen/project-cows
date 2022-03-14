@@ -3,7 +3,6 @@ package com.cows.game.roundSimulation
 import com.cows.game.controllers.TowerController
 import com.cows.game.controllers.UnitController
 import java.util.*
-import kotlin.collections.ArrayList
 
 class GameLoopSimulator (private val roundSimulation: RoundSimulation) {
     private val TIME_BETWEEN_TICKS = 0.25f
@@ -23,21 +22,22 @@ class GameLoopSimulator (private val roundSimulation: RoundSimulation) {
         if (timer >= TIME_BETWEEN_TICKS) {
             timer -= TIME_BETWEEN_TICKS
             // process next tick
+            if (eventLog.size == 0) {
+                println("empty event log")
+                return
+            }
             val tick = eventLog.remove()
             processTick(tick)
         }
     }
 
-    fun processTick(tick: Tick) = tick.actions.forEach { processAction(it) }
+    fun processTick(tick: Tick) {
+        if (tick.actions.size == 0) return
+        tick.actions.forEach { processAction(it) }
+    }
 
     fun processAction(action: Action) {
         println("Processing action $action")
-//        if (action.)
-////        action.subject
-////        val tower = towerList[action.subject]
-//        when (action.verb) {
-//            ActionTypes. -> tower.move
-//        }
     }
 
 }

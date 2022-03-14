@@ -1,6 +1,7 @@
 package com.cows.game
 
 import com.badlogic.gdx.ApplicationAdapter
+import com.badlogic.gdx.Gdx
 import com.cows.game.models.Tile
 import com.cows.game.roundSimulation.GameLoopSimulator
 import com.cows.game.roundSimulation.RoundSimulationDeserializer
@@ -24,7 +25,9 @@ class Application : ApplicationAdapter() {
     }
 
     override fun render() {
-        Renderer.instance.render()
+        val deltaTime = Gdx.graphics.deltaTime
+        gameLoopSimulator.update(deltaTime)
+        Renderer.instance.render(deltaTime)
     }
 
     override fun dispose() {
