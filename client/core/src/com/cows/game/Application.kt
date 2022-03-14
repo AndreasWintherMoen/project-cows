@@ -2,6 +2,7 @@ package com.cows.game
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.cows.game.models.Tile
+import com.cows.game.roundSimulation.GameLoopSimulator
 import com.cows.game.roundSimulation.RoundSimulationDeserializer
 import java.io.File
 

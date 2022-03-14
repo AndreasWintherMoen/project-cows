@@ -45,6 +45,16 @@
           "obj": 1
         }
       ]
+    },
+    {},
+    {
+      "actions": [
+        {
+          "subject": 2,
+          "verb": "move",
+          "obj": 2
+        }
+      ]
     }
   ]
 }
