@@ -10,7 +10,7 @@ import com.cows.game.roundSimulation.rawJsonData.JsonTick
 import java.util.*
 import kotlin.collections.ArrayList
 
-class GameLoopSimulator (private val roundSimulation: JsonRoundSimulation) {
+class GameTickProcessor (private val roundSimulation: JsonRoundSimulation) {
     private var tickTimer = 0f
     private val towerList = hashMapOf<Int, TowerController>()
     private val unitList = hashMapOf<Int, UnitController>()

@@ -7,7 +7,7 @@ object Updater {
     private val updatable: MutableList<Updatable> = mutableListOf<Updatable>()
 
 
-    fun render(deltaTime: Float) {
+    fun update(deltaTime: Float) {
         updatable.forEach { it.update(deltaTime)}
     }
 

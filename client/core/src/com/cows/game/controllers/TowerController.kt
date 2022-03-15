@@ -6,10 +6,10 @@ import com.cows.game.views.TowerView
 
 class TowerController(val model: TowerModel): Updatable() {
     override fun update(deltaTime: Float) {
-        TODO("Not yet implemented")
+       // TODO("Not yet implemented")
     }
 
-    override val renderableView = TowerView(model)
+    val renderableView = TowerView(model)
 
     fun target(unit: UnitController) {
         // TODO: Implement this
