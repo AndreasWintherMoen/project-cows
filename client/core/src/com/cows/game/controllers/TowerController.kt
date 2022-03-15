@@ -9,7 +9,7 @@ class TowerController(val model: TowerModel): Updatable() {
        // TODO("Not yet implemented")
     }
 
-    override val renderableView = TowerView(model)
+    val renderableView = TowerView(model)
 
     fun target(unit: UnitController) {
         // TODO: Implement this

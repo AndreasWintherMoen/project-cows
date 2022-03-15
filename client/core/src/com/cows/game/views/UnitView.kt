@@ -11,17 +11,25 @@ import com.cows.game.models.UnitModel
 
 class UnitView (val model: UnitModel): Renderable() {
     companion object {
-        fun unitTypeToSprite(unitType: UnitType): Sprite =
+        fun unitTypeToFolder(unitType: UnitType): String =
             when(unitType) {
-                UnitType.INDIAN_UNIT -> Sprite(Texture("IndianUnit.png"))
-                UnitType.SWORDMAN -> Sprite(Texture("IndianUnit.png"))
-                UnitType.RUNNER -> Sprite(Texture("tower.png"))
-                UnitType.TANK -> Sprite(Texture("IndianUnit.png"))
+                UnitType.INDIAN_UNIT -> "IndianUnit"
+                UnitType.SWORDMAN -> "IndianUnit"
+                UnitType.RUNNER -> "Runner"
+                UnitType.TANK -> "IndianUnit"
                 else -> throw Error("Could not find unit type $unitType")
             }
+        fun directionToFileName(direction: Coordinate): String {
+            if (direction.x < 0) return "Left"
+            if (direction.x > 0) return "Right"
+            if (direction.y < 0) return "Down"
+            if (direction.y > 0) return "Up"
+            throw Error("Could not find direction $direction")
+        }
+        fun modelToSprite(model: UnitModel): Sprite = Sprite(Texture("Units/${unitTypeToFolder(model.type)}/${directionToFileName(model.currentDirection)}.png"))
     }
 
-    private val sprite = unitTypeToSprite(model.type)
+    private var sprite = modelToSprite(model)
 
     override fun render(batch: SpriteBatch, deltaTime: Float) {
         sprite.setPosition(model.position.x, model.position.y)
@@ -30,5 +38,9 @@ class UnitView (val model: UnitModel): Renderable() {
 
     override fun dispose() {
       sprite.texture.dispose()
+    }
+
+    fun updateSprite() {
+        sprite = modelToSprite(model)
     }
 }

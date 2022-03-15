@@ -9,7 +9,6 @@ import com.cows.game.views.UnitView
 class UnitController(private val model: UnitModel): Updatable() {
     private lateinit var view: UnitView
     private var target = Vector2();
-    override val renderableView = UnitView(model)
     var currentPathIndex = 0;
     var hasSpawned = false
 
@@ -39,7 +38,7 @@ class UnitController(private val model: UnitModel): Updatable() {
     private fun setNewTarget(){
         if (hasSpawned) model.position = target //ensure no overshooting
 
-        if (currentPathIndex >= Map.PATH.size) {
+        if (currentPathIndex + 1 >= Map.PATH.size) {
             win() // this logic wont be here, should be called from event log
             return
         }
@@ -49,6 +48,9 @@ class UnitController(private val model: UnitModel): Updatable() {
         val newTarget = Map.PATH[currentPathIndex]
 
         model.currentDirection = newTarget - currentTarget
+
+        if (hasSpawned) view.updateSprite()
+
         target = newTarget.toVector2()
     }
 
@@ -65,8 +67,10 @@ class UnitController(private val model: UnitModel): Updatable() {
     }
 
     fun spawn(tile: TileController) {
+        println("Spawning unit $model")
         model.position = tile.tileModel.coordinate.toVector2()
         setNewTarget()
+        println(model.currentDirection)
         view = UnitView(model)
         hasSpawned = true
     }
