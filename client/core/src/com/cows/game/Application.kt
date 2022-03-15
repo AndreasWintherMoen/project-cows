@@ -17,7 +17,6 @@ class Application : ApplicationAdapter() {
     private lateinit var gameLoopSimulator: GameLoopSimulator
 
     override fun create() {
-        Map.instance.init()
         val parsedFile = File("roundSimulation.json").readText()
         val roundSimulation = RoundSimulationDeserializer.deserialize(parsedFile)
         println("parsed JSON simulation object: $roundSimulation")
@@ -27,10 +26,10 @@ class Application : ApplicationAdapter() {
     override fun render() {
         val deltaTime = Gdx.graphics.deltaTime
         gameLoopSimulator.update(deltaTime)
-        Renderer.instance.render(deltaTime)
+        Renderer.render(deltaTime)
     }
 
     override fun dispose() {
-        Renderer.instance.dispose()
+        Renderer.dispose()
     }
 }

@@ -6,10 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.ScreenUtils
 import com.cows.game.views.Renderable
 
-class Renderer {
-    companion object {
-        val instance = Renderer()
-    }
+object Renderer {
 
     private val batch = SpriteBatch()
     private val renderables = mutableListOf<Renderable>()

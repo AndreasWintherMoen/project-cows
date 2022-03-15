@@ -8,6 +8,6 @@ abstract class Renderable {
     abstract fun dispose()
 
     init {
-        Renderer.instance.addRenderable(this)
+        Renderer.addRenderable(this)
     }
 }

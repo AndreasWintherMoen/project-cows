@@ -45,10 +45,10 @@ class GameLoopSimulator (private val roundSimulation: JsonRoundSimulation) {
             when (jsonAction.verb) {
                 ActionType.TARGET -> TargetAction(towerList[jsonAction.subject]!!, unitList[jsonAction.obj]!!)
                 ActionType.ATTACK -> AttackAction(towerList[jsonAction.subject]!!)
-                ActionType.MOVE -> MoveAction(unitList[jsonAction.subject]!!, Map.instance.getTileAtPathIndex(jsonAction.obj!!))
+                ActionType.MOVE -> MoveAction(unitList[jsonAction.subject]!!, Map.getTileAtPathIndex(jsonAction.obj!!))
                 ActionType.DIE -> DieAction(unitList[jsonAction.subject]!!)
                 ActionType.WIN -> WinAction(unitList[jsonAction.subject]!!)
-                ActionType.SPAWN -> SpawnAction(unitList[jsonAction.subject]!!, Map.instance.getTileAtPathIndex(jsonAction.obj!!))
+                ActionType.SPAWN -> SpawnAction(unitList[jsonAction.subject]!!, Map.getTileAtPathIndex(jsonAction.obj!!))
                 else -> throw Error("Could not find action type ${jsonAction.verb} on jsonAction $jsonAction")
             }
         } catch (e: Error) {

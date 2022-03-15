@@ -3,12 +3,10 @@ package com.cows.game
 import com.cows.game.controllers.TileController
 import com.cows.game.enums.TileType
 
-class Map {
-    companion object {
-        const val WIDTH = 16
-        const val HEIGHT = 8
-        val instance = Map()
-    }
+object Map {
+
+    const val WIDTH = 16
+    const val HEIGHT = 8
 
     //temporary
     // TODO: Implement a map parser and load path from file
