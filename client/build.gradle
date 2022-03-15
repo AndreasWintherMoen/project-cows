@@ -93,5 +93,7 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
         implementation 'com.google.code.gson:gson:2.9.0'
+        implementation("io.ktor:ktor-client-core:1.6.8")
+        implementation("io.ktor:ktor-client-cio:1.6.8")
     }
 }

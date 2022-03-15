@@ -6,16 +6,21 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
+import java.io.File
 
 fun Application.configureSerialization() {
     install(ContentNegotiation) {
         gson {
+            setPrettyPrinting()
+            disableHtmlEscaping()
         }
     }
 
     routing {
         get("/json/gson") {
-            call.respond(mapOf("hello" to "world"))
+
+            val responseString = File("RoundSimulation.json").bufferedReader().readLines()
+            call.respond(responseString)
         }
     }
 }
