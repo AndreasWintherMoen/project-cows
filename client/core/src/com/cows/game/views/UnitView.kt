@@ -16,7 +16,7 @@ class UnitView (val model: UnitModel): Renderable() {
                 UnitType.SWORDMAN -> Sprite(Texture("IndianUnit.png"))
                 UnitType.RUNNER -> Sprite(Texture("tower.png"))
                 UnitType.TANK -> Sprite(Texture("IndianUnit.png"))
-                else -> throw Error("Could not find tile type $unitType")
+                else -> throw Error("Could not find unit type $unitType")
             }
     }
 
