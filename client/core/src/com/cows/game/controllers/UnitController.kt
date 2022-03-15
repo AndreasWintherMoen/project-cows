@@ -1,22 +1,26 @@
 package com.cows.game.controllers
 
+import com.badlogic.gdx.math.Vector2
 import com.cows.game.models.UnitModel
 import com.cows.game.views.TowerView
 import com.cows.game.views.UnitView
 
+
 class UnitController(private val model: UnitModel): Updatable() {
+    private val view = UnitView(model)
+    private var target = Vector2();
+    override val renderableView = UnitView(model)
+
     override fun update(deltaTime: Float) {
         TODO("Not yet implemented")
     }
 
-    override val renderableView = UnitView(model)
-
     fun move(tile: TileController) {
-        // TODO: Implement this
+        target = tile.tileModel.coordinate.toVector2()
     }
 
     fun die() {
-        // TODO: Implement this
+        model.isDead = true;
     }
 
     fun win() {
@@ -24,6 +28,7 @@ class UnitController(private val model: UnitModel): Updatable() {
     }
 
     fun spawn(tile: TileController) {
-        // TODO: Implement this
+        model.position = tile.tileModel.coordinate.toVector2()
     }
+
 }
