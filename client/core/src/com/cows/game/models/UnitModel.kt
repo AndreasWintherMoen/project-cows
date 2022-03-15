@@ -7,8 +7,10 @@ data class UnitModel (
     val type: UnitType,
     var position: Vector2,
     val rotation: Float,
+    var isDead: Boolean
 ) {
-    constructor(type: UnitType) : this(type, Vector2(0f, 0f), 0f)
+    constructor(type: UnitType) : this(type, Vector2(0f, 0f), 0f, false)
 }
+
 
 

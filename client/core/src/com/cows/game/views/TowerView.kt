@@ -1,19 +1,36 @@
 package com.cows.game.views
 
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.cows.game.models.TileModel
 import com.cows.game.models.TowerModel
 
 class TowerView(val model: TowerModel): Renderable() {
-    val texture = Texture("tower.png")
+    val tower = Sprite(Texture("Towers/tower1.png"))
+    val turret = Sprite(Texture("Turrets/turret1.png"))
+
+    init {
+        val pixel = model.tileCoordinate.toVector2()
+        tower.setPosition(pixel.x+ TileModel.WIDTH*0.15f, pixel.y+(TileModel.WIDTH/tower.width)*tower.height*0.15f)
+        tower.setSize(TileModel.WIDTH*0.7f, (TileModel.WIDTH/tower.width)*tower.height*0.7f)
+        turret.setPosition(pixel.x, pixel.y+(TileModel.HEIGHT - (TileModel.WIDTH/turret.width)*turret.height)/2)
+        turret.setSize(TileModel.WIDTH, (TileModel.WIDTH/turret.width)*turret.height)
+        turret.setOrigin(turret.width/2f, turret.height/2f)
+    }
+
+    fun rotateTowardTarget(deltaTime: Float){
+        turret.rotate(100*deltaTime)
+    }
 
     override fun render(batch: SpriteBatch, deltaTime: Float) {
-        val pixel = model.tileCoordinate.toVector2()
-        batch.draw(texture, pixel.x, pixel.y)
+        rotateTowardTarget(deltaTime)
+        tower.draw(batch)
+        turret.draw(batch)
     }
 
     override fun dispose() {
-        texture.dispose()
+        tower.texture.dispose()
+        turret.texture.dispose()
     }
-
 }
