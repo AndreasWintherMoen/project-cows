@@ -2,25 +2,25 @@ package com.cows.game
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
-import com.cows.game.models.Tile
+import com.cows.game.models.TileModel
 import com.cows.game.roundSimulation.GameLoopSimulator
 import com.cows.game.roundSimulation.RoundSimulationDeserializer
 import java.io.File
 
 class Application : ApplicationAdapter() {
     companion object {
-        const val WIDTH = Map.WIDTH * Tile.WIDTH
-        const val HEIGHT = Map.HEIGHT * Tile.HEIGHT
-        fun readRoundSimFileAsString(fileName: String): String = File(fileName).readText()
+        const val WIDTH = Map.WIDTH * TileModel.WIDTH
+        const val HEIGHT = Map.HEIGHT * TileModel.HEIGHT
+        const val TICK_DURATION = 1f // in seconds
     }
 
-    private lateinit var map: Map
     private lateinit var gameLoopSimulator: GameLoopSimulator
 
     override fun create() {
-        map = Map()
-        val parsedFile = readRoundSimFileAsString("roundSimulation.json")
+        Map.instance.init()
+        val parsedFile = File("roundSimulation.json").readText()
         val roundSimulation = RoundSimulationDeserializer.deserialize(parsedFile)
+        println("parsed JSON simulation object: $roundSimulation")
         gameLoopSimulator = GameLoopSimulator(roundSimulation)
     }
 

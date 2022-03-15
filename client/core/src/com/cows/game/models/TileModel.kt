@@ -3,7 +3,7 @@ package com.cows.game.models
 import com.cows.game.Coordinate
 import com.cows.game.enums.TileType
 
-data class Tile(
+data class TileModel(
     val type: TileType,
     val coordinate: Coordinate,
     ) {

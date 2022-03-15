@@ -1,8 +1,8 @@
 package com.cows.game
 
-import com.cows.game.models.Tile
+import com.badlogic.gdx.math.Vector2
+import com.cows.game.models.TileModel
 
 data class Coordinate(var x: Int, var y: Int) {
-    constructor() : this(0, 0)
-    fun toPixel() = Pixel(x * Tile.WIDTH, y * Tile.HEIGHT)
+    fun toVector2() = Vector2(x * TileModel.WIDTH, y * TileModel.HEIGHT)
 }

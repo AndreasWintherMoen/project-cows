@@ -1,266 +1,62 @@
-[
-  [
+{
+  "towerList": [
     {
       "id": 0,
-      "type": "stone",
+      "type": "STONE",
       "position": {
         "x": 7,
-        "y": 5
+        "y": 4
       }
     },
     {
       "id": 1,
-      "type": "wood",
+      "type": "WOOD",
       "position": {
         "x": 12,
         "y": 3
       }
     }
   ],
-  [
+  "unitList": [
     {
       "id": 2,
-      "type": "footman"
+      "type": "SWORDMAN"
     },
     {
       "id": 3,
-      "type": "footman"
+      "type": "SWORDMAN"
     },
     {
       "id": 4,
-      "type": "runner"
+      "type": "RUNNER"
     }
   ],
-  [
-    [
-      {
-        "subject": 2,
-        "verb": "spawn",
-        "object": {
-          "x": 16,
-          "y": 10
+  "eventLog": [
+    {
+      "actions": [
+        {
+          "subject": 2,
+          "verb": "SPAWN",
+          "obj": 0
+        },
+        {
+          "subject": 2,
+          "verb": "MOVE",
+          "obj": 1
         }
-      },
-      {
-        "subject": 2,
-        "verb": "move",
-        "object": {
-          "x": 15,
-          "y": 10
+      ]
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": [
+        {
+          "subject": 2,
+          "verb": "MOVE",
+          "obj": 2
         }
-      }
-    ],
-    [],
-    [],
-    [],
-    [
-      {
-        "subject": 2,
-        "verb": "move",
-        "object": {
-          "x": 14,
-          "y": 10
-        }
-      }
-    ],
-    [],
-    [
-      {
-        "subject": 3,
-        "verb": "spawn",
-        "object": {
-          "x": 16,
-          "y": 10
-        }
-      },
-      {
-        "subject": 3,
-        "verb": "move",
-        "object": {
-          "x": 15,
-          "y": 10
-        }
-      }
-    ],
-    [],
-    [
-      {
-        "subject": 2,
-        "verb": "move",
-        "object": {
-          "x": 13,
-          "y": 10
-        }
-      }
-    ],
-    [],
-    [
-      {
-        "subject": 3,
-        "verb": "move",
-        "object": {
-          "x": 14,
-          "y": 10
-        }
-      },
-      {
-        "subject": 0,
-        "verb": "target",
-        "object": 2
-      },
-      {
-        "subject": 0,
-        "verb": "attack",
-        "object": null
-      }
-    ],
-    [],
-    [
-      {
-        "subject": 2,
-        "verb": "move",
-        "object": {
-          "x": 13,
-          "y": 11
-        }
-      },
-      {
-        "subject": 0,
-        "verb": "attack",
-        "object": null
-      },
-      {
-        "subject": 4,
-        "verb": "spawn",
-        "object": {
-          "x": 16,
-          "y": 10
-        }
-      },
-      {
-        "subject": 4,
-        "verb": "move",
-        "object": {
-          "x": 15,
-          "y": 10
-        }
-      }
-    ],
-    [],
-    [
-      {
-        "subject": 3,
-        "verb": "move",
-        "object": {
-          "x": 13,
-          "y": 10
-        }
-      },
-      {
-        "subject": 0,
-        "verb": "attack",
-        "object": null
-      },
-      {
-        "subject": 2,
-        "verb": "die",
-        "object": null
-      }
-    ],
-    [
-      {
-        "subject": 4,
-        "verb": "move",
-        "object": {
-          "x": 14,
-          "y": 10
-        }
-      },
-      {
-        "subject": 0,
-        "verb": "target",
-        "object": 3
-      }
-    ],
-    [
-      {
-        "subject": 0,
-        "verb": "attack",
-        "object": null
-      }
-    ],
-    [],
-    [
-      {
-        "subject": 4,
-        "verb": "move",
-        "object": {
-          "x": 13,
-          "y": 10
-        }
-      },
-      {
-        "subject": 0,
-        "verb": "attack",
-        "object": null
-      }
-    ],
-    [],
-    [
-      {
-        "subject": 0,
-        "verb": "attack",
-        "object": null
-      },
-      {
-        "subject": 3,
-        "verb": "die",
-        "object": null
-      }
-    ],
-    [
-      {
-        "subject": 0,
-        "verb": "target",
-        "object": 4
-      },
-      {
-        "subject": 4,
-        "verb": "move",
-        "object": {
-          "x": 13,
-          "y": 11
-        }
-      }
-    ],
-    [],
-    [
-      {
-        "subject": 0,
-        "verb": "attack",
-        "object": null
-      }
-    ],
-    [],
-    [
-      {
-        "subject": 4,
-        "verb": "move",
-        "object": {
-          "x": 13,
-          "y": 12
-        }
-      },
-      {
-        "subject": 0,
-        "verb": "attack",
-        "object": null
-      },
-      {
-        "subject": 4,
-        "verb": "die",
-        "object": null
-      }
-    ]
+      ]
+    }
   ]
-]
+}
