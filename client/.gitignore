@@ -24,7 +24,7 @@ www-test/
 /android/libs/x86/
 /android/libs/x86_64/
 /android/gen/
-/android/build.gradle
+android/build.gradle
 .idea/
 *.ipr
 *.iws
