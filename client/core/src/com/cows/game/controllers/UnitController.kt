@@ -67,10 +67,8 @@ class UnitController(private val model: UnitModel): Updatable() {
     }
 
     fun spawn(tile: TileController) {
-        println("Spawning unit $model")
         model.position = tile.tileModel.coordinate.toVector2()
         setNewTarget()
-        println(model.currentDirection)
         view = UnitView(model)
         hasSpawned = true
     }
