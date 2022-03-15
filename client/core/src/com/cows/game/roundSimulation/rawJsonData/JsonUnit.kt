@@ -5,7 +5,8 @@ import com.cows.game.models.UnitModel
 
 data class JsonUnit(
     val id: Int,
-    val type: UnitType
+    val type: UnitType,
+    val movementSpeed: Float
 ) {
-    fun toUnitModel() = UnitModel(type)
+    fun toUnitModel() = UnitModel(type, movementSpeed)
 }

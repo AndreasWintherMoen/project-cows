@@ -3,6 +3,7 @@ package com.cows.game.views
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.cows.game.Coordinate
 import com.cows.game.enums.TileType
 import com.cows.game.enums.UnitType
 import com.cows.game.models.TileModel

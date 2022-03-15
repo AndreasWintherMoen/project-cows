@@ -27,6 +27,7 @@ class Application : ApplicationAdapter() {
     override fun render() {
         val deltaTime = Gdx.graphics.deltaTime
         gameTickProcessor.update(deltaTime)
+        Updater.update(deltaTime)
         Renderer.render(deltaTime)
     }
 

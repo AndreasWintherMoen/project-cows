@@ -12,7 +12,7 @@ class TileController(tileType: TileType, coordinate: Coordinate) : Updatable() {
     private val tileView = TileView(tileModel)
 
     override fun update(deltaTime: Float) {
-        TODO("Not yet implemented")
+       // TODO("Not yet implemented")
     }
 }
 

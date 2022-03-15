@@ -20,15 +20,18 @@
   "unitList": [
     {
       "id": 2,
-      "type": "SWORDMAN"
+      "type": "SWORDMAN",
+      "movementSpeed": 0.8
     },
     {
       "id": 3,
-      "type": "SWORDMAN"
+      "type": "SWORDMAN",
+      "movementSpeed": 0.8
     },
     {
       "id": 4,
-      "type": "RUNNER"
+      "type": "RUNNER",
+      "movementSpeed": 1.9
     }
   ],
   "eventLog": [
@@ -55,6 +58,32 @@
           "subject": 2,
           "verb": "MOVE",
           "obj": 2
+        },
+        {
+          "subject": 3,
+          "verb": "SPAWN",
+          "obj": 0
+        }
+      ]
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": [
+        {
+          "subject": 4,
+          "verb": "SPAWN",
+          "obj": 0
         }
       ]
     }
