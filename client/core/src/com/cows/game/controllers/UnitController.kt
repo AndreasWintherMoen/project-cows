@@ -12,7 +12,7 @@ class UnitController(private val model: UnitModel): Updatable() {
     override val renderableView = UnitView(model)
 
     override fun update(deltaTime: Float) {
-        TODO("Not yet implemented")
+       // TODO("Not yet implemented")
     }
 
     fun move(tile: TileController) {
