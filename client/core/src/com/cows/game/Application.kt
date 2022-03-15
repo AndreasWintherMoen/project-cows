@@ -17,6 +17,7 @@ class Application : ApplicationAdapter() {
     private lateinit var gameLoopSimulator: GameLoopSimulator
 
     override fun create() {
+        Map.init()
         val parsedFile = File("roundSimulation.json").readText()
         val roundSimulation = RoundSimulationDeserializer.deserialize(parsedFile)
         println("parsed JSON simulation object: $roundSimulation")
