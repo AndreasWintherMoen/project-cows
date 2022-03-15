@@ -11,7 +11,6 @@ class TowerView(val model: TowerModel): Renderable() {
     val turret = Sprite(Texture("Turrets/turret1.png"))
 
     init {
-        println("Init tower view at position ${model.tileCoordinate}")
         val pixel = model.tileCoordinate.toVector2()
         tower.setPosition(pixel.x+ TileModel.WIDTH*0.15f, pixel.y+(TileModel.WIDTH/tower.width)*tower.height*0.15f)
         tower.setSize(TileModel.WIDTH*0.7f, (TileModel.WIDTH/tower.width)*tower.height*0.7f)
