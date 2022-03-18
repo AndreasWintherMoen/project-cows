@@ -10,5 +10,5 @@ data class JsonTower (
     val position: Coordinate,
     val range: Float
  ) {
-    fun toTowerModel() = TowerModel(type, position, range)
+    fun toTowerModel() = TowerModel(type, position, range, false)
 }

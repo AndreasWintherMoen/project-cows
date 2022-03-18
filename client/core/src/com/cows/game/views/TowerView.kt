@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.cows.game.models.TileModel
 import com.cows.game.models.TowerModel
 
-class TowerView(val model: TowerModel): Renderable() {
-    val tower = Sprite(Texture("Towers/tower1.png"))
-    val turret = Sprite(Texture("Turrets/turret1.png"))
+class TowerView(private val model: TowerModel): Renderable() {
+    private val tower = Sprite(Texture("Towers/tower1.png"))
+    private val turret = Sprite(Texture("Turrets/turret1.png"))
 
     init {
         val pixel = model.tileCoordinate.toVector2()
@@ -19,8 +19,12 @@ class TowerView(val model: TowerModel): Renderable() {
         turret.setOrigin(turret.width/2f, turret.height/2f)
     }
 
-    fun rotateTowardTarget(deltaTime: Float){
-        turret.rotate(100*deltaTime)
+    private fun rotateTowardTarget(deltaTime: Float){
+        if (!model.hasTarget) {
+            turret.rotate(100*deltaTime)
+            return
+        }
+        turret.rotation = model.rotation
     }
 
     override fun render(batch: SpriteBatch, deltaTime: Float) {
