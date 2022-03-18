@@ -2,6 +2,7 @@ package com.cows.game
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
+import com.cows.game.enums.GameState
 import com.cows.game.models.TileModel
 import com.cows.game.roundSimulation.GameTickProcessor
 import com.cows.game.roundSimulation.RoundSimulationDeserializer
@@ -11,6 +12,7 @@ class Application : ApplicationAdapter() {
     companion object {
         const val WIDTH = Map.WIDTH * TileModel.WIDTH
         const val HEIGHT = Map.HEIGHT * TileModel.HEIGHT
+        const val TICK_DURATION = 1f // in seconds
     }
 
     val tickDuration = 0.5f // in seconds
