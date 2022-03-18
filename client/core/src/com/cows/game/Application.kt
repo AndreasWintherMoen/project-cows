@@ -11,9 +11,9 @@ class Application : ApplicationAdapter() {
     companion object {
         const val WIDTH = Map.WIDTH * TileModel.WIDTH
         const val HEIGHT = Map.HEIGHT * TileModel.HEIGHT
-        const val TICK_DURATION = 1f // in seconds
     }
 
+    val tickDuration = 0.5f // in seconds
     private lateinit var gameTickProcessor: GameTickProcessor
 
     override fun create() {
@@ -26,9 +26,11 @@ class Application : ApplicationAdapter() {
 
     override fun render() {
         val deltaTime = Gdx.graphics.deltaTime
-        gameTickProcessor.update(deltaTime)
-        Updater.update(deltaTime)
-        Renderer.render(deltaTime)
+        gameTickProcessor.update(deltaTime, tickDuration)
+
+        val tickAdjustedDeltaTime = deltaTime / tickDuration
+        Updater.update(tickAdjustedDeltaTime)
+        Renderer.render(tickAdjustedDeltaTime)
     }
 
     override fun dispose() {

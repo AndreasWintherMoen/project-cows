@@ -22,10 +22,10 @@ class GameTickProcessor (private val roundSimulation: JsonRoundSimulation) {
         roundSimulation.eventLog.map { concretizeTick(it) }.forEach { eventLog.add(it) }
     }
 
-    fun update(deltaTime: Float) {
+    fun update(deltaTime: Float, tickDuration: Float) {
         tickTimer += deltaTime
-        if (tickTimer >= Application.TICK_DURATION) {
-            tickTimer -= Application.TICK_DURATION
+        if (tickTimer >= tickDuration) {
+            tickTimer -= tickDuration
             if (eventLog.size == 0) {
                 println("empty event log")
                 return
