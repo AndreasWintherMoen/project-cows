@@ -1,6 +1,5 @@
 package com.cows.game
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.ScreenUtils
@@ -10,7 +9,8 @@ object Renderer {
 
     private val batch = SpriteBatch()
     private val renderables = mutableListOf<Renderable>()
-    private val newRenderables = mutableListOf<Renderable>()
+    private val renderablesToBeAdded = mutableListOf<Renderable>()
+    private val renderablesToBeRemoved = mutableListOf<Renderable>()
     private val cam = OrthographicCamera()
 
 
@@ -25,8 +25,10 @@ object Renderer {
         renderables.forEach { it.render(batch, deltaTime) }
         batch.end()
 
-        newRenderables.forEach { renderables.add(it) }
-        newRenderables.clear()
+        renderablesToBeAdded.forEach { renderables.add(it) }
+        renderablesToBeAdded.clear()
+        renderablesToBeRemoved.forEach { renderables.remove(it) }
+        renderablesToBeRemoved.clear()
     }
 
     fun dispose() {
@@ -34,8 +36,7 @@ object Renderer {
         renderables.forEach { it.dispose() }
     }
 
-    fun addRenderable(renderable: Renderable) = newRenderables.add(renderable)
+    fun addRenderable(renderable: Renderable) = renderablesToBeAdded.add(renderable)
 
-        // TODO: Check if exists???
-        fun removeRenderable(renderable: Renderable) = renderables.remove(renderable)
+    fun removeRenderable(renderable: Renderable) = renderablesToBeRemoved.add(renderable)
 }
