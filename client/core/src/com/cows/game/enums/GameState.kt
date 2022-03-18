@@ -5,6 +5,6 @@ enum class GameState {
     NONE,
     START_MENU,
     PLANNING_DEFENSE,
-    PLANNING_ATTACK,
+    PLANNING_ATTACK ,
     ACTIVE_GAME
 }

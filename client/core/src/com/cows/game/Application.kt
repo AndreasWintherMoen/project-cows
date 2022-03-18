@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.cows.game.enums.GameState
 import com.cows.game.hud.StartGameButton
+import com.cows.game.managers.GameStateManager
 import com.cows.game.models.TileModel
 import com.cows.game.roundSimulation.GameTickProcessor
 import com.cows.game.roundSimulation.RoundSimulationDeserializer
@@ -13,9 +14,8 @@ class Application : ApplicationAdapter() {
     companion object {
         const val WIDTH = Map.WIDTH * TileModel.WIDTH
         const val HEIGHT = Map.HEIGHT * TileModel.HEIGHT
-        const val TICK_DURATION = 1f // in seconds
-        var gameState = GameState.PLANNING_DEFENSE
     }
+
     private lateinit var startButton: StartGameButton
 
     val tickDuration = 0.5f // in seconds
@@ -30,7 +30,7 @@ class Application : ApplicationAdapter() {
         val deltaTime = Gdx.graphics.deltaTime
         val tickAdjustedDeltaTime = deltaTime / tickDuration
 
-        if (gameState != GameState.ACTIVE_GAME){
+        if (GameStateManager.currentGameState != GameState.ACTIVE_GAME){
             Renderer.render(tickAdjustedDeltaTime)
             return
         }
@@ -46,7 +46,12 @@ class Application : ApplicationAdapter() {
     }
 
     private fun startGame() {
-        gameState = GameState.ACTIVE_GAME
+        GameStateManager.currentGameState = GameState.ACTIVE_GAME
+        loadRoundSimulation()
+    }
+
+    // this will load from API at some point
+    private fun loadRoundSimulation() {
         val parsedFile = File("roundSimulation.json").readText()
         val roundSimulation = RoundSimulationDeserializer.deserialize(parsedFile)
         println("parsed JSON simulation object: $roundSimulation")
