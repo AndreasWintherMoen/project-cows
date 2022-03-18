@@ -43,7 +43,7 @@ class GameTickProcessor (private val roundSimulation: JsonRoundSimulation) {
     private fun concretizeAction(jsonAction: JsonAction): Action {
         return try {
             when (jsonAction.verb) {
-                ActionType.TARGET -> TargetAction(towerList[jsonAction.subject]!!, unitList[jsonAction.obj]!!)
+                ActionType.TARGET -> TargetAction(towerList[jsonAction.subject]!!, unitList[jsonAction.obj])
                 ActionType.ATTACK -> AttackAction(towerList[jsonAction.subject]!!)
                 ActionType.MOVE -> MoveAction(unitList[jsonAction.subject]!!, Map.getTileAtPathIndex(jsonAction.obj!!))
                 ActionType.DIE -> DieAction(unitList[jsonAction.subject]!!)
