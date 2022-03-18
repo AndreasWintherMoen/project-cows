@@ -26,6 +26,11 @@ class TowerController(val model: TowerModel): Updatable() {
         model.hasTarget = true
     }
 
+    fun removeTarget() {
+        currentTarget = null
+        model.hasTarget = false
+    }
+
     fun attack() {
         // TODO: Implement this
     }
