@@ -3,6 +3,7 @@ package com.cows.game
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.cows.game.enums.GameState
+import com.cows.game.hud.HUDManager
 import com.cows.game.hud.StartGameButton
 import com.cows.game.managers.GameStateManager
 import com.cows.game.models.TileModel
@@ -16,14 +17,14 @@ class Application : ApplicationAdapter() {
         const val HEIGHT = Map.HEIGHT * TileModel.HEIGHT
     }
 
-    private lateinit var startButton: StartGameButton
-
-    val tickDuration = 0.5f // in seconds
+    val tickDuration = 1f // in seconds
     private lateinit var gameTickProcessor: GameTickProcessor
+    private lateinit var hudManager: HUDManager
 
     override fun create() {
         Map.init()
-        startButton = StartGameButton { startGame() }
+        hudManager = HUDManager { startGame() }
+        GameStateManager.currentGameState = GameState.PLANNING_DEFENSE
     }
 
     override fun render() {
@@ -39,6 +40,9 @@ class Application : ApplicationAdapter() {
 
         Updater.update(tickAdjustedDeltaTime)
         Renderer.render(tickAdjustedDeltaTime)
+
+
+        //
     }
 
     override fun dispose() {
@@ -46,6 +50,7 @@ class Application : ApplicationAdapter() {
     }
 
     private fun startGame() {
+        println("Starting game")
         GameStateManager.currentGameState = GameState.ACTIVE_GAME
         loadRoundSimulation()
     }

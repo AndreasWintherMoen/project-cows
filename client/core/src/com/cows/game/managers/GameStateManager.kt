@@ -8,7 +8,7 @@ import java.util.*
 
 object GameStateManager {
     var gameStateSubscribers = mutableListOf<GameStateSubscriber>()
-    var currentGameState = GameState.PLANNING_DEFENSE
+    var currentGameState = GameState.NONE
         set(newGameState) {
             if (!isValidGameState(newGameState)) return
             onChangeGameStateChange(field, newGameState)
