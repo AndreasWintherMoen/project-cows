@@ -10,7 +10,9 @@ object Renderer {
 
     private val batch = SpriteBatch()
     private val renderables = mutableListOf<Renderable>()
+    private val newRenderables = mutableListOf<Renderable>()
     private val cam = OrthographicCamera()
+
 
     init {
         cam.setToOrtho(false, Application.WIDTH, Application.HEIGHT)
@@ -22,6 +24,9 @@ object Renderer {
         batch.begin()
         renderables.forEach { it.render(batch, deltaTime) }
         batch.end()
+
+        newRenderables.forEach { renderables.add(it) }
+        newRenderables.clear()
     }
 
     fun dispose() {
@@ -29,8 +34,8 @@ object Renderer {
         renderables.forEach { it.dispose() }
     }
 
-    fun addRenderable(renderable: Renderable) = renderables.add(renderable)
+    fun addRenderable(renderable: Renderable) = newRenderables.add(renderable)
 
-    // TODO: Check if exists???
-    fun removeRenderable(renderable: Renderable) = renderables.remove(renderable)
+        // TODO: Check if exists???
+        fun removeRenderable(renderable: Renderable) = renderables.remove(renderable)
 }
