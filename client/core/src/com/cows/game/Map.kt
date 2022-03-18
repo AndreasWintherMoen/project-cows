@@ -43,12 +43,7 @@ object Map {
     }
 
     private fun rawMapToArray(rawMap: String): Array<IntArray> {
-        val map = Array(HEIGHT) { IntArray(WIDTH) { 0 } }
-        // I double checked the maths :y:
-        for(index in rawMap.indices){
-            map[index / WIDTH][index % WIDTH] =  rawMap[index].digitToInt();
-        }
-        return map
+        return Array(HEIGHT) { x -> IntArray(WIDTH) { y -> rawMap[x * WIDTH + y].digitToInt() } }
     }
 
     private fun generatePath(map: Array<IntArray>): ArrayList<Coordinate>{
