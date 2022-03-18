@@ -7,6 +7,10 @@ abstract class Renderable {
     abstract fun render(batch: SpriteBatch, deltaTime: Float)
     abstract fun dispose()
 
+    open fun die() {
+        Renderer.removeRenderable(this)
+    }
+
     init {
         Renderer.addRenderable(this)
     }

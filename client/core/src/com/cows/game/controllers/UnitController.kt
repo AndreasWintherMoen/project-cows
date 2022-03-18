@@ -58,7 +58,9 @@ class UnitController(val model: UnitModel): Updatable() {
         target = tile.tileModel.coordinate.toVector2()
     }
 
-    fun die() {
+    override fun die() {
+        super.die()
+
         model.isDead = true;
     }
 

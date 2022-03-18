@@ -1,25 +1,24 @@
 package com.cows.game
 
 import com.cows.game.controllers.Updatable
-import com.cows.game.views.Renderable
 
 object Updater {
-    private val updatable: MutableList<Updatable> = mutableListOf<Updatable>()
+    private val updatables = mutableListOf<Updatable>()
+    private val updatablesToBeAdded = mutableListOf<Updatable>()
+    private val updatablesToBeRemoved = mutableListOf<Updatable>()
 
 
     fun update(deltaTime: Float) {
-        updatable.forEach { it.update(deltaTime)}
+        updatables.forEach { it.update(deltaTime)}
+
+        updatablesToBeAdded.forEach { updatables.add(it) }
+        updatablesToBeAdded.clear()
+        updatablesToBeRemoved.forEach { updatables.remove(it) }
+        updatablesToBeRemoved.clear()
     }
 
-    fun addUpdatable(updatable: Updatable) = Updater.updatable.add(updatable)
+    fun addUpdatable(updatable: Updatable) = updatablesToBeAdded.add(updatable)
 
-    // This function tries to remove an updatable from the updater, and prints a message, should the
-    // updatable not be in the list of updatables.
-    fun removeUpdatable(updatable: Updatable){
-        if (!Updater.updatable.remove(updatable)){
-            print("An attempt to remove ${updatable} was made, although it was not in the list of updatables. ")
-            TODO("Implement proper logging for this case")
-        }
-    }
+    fun removeUpdatable(updatable: Updatable) = updatablesToBeRemoved.add(updatable)
 
 }

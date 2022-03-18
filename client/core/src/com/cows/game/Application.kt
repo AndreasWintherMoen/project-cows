@@ -2,6 +2,10 @@ package com.cows.game
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
+import com.cows.game.enums.GameState
+import com.cows.game.hud.HUDManager
+import com.cows.game.hud.StartGameButton
+import com.cows.game.managers.GameStateManager
 import com.cows.game.models.TileModel
 import com.cows.game.roundSimulation.GameTickProcessor
 import com.cows.game.roundSimulation.RoundSimulationDeserializer
@@ -13,27 +17,50 @@ class Application : ApplicationAdapter() {
         const val HEIGHT = Map.HEIGHT * TileModel.HEIGHT
     }
 
-    val tickDuration = 0.5f // in seconds
+    val tickDuration = 1f // in seconds
     private lateinit var gameTickProcessor: GameTickProcessor
+    private lateinit var hudManager: HUDManager
 
     override fun create() {
         Map.init()
+        hudManager = HUDManager { startGame() }
+        GameStateManager.currentGameState = GameState.PLANNING_DEFENSE
+    }
+
+    override fun render() {
+        val deltaTime = Gdx.graphics.deltaTime
+        val tickAdjustedDeltaTime = deltaTime / tickDuration
+
+        if (GameStateManager.currentGameState != GameState.ACTIVE_GAME){
+            Renderer.render(tickAdjustedDeltaTime)
+            return
+        }
+
+        gameTickProcessor.update(deltaTime, tickDuration)
+
+        Updater.update(tickAdjustedDeltaTime)
+        Renderer.render(tickAdjustedDeltaTime)
+
+
+        //
+    }
+
+    override fun dispose() {
+        Renderer.dispose()
+    }
+
+    private fun startGame() {
+        println("Starting game")
+        GameStateManager.currentGameState = GameState.ACTIVE_GAME
+        loadRoundSimulation()
+    }
+
+    // this will load from API at some point
+    private fun loadRoundSimulation() {
         val parsedFile = File("roundSimulation.json").readText()
         val roundSimulation = RoundSimulationDeserializer.deserialize(parsedFile)
         println("parsed JSON simulation object: $roundSimulation")
         gameTickProcessor = GameTickProcessor(roundSimulation)
     }
 
-    override fun render() {
-        val deltaTime = Gdx.graphics.deltaTime
-        gameTickProcessor.update(deltaTime, tickDuration)
-
-        val tickAdjustedDeltaTime = deltaTime / tickDuration
-        Updater.update(tickAdjustedDeltaTime)
-        Renderer.render(tickAdjustedDeltaTime)
-    }
-
-    override fun dispose() {
-        Renderer.dispose()
-    }
 }
