@@ -23,7 +23,7 @@ class Application : ApplicationAdapter() {
 
     override fun create() {
         Map.init()
-        startButton = StartGameButton()
+        startButton = StartGameButton { startGame() }
     }
 
     override fun render() {
@@ -45,7 +45,8 @@ class Application : ApplicationAdapter() {
         Renderer.dispose()
     }
 
-    fun startGame(){
+    private fun startGame() {
+        gameState = GameState.ACTIVE_GAME
         val parsedFile = File("roundSimulation.json").readText()
         val roundSimulation = RoundSimulationDeserializer.deserialize(parsedFile)
         println("parsed JSON simulation object: $roundSimulation")

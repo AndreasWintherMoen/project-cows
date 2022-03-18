@@ -8,7 +8,6 @@ import com.cows.game.views.TileView
 
 class TileController(tileType: TileType, coordinate: Coordinate) : Updatable() {
     val tileModel = TileModel(tileType, coordinate)
-    val renderableView = TileView(tileModel)
     private val tileView = TileView(tileModel)
 
     override fun update(deltaTime: Float) {
