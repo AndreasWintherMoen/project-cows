@@ -9,7 +9,7 @@ object Map {
 
     const val WIDTH = 16
     const val HEIGHT = 8
-    private val PATH = load()
+    val PATH = load()
     const val FILE_NAME = "map"
 
     private val tiles = Array(WIDTH) { x -> Array(HEIGHT) { y ->
@@ -63,6 +63,10 @@ object Map {
         }
 
         return tempPath
+    }
+
+    fun getPathCoordinates(): List<IntArray> {
+        return PATH.map { c -> intArrayOf(c.x, c.y) }
     }
 
     fun getTile(x: Int, y: Int): TileController {
