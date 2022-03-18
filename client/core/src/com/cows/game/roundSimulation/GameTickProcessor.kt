@@ -10,7 +10,7 @@ import com.cows.game.roundSimulation.rawJsonData.JsonTick
 import java.util.*
 import kotlin.collections.ArrayList
 
-class GameLoopSimulator (private val roundSimulation: JsonRoundSimulation) {
+class GameTickProcessor (private val roundSimulation: JsonRoundSimulation) {
     private var tickTimer = 0f
     private val towerList = hashMapOf<Int, TowerController>()
     private val unitList = hashMapOf<Int, UnitController>()
@@ -22,10 +22,10 @@ class GameLoopSimulator (private val roundSimulation: JsonRoundSimulation) {
         roundSimulation.eventLog.map { concretizeTick(it) }.forEach { eventLog.add(it) }
     }
 
-    fun update(deltaTime: Float) {
+    fun update(deltaTime: Float, tickDuration: Float) {
         tickTimer += deltaTime
-        if (tickTimer >= Application.TICK_DURATION) {
-            tickTimer -= Application.TICK_DURATION
+        if (tickTimer >= tickDuration) {
+            tickTimer -= tickDuration
             if (eventLog.size == 0) {
                 println("empty event log")
                 return
@@ -43,7 +43,7 @@ class GameLoopSimulator (private val roundSimulation: JsonRoundSimulation) {
     private fun concretizeAction(jsonAction: JsonAction): Action {
         return try {
             when (jsonAction.verb) {
-                ActionType.TARGET -> TargetAction(towerList[jsonAction.subject]!!, unitList[jsonAction.obj]!!)
+                ActionType.TARGET -> TargetAction(towerList[jsonAction.subject]!!, unitList[jsonAction.obj])
                 ActionType.ATTACK -> AttackAction(towerList[jsonAction.subject]!!)
                 ActionType.MOVE -> MoveAction(unitList[jsonAction.subject]!!, Map.getTileAtPathIndex(jsonAction.obj!!))
                 ActionType.DIE -> DieAction(unitList[jsonAction.subject]!!)

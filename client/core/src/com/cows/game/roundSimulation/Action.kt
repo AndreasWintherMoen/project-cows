@@ -24,8 +24,11 @@ class EmptyAction(): Action() {
     override val type = ActionType.NONE
 }
 
-data class TargetAction(val tower: TowerController, val unit: UnitController): Action() {
-    override fun processAction() = tower.target(unit)
+data class TargetAction(val tower: TowerController, val unit: UnitController?): Action() {
+    override fun processAction() {
+        if (unit == null) tower.removeTarget()
+        else tower.target(unit)
+    }
     override val type = ActionType.TARGET
 }
 
