@@ -6,6 +6,7 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
+import io.ktor.server.websocket.*
 import java.io.File
 
 fun Application.configureSerialization() {
@@ -17,6 +18,11 @@ fun Application.configureSerialization() {
     }
 
     routing {
+
+        webSocket("/echo") {
+            call.respond("Echo")
+        }
+        webSocket("/eventlog") {  }
         get("/json/gson") {
 
             val responseString = File("RoundSimulation.json").bufferedReader().readLines()

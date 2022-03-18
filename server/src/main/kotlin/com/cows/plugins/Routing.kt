@@ -10,6 +10,8 @@ fun Application.configureRouting() {
 
     routing {
         get("/") {
+
+
             call.respond("")
         }
     }

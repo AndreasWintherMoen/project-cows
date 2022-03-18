@@ -9,13 +9,20 @@ import io.ktor.client.statement.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import kotlinx.coroutines.runBlocking
-
-class client {
+import io.ktor.client.features.auth.*
+class Client {
 
     fun sendRequest() = runBlocking {
         launch {
-            val client = HttpClient(CIO)
-            val response: HttpResponse = client.get("http://0.0.0.0:8080/")
+            val client = HttpClient(CIO){
+                install(Auth){
+
+                }
+
+            }
+            val response: HttpResponse = client.post("http://0.0.0.0:8080/login"){
+                bo
+            }
             val res:String = response.receive()
             print("\n $res.,----\n")
         }
@@ -24,5 +31,7 @@ class client {
     init {
         sendRequest()
     }
+
+
 
 }
