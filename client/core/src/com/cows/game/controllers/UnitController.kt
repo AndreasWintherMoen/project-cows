@@ -6,7 +6,7 @@ import com.cows.game.models.UnitModel
 import com.cows.game.views.UnitView
 
 
-class UnitController(private val model: UnitModel): Updatable() {
+class UnitController(val model: UnitModel): Updatable() {
     private lateinit var view: UnitView
     private var target = Vector2();
     var currentPathIndex = 0;

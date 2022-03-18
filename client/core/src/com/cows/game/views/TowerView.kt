@@ -19,8 +19,12 @@ class TowerView(val model: TowerModel): Renderable() {
         turret.setOrigin(turret.width/2f, turret.height/2f)
     }
 
-    fun rotateTowardTarget(deltaTime: Float){
-        turret.rotate(100*deltaTime)
+    private fun rotateTowardTarget(deltaTime: Float){
+        if (!model.hasTarget) {
+            turret.rotate(100*deltaTime)
+            return
+        }
+        turret.rotation = model.rotation
     }
 
     override fun render(batch: SpriteBatch, deltaTime: Float) {
