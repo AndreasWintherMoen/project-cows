@@ -7,9 +7,12 @@ import com.badlogic.gdx.math.Vector2
 import com.cows.game.views.Renderable
 
 
-abstract class Button(var onClick: () -> Unit): Renderable() {
-    protected abstract var position: Vector2
-    protected abstract val texture: Texture
+class Button(textureFilePath: String, var position: Vector2, var onClick: () -> Unit): Renderable() {
+    constructor(textureFilePath: String) : this(textureFilePath, Vector2(), {})
+    constructor(textureFilePath: String, position: Vector2) : this(textureFilePath, position, {})
+    constructor(textureFilePath: String, onClick: () -> Unit) : this(textureFilePath, Vector2(), onClick)
+
+    var texture = Texture(textureFilePath)
 
     private fun isWithinBounds(pos: Vector2): Boolean {
         if (pos.x < position.x) return false
