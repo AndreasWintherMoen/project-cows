@@ -1,7 +1,9 @@
 package com.cows.game.map
 
+import com.badlogic.gdx.math.Vector2
 import com.cows.game.controllers.TileController
 import com.cows.game.enums.TileType
+import com.cows.game.models.TileModel
 
 object Map {
 
@@ -52,5 +54,11 @@ object Map {
         if (index < 0 || index >= PATH.size) throw Error("Path index $index out of bounds")
         val coordinate = PATH[index]
         return getTile(coordinate.x, coordinate.y)
+    }
+
+    fun getTileAtPixel(pixel: Vector2): TileController {
+        val x = (pixel.x / TileModel.WIDTH).toInt()
+        val y = (pixel.y / TileModel.HEIGHT).toInt()
+        return getTile(x, y)
     }
 }

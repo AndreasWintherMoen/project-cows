@@ -34,13 +34,9 @@ class Application : ApplicationAdapter() {
         val deltaTime = Gdx.graphics.deltaTime
         val tickAdjustedDeltaTime = deltaTime / tickDuration
 
-        if (GameStateManager.currentGameState != GameState.ACTIVE_GAME){
-            Renderer.render(tickAdjustedDeltaTime)
-            FunctionDelayer.invokeRegisteredFunctions()
-            return
+        if (GameStateManager.currentGameState == GameState.ACTIVE_GAME) {
+            gameTickProcessor.update(deltaTime, tickDuration)
         }
-
-        gameTickProcessor.update(deltaTime, tickDuration)
 
         Updater.update(tickAdjustedDeltaTime)
         Renderer.render(tickAdjustedDeltaTime)

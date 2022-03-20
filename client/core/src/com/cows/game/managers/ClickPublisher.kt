@@ -8,11 +8,18 @@ import com.cows.game.map.Map
 
 object ClickPublisher: Updatable() {
     private val subscribers = mutableListOf<ClickSubscriber>()
+    private val subscribersToBeAdded = mutableListOf<ClickSubscriber>()
+    private val subscribersToBeRemoved = mutableListOf<ClickSubscriber>()
 
-    fun subscribeToClickEvents(subscriber: ClickSubscriber) = subscribers.add(subscriber)
-    fun unsubscribeToClickEvents(subscriber: ClickSubscriber) = subscribers.remove(subscriber)
+    fun subscribeToClickEvents(subscriber: ClickSubscriber) = subscribersToBeAdded.add(subscriber)
+    fun unsubscribeToClickEvents(subscriber: ClickSubscriber) = subscribersToBeRemoved.add(subscriber)
 
     override fun update(deltaTime: Float) {
+        subscribersToBeAdded.forEach { subscribers.add(it) }
+        subscribersToBeAdded.clear()
+        subscribersToBeRemoved.forEach { subscribers.remove(it) }
+        subscribersToBeRemoved.clear()
+
         if (!Gdx.input.justTouched()) return
 
         val clickedPosition = Vector2(Gdx.input.x.toFloat(), Gdx.graphics.height - Gdx.input.y.toFloat())
