@@ -22,7 +22,7 @@ object Renderer {
         ScreenUtils.clear(0f, 0f, 0f, 1f)
         batch.projectionMatrix = cam.combined
         batch.begin()
-        renderables.forEach { it.render(batch, deltaTime) }
+        renderables.forEach { if (!it.hide) it.render(batch, deltaTime) }
         batch.end()
 
         renderablesToBeAdded.forEach { renderables.add(it) }
