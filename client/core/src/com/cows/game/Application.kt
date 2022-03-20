@@ -5,6 +5,9 @@ import com.badlogic.gdx.Gdx
 import com.cows.game.enums.GameState
 import com.cows.game.hud.HUDManager
 import com.cows.game.managers.GameStateManager
+import com.cows.game.managers.Renderer
+import com.cows.game.managers.Updater
+import com.cows.game.map.Map
 import com.cows.game.models.TileModel
 import com.cows.game.roundSimulation.GameTickProcessor
 import com.cows.game.roundSimulation.RoundSimulationDeserializer

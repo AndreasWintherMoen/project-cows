@@ -1,4 +1,4 @@
-package com.cows.game
+package com.cows.game.map
 
 import com.badlogic.gdx.math.Vector2
 import com.cows.game.models.TileModel

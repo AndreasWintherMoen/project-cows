@@ -1,8 +1,9 @@
-package com.cows.game
+package com.cows.game.managers
 
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.ScreenUtils
+import com.cows.game.Application
 import com.cows.game.views.Renderable
 
 object Renderer {

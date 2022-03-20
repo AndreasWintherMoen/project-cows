@@ -1,4 +1,4 @@
-package com.cows.game
+package com.cows.game.map
 
 import com.cows.game.controllers.TileController
 import com.cows.game.enums.TileType
