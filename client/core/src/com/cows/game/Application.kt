@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.cows.game.enums.GameState
 import com.cows.game.hud.HUDManager
+import com.cows.game.managers.FunctionDelayer
 import com.cows.game.managers.GameStateManager
 import com.cows.game.managers.Renderer
 import com.cows.game.managers.Updater
@@ -35,6 +36,7 @@ class Application : ApplicationAdapter() {
 
         if (GameStateManager.currentGameState != GameState.ACTIVE_GAME){
             Renderer.render(tickAdjustedDeltaTime)
+            FunctionDelayer.invokeRegisteredFunctions()
             return
         }
 
@@ -43,8 +45,7 @@ class Application : ApplicationAdapter() {
         Updater.update(tickAdjustedDeltaTime)
         Renderer.render(tickAdjustedDeltaTime)
 
-
-        //
+        FunctionDelayer.invokeRegisteredFunctions()
     }
 
     override fun dispose() {
