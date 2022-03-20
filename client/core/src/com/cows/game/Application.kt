@@ -4,7 +4,6 @@ import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.cows.game.enums.GameState
 import com.cows.game.hud.HUDManager
-import com.cows.game.hud.StartGameButton
 import com.cows.game.managers.GameStateManager
 import com.cows.game.models.TileModel
 import com.cows.game.roundSimulation.GameTickProcessor
