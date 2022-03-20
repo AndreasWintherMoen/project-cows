@@ -19,10 +19,10 @@ object Map {
     fun init() {}
 
     private fun load(): ArrayList<Coordinate> {
-        val rawMap = File("maps/$FILE_NAME.map").readText().trim().replace("\n", "")
-        val map: Array<IntArray>;
-        try {
-            map = rawMapToArray(rawMap);
+        return try {
+            val charMap = File("maps/$FILE_NAME.map").readText().lines().map { it.toCharArray() }
+            val map = charMap.map { charArrayToIntArray(it) }
+            generatePath(map)
         }
         catch (e: Exception){
             error("""
@@ -39,14 +39,11 @@ object Map {
                 0000000000000000
             """.trimMargin())
         }
-        return generatePath(map)
     }
 
-    private fun rawMapToArray(rawMap: String): Array<IntArray> {
-        return Array(HEIGHT) { x -> IntArray(WIDTH) { y -> rawMap[x * WIDTH + y].digitToInt() } }
-    }
+    private fun charArrayToIntArray(array: CharArray) = array.map { it.digitToInt() }
 
-    private fun generatePath(map: Array<IntArray>): ArrayList<Coordinate>{
+    private fun generatePath(map: List<List<Int>>): ArrayList<Coordinate>{
         val tempPath = arrayListOf<Coordinate>();
 
         for(w in 0 until WIDTH){
