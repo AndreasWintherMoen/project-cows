@@ -2,46 +2,69 @@ package com.cows.game
 
 import com.cows.game.controllers.TileController
 import com.cows.game.enums.TileType
+import java.io.File
+import java.lang.Exception
 
 object Map {
 
     const val WIDTH = 16
     const val HEIGHT = 8
-
-    //temporary
-    // TODO: Implement a map parser and load path from file
-    val PATH = arrayListOf(
-        Coordinate(15, 5),
-        Coordinate(14, 5),
-        Coordinate(13, 5),
-        Coordinate(13, 6),
-        Coordinate(13, 7),
-        Coordinate(12, 7),
-        Coordinate(11, 7),
-        Coordinate(10, 7),
-        Coordinate(10, 6),
-        Coordinate(10, 5),
-        Coordinate(10, 4),
-        Coordinate(10, 3),
-        Coordinate(9, 3),
-        Coordinate(8, 3),
-        Coordinate(7, 3),
-        Coordinate(6, 3),
-        Coordinate(5, 3),
-        Coordinate(5, 4),
-        Coordinate(5, 5),
-        Coordinate(4, 5),
-        Coordinate(3, 5),
-        Coordinate(2, 5),
-        Coordinate(1, 5),
-        Coordinate(0, 5),
-    )
-
-    fun init() {}
+    val PATH = load()
+    const val FILE_NAME = "map"
 
     private val tiles = Array(WIDTH) { x -> Array(HEIGHT) { y ->
         TileController(if (PATH.contains(Coordinate(x, y))) TileType.PATH else TileType.GRASS, Coordinate(x, y))
     } }
+
+    fun init() {}
+
+    private fun load(): ArrayList<Coordinate> {
+        return try {
+            val charMap = File("maps/$FILE_NAME.map").readText().lines().map { it.toCharArray() }
+            val map = charMap.map { charArrayToIntArray(it) }
+            generatePath(map)
+        }
+        catch (e: Exception){
+            error("""
+                Map file is not in correct format.
+                Correct format should be a 16x8 table of numbers [1: Path, 0: Grass] (Might add more) 
+                Ex.
+                0000000000000000
+                0000000011110000
+                0000000110011100
+                0000000100000100
+                0000000100000111
+                0000000100000000
+                1111111100000000
+                0000000000000000
+            """.trimMargin())
+        }
+    }
+
+    private fun charArrayToIntArray(array: CharArray) = array.map { it.digitToInt() }
+
+    private fun generatePath(map: List<List<Int>>): ArrayList<Coordinate>{
+        val tempPath = arrayListOf<Coordinate>();
+
+        for(w in 0 until WIDTH){
+            val tempCoordinates = arrayListOf<Coordinate>();
+            for(h in 0 until HEIGHT){
+                if(map[h][w] == 1){
+                    tempCoordinates.add(Coordinate(w, HEIGHT-1-h))
+                }
+            }
+            if(tempCoordinates.size > 1 && tempPath.size > 1 && tempPath.last().y != tempCoordinates[0].y){
+                tempCoordinates.reverse()
+            }
+            tempPath += tempCoordinates
+        }
+
+        return tempPath
+    }
+
+    fun getPathCoordinates(): List<IntArray> {
+        return PATH.map { c -> intArrayOf(c.x, c.y) }
+    }
 
     fun getTile(x: Int, y: Int): TileController {
         if (x < 0 || x > WIDTH || y < 0 || y > HEIGHT) throw Error("Tile ($x, $y) out of bounds")
