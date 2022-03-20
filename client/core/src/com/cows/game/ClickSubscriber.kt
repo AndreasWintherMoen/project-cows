@@ -5,7 +5,7 @@ import com.cows.game.controllers.TileController
 import com.cows.game.managers.ClickPublisher
 
 interface ClickSubscriber {
-    fun subscribeToClickEvents() { println("subscribing"); ClickPublisher.subscribeToClickEvents(this) }
+    fun subscribeToClickEvents() { ClickPublisher.subscribeToClickEvents(this) }
     fun unsubscribeToClickEvents() { ClickPublisher.unsubscribeToClickEvents(this) }
     fun click(position: Vector2, tile: TileController?)
 }
