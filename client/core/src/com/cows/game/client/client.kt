@@ -18,22 +18,22 @@ class Client {
 
     fun sendRequest() = runBlocking {
         launch {
-            val client = HttpClient(CIO){
-                install(Auth){
+            val client = HttpClient(CIO) {
+                install(Auth) {
 
                 }
 
             }
 
             val response: HttpResponse = client.submitForm(
-                url ="http://0.0.0.0:8080/login",
+                url = "http://0.0.0.0:8080/login",
                 formParameters = Parameters.build {
-                    append("Username","Test")
-                    append("Password","Testesen")
+                    append("Username", "Test")
+                    append("Password", "Testesen")
                 },
                 encodeInQuery = false
             )
-            val res:String = response.receive()
+            val res: String = response.receive()
             print("\n $res.,----\n")
         }
     }
@@ -41,7 +41,6 @@ class Client {
     init {
         sendRequest()
     }
-
 
 
 }
