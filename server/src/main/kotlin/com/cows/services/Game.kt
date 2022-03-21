@@ -11,10 +11,6 @@ class Game() {
 
     private val Id:Int = lastId.getAndIncrement()
 
-    // TODO: Implement check for other current codes
-    // This is the initial code created by a user
-    private val gameCode:GameCode = GameCode()
-
 
 
 
