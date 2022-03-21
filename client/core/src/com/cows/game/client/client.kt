@@ -10,6 +10,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import kotlinx.coroutines.runBlocking
 import io.ktor.client.features.auth.*
+import io.ktor.client.request.forms.*
+import io.ktor.http.*
+import java.lang.reflect.Parameter
+
 class Client {
 
     fun sendRequest() = runBlocking {
@@ -20,9 +24,15 @@ class Client {
                 }
 
             }
-            val response: HttpResponse = client.post("http://0.0.0.0:8080/login"){
-                bo
-            }
+
+            val response: HttpResponse = client.submitForm(
+                url ="http://0.0.0.0:8080/login",
+                formParameters = Parameters.build {
+                    append("Username","Test")
+                    append("Password","Testesen")
+                },
+                encodeInQuery = false
+            )
             val res:String = response.receive()
             print("\n $res.,----\n")
         }

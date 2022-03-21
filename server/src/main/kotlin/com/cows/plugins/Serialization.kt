@@ -14,6 +14,7 @@ fun Application.configureSerialization() {
         gson {
             setPrettyPrinting()
             disableHtmlEscaping()
+
         }
     }
 

@@ -16,5 +16,5 @@ fun Application.module() {
     /*configureMonitoring()*/
     /*configureSerialization()*/
 
-    configureSockets()
+    /*configureSockets()*/
 }

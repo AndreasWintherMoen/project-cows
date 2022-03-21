@@ -7,17 +7,18 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
-import java.security.Principal
+import java.util.UUID
 
-data class UserSession(val userName: String, val count: Int): Principal {
-    override fun getName(): String {
-        return this.userName
-    }
-}
+data class UserSession(val userName: String, val count: Int): Principal
+
+/*data class UserSession(val user:UUID): Principal*/
+private val UUIDMap = mutableSetOf<UUID>()
+
+
+
 
 // TODO: Implement a proper level of security. For now, the user only needs a username to log in.
 fun Application.configureSecurity() {
-    data class MySession(val count: Int = 0)
     install(Sessions) {
         cookie<UserSession>("user_session") {
             cookie.path = "/"
@@ -27,9 +28,10 @@ fun Application.configureSecurity() {
     install(Authentication) {
 
         form("auth_form"){
+            userParamName = "Username"
+            passwordParamName = "Password"
             validate { credentials ->
-                print(credentials)
-                if (credentials.name == "Test"){
+                if (credentials.name == "Test" && credentials.password == "Testesen"){
                     UserIdPrincipal(credentials.name)
                 }
                 else {
@@ -39,11 +41,9 @@ fun Application.configureSecurity() {
         }
         session<UserSession>("auth_session"){
             validate { session ->
-
-                if (session.name.startsWith("jet")){
-                    UserIdPrincipal(session.name)
+                if (session.userName.startsWith("jet")){
+                    session
                 } else{
-                    // TODO: Implement giving user a new token
                     null
                 }
             }
@@ -58,24 +58,29 @@ fun Application.configureSecurity() {
     routing {
 
         get("/login"){
-            call.request.header("userName")
-
+            val newUserUUID = UUID.randomUUID()
+            call.respond(newUserUUID)
+            UUIDMap.add(newUserUUID)
         }
+
         authenticate ("auth_form"){
             post ("/login"){
-                print(call.request)
                 val userName = call.principal<UserIdPrincipal>()?.name
                 call.sessions.set(userName?.let { it1 -> UserSession(userName = it1, count = 1) })
-                print(userName)
                 call.respondText("hello, ${userName}")
-
+                call.respondRedirect("/auth")
             }
         }
-        get("/session/increment") {
-            val session = call.sessions.get<MySession>() ?: MySession()
-            call.sessions.set(session.copy(count = session.count + 1))
-            call.respondText("Counter is ${session.count}. Refresh to increment.")
+
+        authenticate("auth_session"){
+            get("/auth") {
+                val userSession = call.principal<UserSession>()
+                call.sessions.set(userSession?.copy(count = userSession.count+1))
+                call.respondText("Hello, ${userSession?.userName}! Visit count is ${userSession?.count}.")
+            }
         }
+
+
     }
 }
 
