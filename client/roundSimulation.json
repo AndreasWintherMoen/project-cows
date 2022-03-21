@@ -4,7 +4,7 @@
       "id": 0,
       "type": "STONE",
       "position": {
-        "x": 7,
+        "x": 8,
         "y": 4
       }
     },
@@ -12,7 +12,7 @@
       "id": 1,
       "type": "WOOD",
       "position": {
-        "x": 12,
+        "x": 5,
         "y": 3
       }
     }
@@ -20,15 +20,18 @@
   "unitList": [
     {
       "id": 2,
-      "type": "SWORDMAN"
+      "type": "SWORDMAN",
+      "movementSpeed": 0.8
     },
     {
       "id": 3,
-      "type": "SWORDMAN"
+      "type": "SWORDMAN",
+      "movementSpeed": 0.8
     },
     {
       "id": 4,
-      "type": "RUNNER"
+      "type": "RUNNER",
+      "movementSpeed": 1.9
     }
   ],
   "eventLog": [
@@ -55,6 +58,116 @@
           "subject": 2,
           "verb": "MOVE",
           "obj": 2
+        },
+        {
+          "subject": 3,
+          "verb": "SPAWN",
+          "obj": 0
+        },
+        {
+          "subject": 1,
+          "verb": "TARGET",
+          "obj": 2
+        }
+      ]
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": [
+        {
+          "subject": 4,
+          "verb": "SPAWN",
+          "obj": 0
+        }
+      ]
+    },
+    {
+      "actions": [
+        {
+          "subject": 0,
+          "verb": "TARGET",
+          "obj": 2
+        }
+      ]
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": [
+        {
+          "subject": 1,
+          "verb": "TARGET",
+          "obj": 3
+        }
+      ]
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": [
+        {
+          "subject": 1,
+          "verb": "TARGET"
+        }
+      ]
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": [
+        {
+          "subject": 0,
+          "verb": "TARGET",
+          "obj": 3
+        }
+      ]
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": [
+        {
+          "subject": 0,
+          "verb": "TARGET"
         }
       ]
     }

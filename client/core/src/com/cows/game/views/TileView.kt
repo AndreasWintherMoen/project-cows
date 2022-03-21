@@ -9,8 +9,8 @@ class TileView(private val model: TileModel) : Renderable() {
    companion object {
       fun tileTypeToTexture(tileType: TileType): Texture =
          when(tileType) {
-            TileType.GRASS -> Texture("grass.png")
-            TileType.PATH -> Texture("path.png")
+            TileType.GRASS -> Texture("Tiles/grass.png")
+            TileType.PATH -> Texture("Tiles/path.png")
             else -> throw Error("Could not find tile type $tileType")
          }
    }

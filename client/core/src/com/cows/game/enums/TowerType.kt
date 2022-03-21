@@ -1,3 +1,3 @@
 package com.cows.game.enums
 
-enum class TowerType { STONE, WOOD }
+enum class TowerType { NONE, STONE, WOOD, SOMETHING }
