@@ -5,6 +5,7 @@ import com.cows.game.ClickSubscriber
 import com.cows.game.controllers.PlanningTowerController
 import com.cows.game.controllers.TileController
 import com.cows.game.enums.GameState
+import com.cows.game.enums.TileType
 import com.cows.game.enums.TowerType
 import com.cows.game.gameState.GameStateSubscriber
 import com.cows.game.map.Coordinate
@@ -44,6 +45,7 @@ object TowerSpawner: GameStateSubscriber(), ClickSubscriber {
 
     override fun click(position: Vector2, tile: TileController?) {
         if (tile == null) return
+        if (tile.tileModel.type == TileType.PATH) return
         spawnActiveTower(tile.tileModel.coordinate)
     }
 
