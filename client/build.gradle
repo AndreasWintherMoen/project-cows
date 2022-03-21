@@ -1,5 +1,6 @@
 buildscript {
     ext.kotlinVersion = '1.6.10'
+    ext.ktor_version = '1.6.8'
 
     repositories {
         mavenLocal()
@@ -9,7 +10,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.4'
+        classpath 'com.android.tools.build:gradle:7.1.2'
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.15'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 
@@ -95,5 +96,6 @@ project(":core") {
         implementation 'com.google.code.gson:gson:2.9.0'
         implementation("io.ktor:ktor-client-core:1.6.8")
         implementation("io.ktor:ktor-client-cio:1.6.8")
+        implementation("io.ktor:ktor-client-auth:$ktor_version")
     }
 }
