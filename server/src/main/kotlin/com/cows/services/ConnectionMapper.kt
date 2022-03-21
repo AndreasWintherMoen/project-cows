@@ -3,19 +3,24 @@ package com.cows.services
 import ch.qos.logback.core.net.server.Client
 import io.ktor.util.date.*
 import java.util.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.coroutineScope
 
 
 // This object will map connections to the game id's
-// TODO: Create serializer and verification for the recieved instructionlists to prevent a user from making moves for the other
+// TODO: Create serializer and verification for the received instructionlists to prevent a user from making moves for the other
 // TODO: Create an efficient way of checking if a user requesting a gameCode is in an active game.
 // This object compares if the incoming connection is valid for the requested game and if so,
 // maps the requested instruction list to the incoming game.
-object ConnectionMapper {
+class ConnectionMapper {
+
+    // This is the timeout value for the gameCodes. 900 000 is 15 minutes
+    private val gameCodeTimeoutMillis = 900000
 
 
     // This map is used to map the gameId to the actual game, should the client be able to prove that they are
     // one of the clients in the game.
-    private var gameMap:MutableMap<UUID,Game> = Collections.synchronizedMap(mutableMapOf())
+    var gameMap:MutableMap<UUID,Game> = Collections.synchronizedMap(mutableMapOf())
 
 
     // This is an API function which takes in a new connecting client and a gameCodeInteger to create a game
@@ -36,10 +41,6 @@ object ConnectionMapper {
         }
     }
 
-
-
-
-
     // This map will list the currently active and valid gameCodes
     private var gameCodeMap:MutableMap<Int,GameCode> = Collections.synchronizedMap(mutableMapOf())
 
@@ -48,13 +49,12 @@ object ConnectionMapper {
     // This API function is used by the API endpoints to generate a valid code.
     // This function will generate a valid GameCodeInteger and a valid GameCode based on this integer
     // It will then store this GameCode in the GameCodeMap with the key being the GameCodeInteger and the value being the GameCode
-    fun createGameCode(clientConnection:ClientConnection) : Int{
+    fun createGameCode(clientConnection:ClientConnection) : Int {
         // Generates the gameCodeInteger and initializes the gameCode with the creator connection
         val gameCodeInteger:Int = generateGameCodeInteger()
         gameCodeMap[gameCodeInteger] = GameCode(gameCodeInteger,clientConnection)
         return gameCodeInteger
     }
-
 
 
     // This is an internal function which generates a gameCode which can be used, and does not exist in the set of currently available game codes
@@ -78,25 +78,24 @@ object ConnectionMapper {
         val gameCodeMapEntry:GameCode? = gameCodeMap[gameCodeInteger]
         if (gameCodeMapEntry != null){
             return if (
-                    // Checks if the gameCodeMapEntry is no less than 15 minutes old
-                    getTimeMillis()- gameCodeMapEntry.timeOfCreation < 900000
-                    ){
+                // Checks if the gameCodeMapEntry is no less than 15 minutes old
+                getTimeMillis()- gameCodeMapEntry.timeOfCreation < gameCodeTimeoutMillis
+            ){
                 gameCodeMapEntry
-            }
-            else{
+            } else{
+                // If this returns null, then the gameCodeMapEntry has been created later than 15 minutes and therefore is not valid.
+                // Thus the code must also be removed as it should not be in the map and the method returns null.
+                gameCodeMap.remove(gameCodeInteger)
                 null
             }
         }
         else{
             // If the gameCodeMapEntry is null, it does not exist in the gameCodeMap and is therefore not valid.
-            // It may have been removed
             return null
         }
     }
 
-
-
-
+    private val gameCodeGarbageCollector = GameCodeGarbageCollector(gameCodeMap,gameCodeTimeoutMillis,30000L)
 
 
 }
