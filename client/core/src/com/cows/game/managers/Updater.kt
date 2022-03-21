@@ -1,4 +1,4 @@
-package com.cows.game
+package com.cows.game.managers
 
 import com.cows.game.controllers.Updatable
 

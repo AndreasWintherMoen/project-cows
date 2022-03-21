@@ -1,8 +1,9 @@
-package com.cows.game
+package com.cows.game.managers
 
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.ScreenUtils
+import com.cows.game.Application
 import com.cows.game.views.Renderable
 
 object Renderer {
@@ -22,7 +23,7 @@ object Renderer {
         ScreenUtils.clear(0f, 0f, 0f, 1f)
         batch.projectionMatrix = cam.combined
         batch.begin()
-        renderables.forEach { it.render(batch, deltaTime) }
+        renderables.forEach { if (!it.hide) it.render(batch, deltaTime) }
         batch.end()
 
         renderablesToBeAdded.forEach { renderables.add(it) }

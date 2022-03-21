@@ -1,7 +1,7 @@
 package com.cows.game.controllers
 
 import com.badlogic.gdx.math.Vector2
-import com.cows.game.Map
+import com.cows.game.map.Map
 import com.cows.game.models.UnitModel
 import com.cows.game.views.UnitView
 

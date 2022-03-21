@@ -4,7 +4,7 @@
       "id": 0,
       "type": "STONE",
       "position": {
-        "x": 7,
+        "x": 8,
         "y": 4
       }
     },
@@ -12,8 +12,8 @@
       "id": 1,
       "type": "WOOD",
       "position": {
-        "x": 11,
-        "y": 6
+        "x": 5,
+        "y": 3
       }
     }
   ],
@@ -93,13 +93,13 @@
       ]
     },
     {
-      "actions": []
-    },
-    {
-      "actions": []
-    },
-    {
-      "actions": []
+      "actions": [
+        {
+          "subject": 0,
+          "verb": "TARGET",
+          "obj": 2
+        }
+      ]
     },
     {
       "actions": []
@@ -120,6 +120,53 @@
       "actions": [
         {
           "subject": 1,
+          "verb": "TARGET",
+          "obj": 3
+        }
+      ]
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": [
+        {
+          "subject": 1,
+          "verb": "TARGET"
+        }
+      ]
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": [
+        {
+          "subject": 0,
+          "verb": "TARGET",
+          "obj": 3
+        }
+      ]
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": []
+    },
+    {
+      "actions": [
+        {
+          "subject": 0,
           "verb": "TARGET"
         }
       ]
