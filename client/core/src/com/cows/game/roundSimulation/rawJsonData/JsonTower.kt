@@ -1,6 +1,6 @@
 package com.cows.game.roundSimulation.rawJsonData
 
-import com.cows.game.Coordinate
+import com.cows.game.map.Coordinate
 import com.cows.game.enums.TowerType
 import com.cows.game.models.TowerModel
 

@@ -1,7 +1,7 @@
 package com.cows.game.models
 
 import com.badlogic.gdx.math.Vector2
-import com.cows.game.Coordinate
+import com.cows.game.map.Coordinate
 import com.cows.game.enums.UnitType
 
 data class UnitModel (

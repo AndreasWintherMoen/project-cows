@@ -1,7 +1,6 @@
 package com.cows.game.roundSimulation
 
-import com.cows.game.Application
-import com.cows.game.Map
+import com.cows.game.map.Map
 import com.cows.game.controllers.TowerController
 import com.cows.game.controllers.UnitController
 import com.cows.game.roundSimulation.rawJsonData.JsonAction

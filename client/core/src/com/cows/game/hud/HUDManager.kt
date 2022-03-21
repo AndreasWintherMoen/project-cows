@@ -1,11 +1,16 @@
 package com.cows.game.hud
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.math.Vector2
 import com.cows.game.enums.GameState
+import com.cows.game.enums.TowerType
 import com.cows.game.gameState.GameStateSubscriber
+import com.cows.game.managers.FunctionDelayer
+import com.cows.game.managers.TowerSpawner
 
 
 // Should manage which naviagations buttons that should be displayed
 class HUDManager(private val onStartGame: () -> Unit): GameStateSubscriber() {
-    var buttons = mutableListOf<Button>()
+    private val buttons = mutableListOf<Button>()
 
     override fun onChangeGameState(oldGameState: GameState, newGameState: GameState) {
         println("Changing game state from $oldGameState to $newGameState")
@@ -13,11 +18,54 @@ class HUDManager(private val onStartGame: () -> Unit): GameStateSubscriber() {
         buttons.forEach { it.die() }
         buttons.clear()
         when (newGameState) {
-            GameState.ACTIVE_GAME -> print("RETURN BUTTONS FOR: ACTIVE GAME")
-            GameState.NONE -> print("RETURN BUTTONS FOR: ACTIVE GAME")
-            GameState.START_MENU -> print("RETURN BUTTONS FOR: ACTIVE GAME")
-            GameState.PLANNING_DEFENSE -> buttons.add(StartGameButton({ onStartGame.invoke() }))
-            GameState.PLANNING_ATTACK -> print("x == 1")
+            GameState.ACTIVE_GAME -> createActiveGameButtons()
+            GameState.NONE -> {}
+            GameState.START_MENU -> {}
+            GameState.PLANNING_DEFENSE -> createPlanningDefenseButtons()
+            GameState.PLANNING_ATTACK -> createPlanningAttackButtons()
         }
+    }
+
+    private fun createPlanningDefenseButtons() {
+        val startGameButton = Button("HUD/start-button.png") { onStartGame.invoke() }
+        val cancelPlacementButton = Button("HUD/cancel-button.png", Vector2(Gdx.graphics.width - 150f, 30f))
+
+        fun cancelPlacement() {
+            TowerSpawner.cancelPlacement()
+            FunctionDelayer.invokeFunctionAtEndOfThisFrame { buttons.forEach { it.hide = it == cancelPlacementButton } }
+        }
+
+        fun selectTower(type: TowerType) {
+            TowerSpawner.selectTower(type) { cancelPlacement() }
+            FunctionDelayer.invokeFunctionAtEndOfThisFrame { buttons.forEach { it.hide = it != cancelPlacementButton } }
+        }
+
+        cancelPlacementButton.hide = true
+        cancelPlacementButton.onClick = { cancelPlacement() }
+
+        val pos = Vector2(Gdx.graphics.width - 3 * 106f, 0f) // 106 is currently the width of each sprite. change this later
+        val spawnTowerButton1 = Button("Towers/tower1.png", Vector2(pos.x, pos.y))
+        val spawnTowerButton2 = Button("Towers/tower2.png", Vector2(pos.x + 106, pos.y))
+        val spawnTowerButton3 = Button("Towers/tower3.png", Vector2(pos.x + 106 * 2, pos.y))
+
+        spawnTowerButton1.onClick = { selectTower(TowerType.WOOD) }
+        spawnTowerButton2.onClick = { selectTower(TowerType.STONE) }
+        spawnTowerButton3.onClick = { selectTower(TowerType.SOMETHING) }
+
+        buttons.add(startGameButton)
+        buttons.add(cancelPlacementButton)
+        buttons.add(spawnTowerButton1)
+        buttons.add(spawnTowerButton2)
+        buttons.add(spawnTowerButton3)
+    }
+
+    private fun createPlanningAttackButtons() {
+        val startGameButton = Button("HUD/start-button.png", { onStartGame.invoke() })
+
+        buttons.add(startGameButton)
+    }
+
+    private fun createActiveGameButtons() {
+        //TODO: Implement this
     }
 }
