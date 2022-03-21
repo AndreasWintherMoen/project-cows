@@ -33,19 +33,21 @@ class RoundSimulator {
         //perform simulation and populate eventlog
         while(!gameOver){
             currentTick.clear()
-            units.forEach{calculateUnit(it)}
-            towers.forEach{calculateTower(it)}
+            currentTick += towers.mapNotNull { calculateTower(it) }
+            currentTick += units.mapNotNull { calculateUnit(it, path) }
             eventLog.add(JsonTick(currentTick))
         }
 
         return JsonRoundSimulation(defendInstruction, attackInstruction, eventLog)
     }
 
-    fun calculateUnit(unit : UnitSimulationModel, path : List<IntArray> ){
+    fun calculateUnit(unit : UnitSimulationModel, path : List<IntArray> ): JsonAction? {
+            if (unit.isDead()) return JsonAction(unit.id, ActionType.DIE, null)
+
             //if the unit is at goal position
             if (unit.pathIndex == path.size-1) {
                 gameOver = true
-                currentTick.add(JsonAction(unit.id, ActionType.WIN, null))
+                return JsonAction(unit.id, ActionType.WIN, null)
             }
             else{
                 //need to handle unit movement here, unless we want to add the path to each individual unit.
@@ -53,44 +55,37 @@ class RoundSimulator {
                 if(unit.movementProgress >= unit.movementSpeed){
                     unit.move()
                     unit.movementProgress = 0
-                    currentTick.add(JsonAction(unit.id, ActionType.MOVE, null))
+                    return JsonAction(unit.id, ActionType.MOVE, null)
                 }
-
+                return null
             }
         }
 
-    fun calculateTower(tower : TowerSimulationModel){
-            if (tower.target != null) {
-                if(tower.targetInRange()){ //TODO implement
-                    if(tower.cooldown == 0){
-                        //simulates an attack
-                        //check here if unit is attacked tower.target.health-turretdamage; unit.Health <= 0 ? unit.kill()
-                        tower.attack()
-                        currentTick.add(JsonAction(tower.id, ActionType.ATTACK, tower.target!!.id))
-                        tower.setCooldown()
+    fun calculateTower(tower : TowerSimulationModel): JsonAction? {
+        tower.decrementCooldown()
 
-                        if (tower.target!!.isDead()){
-                            currentTick.add(JsonAction(tower.target!!.id, ActionType.DIE, null))
-                            //tower.updateTarget() TODO implement
+        // if no target, either set new target if a unit is in range, or do nothing if no unit in range
+        if (tower.target == null) {
+            val newTarget = tower.findNewTarget() ?: return null
+            tower.target = newTarget
+            return JsonAction(tower.id, ActionType.TARGET, tower.target!!.id)
+        }
 
-                            if(tower.target != null){
-                                currentTick.add(JsonAction(tower.id, ActionType.TARGET, tower.target!!.id))
-                            }
-                        }
-                    }else{
-                        tower.decrementCooldown()
-                    }
-                }else{
-                    //tower.updateTarget() //TODO repetetive code, consider changing this
-                    if(tower.target != null){
-                        currentTick.add(JsonAction(tower.id, ActionType.TARGET, tower.target!!.id))
-                    }
-                }
-            } else{
-                //tower.updateTarget() //TODO implement
-                if(tower.target != null){
-                    currentTick.add(JsonAction(tower.id, ActionType.TARGET, tower.target!!.id))
-                }
-            }
+        // if target is no longer in range, target a new unit (if in range), or null (if none in range)
+        if (!tower.targetInRange()) {
+            val newTarget = tower.findNewTarget()
+            tower.target = newTarget
+            return JsonAction(tower.id, ActionType.TARGET, tower.target?.id)
+        }
+
+        // if cooldown is 0, attack target
+        if (tower.cooldown == 0) {
+            tower.attack()
+            tower.setCooldown()
+            return JsonAction(tower.id, ActionType.ATTACK, tower.target!!.id)
+        }
+
+        // has target, but tower is still on cooldown, so do nothing
+        return null
     }
 }
