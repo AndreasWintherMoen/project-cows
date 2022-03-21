@@ -9,7 +9,7 @@ object FunctionDelayer {
     fun invokeFunctionAtEndOfNextFrame(function: () -> Unit) = nextFrameFunctions.add(function)
 
     fun invokeRegisteredFunctions() {
-        thisFrameFunctions.forEach { println(it); it.invoke() }
+        thisFrameFunctions.forEach { it.invoke() }
         thisFrameFunctions.clear()
         thisFrameFunctions += nextFrameFunctions
         nextFrameFunctions.clear()
