@@ -18,10 +18,10 @@ class RoundSimulator {
     //TODO add gameState, to simulate money, store map etc.
     fun simulate(map : Map, defendInstruction : List<JsonTower>, attackInstruction : List<JsonUnit>) : JsonRoundSimulation {
 
-        var path = map.getPathCoordinates()
+        val path = Map.getPathCoordinates()
 
         //init simulation
-        var units = mutableListOf<UnitSimulationModel>()
+        val units = mutableListOf<UnitSimulationModel>()
         val towers = mutableListOf<TowerSimulationModel>()
 
         //TODO possibly split this up so they dont "spawn" at once
