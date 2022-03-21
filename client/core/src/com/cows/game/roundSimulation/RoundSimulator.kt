@@ -1,10 +1,10 @@
 package com.cows.game.roundSimulation
 
+import com.cows.game.map.Map
 import com.cows.game.roundSimulation.rawJsonData.*
 import com.cows.game.roundSimulation.simulationModels.TowerSimulationModel
 import com.cows.game.roundSimulation.simulationModels.UnitSimulationModel
 import kotlin.math.roundToInt
-
 
 class RoundSimulator {
 
@@ -15,20 +15,19 @@ class RoundSimulator {
 
     //Input: attaclInstruction, defendInstruction og GameState
     //Output RoundSimulatoion
-    //TODO add gameState, to simulate money etc.
-    //TODO need to know the path (and start + end position)
-    fun simulate( defendInstruction : List<JsonTower>, attackInstruction : List<JsonUnit>) : JsonRoundSimulation {
+    //TODO add gameState, to simulate money, store map etc.
+    fun simulate(map : Map, defendInstruction : List<JsonTower>, attackInstruction : List<JsonUnit>) : JsonRoundSimulation {
+
+        var path = map.getPathCoordinates()
 
         //init simulation
         var units = mutableListOf<UnitSimulationModel>()
         val towers = mutableListOf<TowerSimulationModel>()
 
-        //TODO add cordinates
         //TODO possibly split this up so they dont "spawn" at once
         //TODO add spawn instruction
-        //TODO implement
-        attackInstruction.forEach{units.add(UnitSimulationModel(it.id, 4, 0, 5))}
-        defendInstruction.forEach{towers.add(TowerSimulationModel(it.id, it.position, it.range.roundToInt(), 2, 1))}
+        attackInstruction.forEach{units.add(UnitSimulationModel(it.id, 4, 0, 5, 0))}
+        defendInstruction.forEach{towers.add(TowerSimulationModel(it.id, it.position, it.range.roundToInt(), path, 2, 2, ))}
 
 
         //perform simulation and populate eventlog
@@ -42,9 +41,9 @@ class RoundSimulator {
         return JsonRoundSimulation(defendInstruction, attackInstruction, eventLog)
     }
 
-    fun calculateUnit(unit : UnitSimulationModel){
-        //todo find goal position
-            if (unit.position == goalPos) {
+    fun calculateUnit(unit : UnitSimulationModel, path : List<IntArray> ){
+            //if the unit is at goal position
+            if (unit.pathIndex == path.size-1) {
                 gameOver = true
                 currentTick.add(JsonAction(unit.id, ActionType.WIN, null))
             }
@@ -52,9 +51,9 @@ class RoundSimulator {
                 //need to handle unit movement here, unless we want to add the path to each individual unit.
                 unit.incrementMovementProgress()
                 if(unit.movementProgress >= unit.movementSpeed){
-                    //unit.move() //TODO get function to find next place to move to
+                    unit.move()
+                    unit.movementProgress = 0
                     currentTick.add(JsonAction(unit.id, ActionType.MOVE, null))
-
                 }
 
             }

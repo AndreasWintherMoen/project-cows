@@ -1,14 +1,13 @@
 package com.cows.game.roundSimulation.simulationModels
 
-import com.cows.game.Coordinate
-
 
 class UnitSimulationModel(
         val id : Int,
         val movementSpeed : Int, //ticks required for moving one square
         var movementProgress: Int,
         var health: Int,
-        var position : Coordinate,
+        var pathIndex : Int, //represents position in the Path Array.
+        var timeToSpawn : Int //TODO implement. Ticks until this unit will spawn
         ) {
 
         fun damage(damage : Int){
@@ -22,8 +21,8 @@ class UnitSimulationModel(
                 movementProgress++
         }
 
-        fun move(newPosition : Coordinate){
-                this.position = newPosition
+        fun move(){
+                this.pathIndex++
         }
 
 }
