@@ -19,14 +19,21 @@ class TowerSimulationModel(val id :Int, val position: Coordinate, range : Int, u
     fun setCooldown(){
         cooldown = timeBetweenAttacks
     }
+
     fun attack() {
         target!!.damage(damage)
     }
+
     fun targetInRange() : Boolean = target != null && pathIndicesInRange.contains(target!!.pathIndex)
 
 
     fun findPathIndicesInRange(range : Int, path : List<IntArray> ) : IntArray {
         //TODO implement, so that it only needs to check these positions
+    }
+
+    fun findNewTarget(): UnitSimulationModel? {
+        // TODO implement this
+        return null
     }
 
 
