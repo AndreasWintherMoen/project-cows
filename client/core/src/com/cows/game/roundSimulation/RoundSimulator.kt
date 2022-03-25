@@ -41,7 +41,7 @@ class RoundSimulator {
         return JsonRoundSimulation(defendInstruction, attackInstruction, eventLog)
     }
 
-    fun calculateUnit(unit : UnitSimulationModel, path : List<IntArray> ): JsonAction? {
+    private fun calculateUnit(unit : UnitSimulationModel, path : List<IntArray> ): JsonAction? {
             if (unit.isDead()) return JsonAction(unit.id, ActionType.DIE, null)
 
             //if the unit is at goal position
@@ -61,19 +61,19 @@ class RoundSimulator {
             }
         }
 
-    fun calculateTower(tower : TowerSimulationModel): JsonAction? {
+    private fun calculateTower(tower : TowerSimulationModel, units : MutableList<UnitSimulationModel>): JsonAction? {
         tower.decrementCooldown()
 
         // if no target, either set new target if a unit is in range, or do nothing if no unit in range
         if (tower.target == null) {
-            val newTarget = tower.findNewTarget() ?: return null
+            val newTarget = tower.findNewTarget(units) ?: return null
             tower.target = newTarget
             return JsonAction(tower.id, ActionType.TARGET, tower.target!!.id)
         }
 
         // if target is no longer in range, target a new unit (if in range), or null (if none in range)
         if (!tower.targetInRange()) {
-            val newTarget = tower.findNewTarget()
+            val newTarget = tower.findNewTarget(units)
             tower.target = newTarget
             return JsonAction(tower.id, ActionType.TARGET, tower.target?.id)
         }

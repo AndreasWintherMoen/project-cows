@@ -31,8 +31,16 @@ class TowerSimulationModel(val id :Int, val position: Coordinate, range : Int, u
         //TODO implement, so that it only needs to check these positions
     }
 
-    fun findNewTarget(): UnitSimulationModel? {
-        // TODO implement this
+    fun findNewTarget(units : MutableList<UnitSimulationModel>): UnitSimulationModel? {
+        //Assumption: pathIndicesInRange are ordered in decreasing order
+        //room for optimization if needed, eg by checking if the unit pos is outside of the range, and then prune it away
+        pathIndicesInRange.forEach { indice ->
+            units.forEach{ unit ->
+                if(unit.movementProgress == indice){
+                    return unit
+                }
+            }
+        }
         return null
     }
 
