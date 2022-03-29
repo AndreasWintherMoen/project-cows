@@ -5,7 +5,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 
-class GameCodeGarbageCollector(private val gameCodeMap:MutableMap<Int,GameCode>,private val gameCodeTimeout: Int, private val timeBetweenChecks:Long) {
+class GameCodeGarbageCollector(private val gameCodeMap:MutableMap<String,GameCode>,private val gameCodeTimeout: Int, private val timeBetweenChecks:Long) {
 
     var lastTimestampMillis = getTimeMillis()
 

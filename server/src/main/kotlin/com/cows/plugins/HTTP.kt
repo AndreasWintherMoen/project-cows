@@ -2,6 +2,7 @@ package com.cows.plugins
 
 import io.ktor.server.plugins.*
 import io.ktor.http.*
+import io.ktor.serialization.gson.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.request.*
@@ -25,5 +26,4 @@ fun Application.configureHTTP() {
         header("MyCustomHeader")
         anyHost() // @TODO: Don't do this in production if possible. Try to limit it.
     }
-
 }
