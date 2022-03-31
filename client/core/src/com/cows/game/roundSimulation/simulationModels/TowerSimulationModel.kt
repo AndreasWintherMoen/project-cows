@@ -28,7 +28,13 @@ class TowerSimulationModel(val id :Int, val position: Coordinate, range : Int, u
 
 
     fun findPathIndicesInRange(range : Int, path : List<IntArray> ) : IntArray {
-        //TODO implement, so that it only needs to check these positions
+        // TODO implement, so that it only needs to check these positions
+        return IntArray(0)
+    }
+
+    fun findNewTarget(): UnitSimulationModel? {
+        // TODO implement this
+        return null
     }
 
     fun findNewTarget(units : MutableList<UnitSimulationModel>): UnitSimulationModel? {
