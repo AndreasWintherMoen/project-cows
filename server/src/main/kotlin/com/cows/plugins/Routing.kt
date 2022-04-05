@@ -30,7 +30,7 @@ fun Application.configureRouting() {
         get("/game/create"){
             val user = ClientConnection()
             val gameSetup = ConnectionMapper.createGameCode(user)
-            call.respond(gson.toJson(GameCreateResponse(user.id, gameSetup.gameJoinCode, gameSetup.gameCodeUUID)))
+            call.respondText(gson.toJson(GameCreateResponse(user.id, gameSetup.gameJoinCode, gameSetup.gameCodeUUID)), ContentType.Application.Json, HttpStatusCode.OK)
         }
 
         get("/game/join/{gameJoinCode}"){
@@ -38,7 +38,7 @@ fun Application.configureRouting() {
             val user = ClientConnection()
             val gameCodeUUID = ConnectionMapper.createGame(user, call.parameters["gameJoinCode"]!!)
             if(gameCodeUUID == null) call.respond(HttpStatusCode.NotFound, "Game code not valid")
-            call.respond(gson.toJson(GameJoinResponse(user.id, gameCodeUUID!!)));
+            call.respondText(gson.toJson(GameJoinResponse(user.id, gameCodeUUID!!)), ContentType.Application.Json, HttpStatusCode.OK);
         }
     }
 }
