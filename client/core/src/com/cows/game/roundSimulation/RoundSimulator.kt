@@ -24,16 +24,18 @@ class RoundSimulator {
         val units = mutableListOf<UnitSimulationModel>()
         val towers = mutableListOf<TowerSimulationModel>()
 
-        //TODO possibly split this up so they dont "spawn" at once
         //TODO add spawn instruction
-        attackInstruction.forEach{units.add(UnitSimulationModel(it.id, 4, 0, 5, 0))}
+        var timeToNextSpawn = 0
+        attackInstruction.forEach{
+            timeToNextSpawn += 5; //TODO(make these attributes based on various units stats)
+            units.add(UnitSimulationModel(it.id, 4, 0, 5, 0, timeToNextSpawn))}
         defendInstruction.forEach{towers.add(TowerSimulationModel(it.id, it.position, it.range.roundToInt(), path, 2, 2, ))}
 
 
         //perform simulation and populate eventlog
         while(!gameOver){
             towers.forEach { it.decrementCooldown() }
-            val towerActions = towers.mapNotNull { calculateTowerAction(it) }
+            val towerActions = towers.mapNotNull { calculateTowerAction(it, units) }
             towerActions.forEach { it.processAction() }
             currentTick += towerActions.map { it.toJsonAction() }
 
@@ -65,20 +67,23 @@ class RoundSimulator {
     fun calculateUnit(unit : UnitSimulationModel): SimulationAction? {
         if (unit.isDead()) return DieSimulationAction (unit)
         if (unit.pathIndex == Map.PATH.size-1) return WinSimulationAction(unit)
-        if (unit.movementProgress >= unit.movementSpeed) return MoveSimulationAction(unit, unit.pathIndex + 1)
+        if (unit.movementProgress >= unit.movementSpeed){
+            unit.resetMovementProgress()
+            return MoveSimulationAction(unit, unit.pathIndex + 1)
+        }
         return null
     }
 
-    fun calculateTowerAction(tower : TowerSimulationModel): SimulationAction? {
+    fun calculateTowerAction(tower : TowerSimulationModel, units : MutableList<UnitSimulationModel>): SimulationAction? {
         // if no target, either set new target if a unit is in range, or do nothing if no unit in range
         if (tower.target == null) {
-            val newTarget = tower.findNewTarget() ?: return EmptySimulationAction()
+            val newTarget = tower.findNewTarget(units) ?: return EmptySimulationAction()
             return TargetSimulationAction(tower, newTarget)
         }
 
         // if target is no longer in range, target a new unit (if in range), or null (if none in range)
         if (!tower.targetInRange()) {
-            val newTarget = tower.findNewTarget()
+            val newTarget = tower.findNewTarget(units)
             return TargetSimulationAction(tower, newTarget)
         }
 

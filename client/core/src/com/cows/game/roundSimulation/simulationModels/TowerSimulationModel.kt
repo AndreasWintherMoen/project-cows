@@ -2,13 +2,11 @@ package com.cows.game.roundSimulation.simulationModels
 
 
 import com.cows.game.map.Coordinate
-import com.cows.game.roundSimulation.ActionType
-import com.cows.game.roundSimulation.rawJsonData.JsonAction
 
 class TowerSimulationModel(val id :Int, val position: Coordinate, range : Int, unitPath: List<IntArray>, private val timeBetweenAttacks : Int, private val damage : Int ) {
     var target : UnitSimulationModel? = null
     var cooldown : Int = 0
-    var pathIndicesInRange = findPathIndicesInRange(range, unitPath)
+    var pathIndicesInRange : IntArray = findPathIndicesInRange(range, unitPath)
 
     fun decrementCooldown(){
         if(cooldown < 0){
@@ -28,13 +26,16 @@ class TowerSimulationModel(val id :Int, val position: Coordinate, range : Int, u
 
 
     fun findPathIndicesInRange(range : Int, path : List<IntArray> ) : IntArray {
-        // TODO implement, so that it only needs to check these positions
-        return IntArray(0)
-    }
+        var pathIndicesInRange = arrayListOf<Int>()
 
-    fun findNewTarget(): UnitSimulationModel? {
-        // TODO implement this
-        return null
+        path.forEachIndexed { index, coordinate ->
+        if (position.x- range <= coordinate[0] && coordinate[1] <= position.x + range){
+                if (position.y - range <= coordinate[1] && coordinate[1] <= position.y+ range) {
+                    pathIndicesInRange.add(index)
+                }
+            }
+        }
+        return this.pathIndicesInRange
     }
 
     fun findNewTarget(units : MutableList<UnitSimulationModel>): UnitSimulationModel? {
@@ -49,7 +50,5 @@ class TowerSimulationModel(val id :Int, val position: Coordinate, range : Int, u
         }
         return null
     }
-
-
 }
 
