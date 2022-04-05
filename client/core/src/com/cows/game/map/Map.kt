@@ -24,7 +24,7 @@ object Map {
         return try {
             val charMap = File("maps/$FILE_NAME.map").readText().lines().map { it.toCharArray() }
             val map = charMap.map { charArrayToIntArray(it) }
-            generatePath(flip(map))
+            generatePath(map)
         }
         catch (e: Exception){
             error("""
