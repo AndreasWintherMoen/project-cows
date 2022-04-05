@@ -76,7 +76,7 @@ class RoundSimulator {
 
     fun calculateTowerAction(tower : TowerSimulationModel, units : MutableList<UnitSimulationModel>): SimulationAction? {
         // if no target, either set new target if a unit is in range, or do nothing if no unit in range
-        if (tower.target == null) {
+        if (tower.target == null || tower.target!!.isDead()) {
             val newTarget = tower.findNewTarget(units) ?: return EmptySimulationAction()
             return TargetSimulationAction(tower, newTarget)
         }

@@ -30,4 +30,12 @@ class UnitSimulationModel(
         fun move(){
                 this.pathIndex++
         }
+
+        fun die() {
+                TODO("Not yet implemented")
+        }
+
+        fun win() {
+                TODO("Not yet implemented")
+        }
 }

@@ -26,7 +26,7 @@ data class TargetSimulationAction(val tower: TowerSimulationModel, val unit: Uni
     }
     override val type = ActionType.TARGET
     override fun toJsonAction(): JsonAction {
-        TODO("Not yet implemented")
+        return JsonAction(tower.id, type, unit?.id)
     }
 
 }
@@ -35,7 +35,7 @@ data class AttackSimulationAction(val tower: TowerSimulationModel): SimulationAc
     override fun processAction() = tower.attack()
     override val type = ActionType.ATTACK
     override fun toJsonAction(): JsonAction {
-        TODO("Not yet implemented")
+        return JsonAction(tower.id, type, null)
     }
 }
 
