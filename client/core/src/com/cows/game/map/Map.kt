@@ -24,7 +24,7 @@ object Map {
         return try {
             val charMap = File("maps/$FILE_NAME.map").readText().lines().map { it.toCharArray() }
             val map = charMap.map { charArrayToIntArray(it) }
-            generatePath(map)
+            generatePath(flip(map))
         }
         catch (e: Exception){
             error("""
@@ -60,12 +60,20 @@ object Map {
             }
             tempPath += tempCoordinates
         }
-
         return tempPath
     }
 
     fun getPathCoordinates(): List<IntArray> {
         return PATH.map { c -> intArrayOf(c.x, c.y) }
+    }
+
+    fun flip(kart: List<List<Int>>): List<List<Int>>{
+        val temp = kart.toMutableList()
+        for (list in kart){
+            temp.remove(list)
+            temp.add(list.reversed())
+        }
+        return temp.toList()
     }
 
     fun getTile(x: Int, y: Int): TileController {
