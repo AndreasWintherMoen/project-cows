@@ -46,7 +46,12 @@ object TowerSpawner: GameStateSubscriber(), ClickSubscriber {
     override fun click(position: Vector2, tile: TileController?) {
         if (tile == null) return
         if (tile.tileModel.type == TileType.PATH) return
+        if (checkIfTileIsOccupied(tile.tileModel.coordinate)) return
         spawnActiveTower(tile.tileModel.coordinate)
+    }
+
+    private fun checkIfTileIsOccupied(position: Coordinate): Boolean {
+        return spawnedTowers.any() { it.model.tileCoordinate == position }
     }
 
 }
