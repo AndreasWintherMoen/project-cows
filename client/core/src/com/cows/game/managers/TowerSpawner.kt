@@ -51,7 +51,7 @@ object TowerSpawner: GameStateSubscriber(), ClickSubscriber {
     }
 
     private fun checkIfTileIsOccupied(position: Coordinate): Boolean {
-        return spawnedTowers.any() { it.model.tileCoordinate == position }
+        return spawnedTowers.any { it.model.tileCoordinate == position }
     }
 
 }
