@@ -1,5 +1,6 @@
 package com.cows.services
 
+import ch.qos.logback.core.net.server.Client
 import io.ktor.util.date.*
 import java.security.MessageDigest
 import java.util.*
@@ -16,7 +17,8 @@ object ConnectionMapper {
 
     // This map is used to map the gameId to the actual game, should the client be able to prove that they are
     // one of the clients in the game.
-    var gameMap: MutableMap<UUID, Game> = Collections.synchronizedMap(mutableMapOf())
+
+    private var gameMap: MutableMap<UUID, Game> = Collections.synchronizedMap(mutableMapOf())
 
     // This is an API function which takes in a new connecting client and a gameCodeInteger to create a game
     // The function will check if the requested gameCode is valid and if so will create a UUID for
@@ -51,6 +53,15 @@ object ConnectionMapper {
         return gameSetup
     }
 
+    fun getUserInGame(userUUID:UUID, gameUUID:UUID): ClientConnection?{
+        if (gameMap.containsKey(gameUUID) &&
+            gameMap[gameUUID]!!.isConnectionInGame(userUUID)){
+            return gameMap[gameUUID]!!.getClientConnection(userUUID)
+        } else {
+            return null
+            }
+        }
+
     // Convert game ID to a easier to read game code
     // Should be random enough, but could/should implement check to see if exists
     private fun generateGameCode(gameCodeUUID: UUID): String {
@@ -68,7 +79,7 @@ object ConnectionMapper {
 
     private fun hashAndExtractCode(id: String, mod: Int): String {
         return MessageDigest
-            .getInstance("SHA256")
+            .getInstance("SHA-256")
             .digest(id.toByteArray())
             .joinToString("") { "%02x".format(it) }
             .substring(0 + mod, 11 + mod)

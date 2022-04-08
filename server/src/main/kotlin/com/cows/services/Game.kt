@@ -17,6 +17,14 @@ class Game(private val gameConnections:Pair<ClientConnection,ClientConnection>) 
         return (gameConnections.first == clientConnection || gameConnections.second == clientConnection)
     }
 
+    fun isConnectionInGame(userUUID: UUID): Boolean{
+        return (gameConnections.first.id == userUUID || gameConnections.second.id == userUUID)
+    }
+
+    fun getClientConnection(userUUID:UUID) : ClientConnection {
+        return if (gameConnections.first.id == userUUID) gameConnections.first else gameConnections.second
+    }
+
 
 
     private val Id:Int = lastId.getAndIncrement()
