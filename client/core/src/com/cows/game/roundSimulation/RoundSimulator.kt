@@ -8,15 +8,13 @@ import kotlin.math.roundToInt
 
 class RoundSimulator {
 
-    private var gameOver = false
-    private val eventLog = mutableListOf<JsonTick>();
-    private val currentTick = arrayListOf<JsonAction>()
-    private val path = Map.getPathCoordinates()
-
     //Input: attackInstruction, defendInstruction og GameState
     //Output RoundSimulation
     //TODO add gameState, to simulate money, store map etc.
     fun simulate(defendInstruction : List<JsonTower>, attackInstruction : List<JsonUnit>) : JsonRoundSimulation {
+        val eventLog = mutableListOf<JsonTick>();
+
+        val path = Map.getPathCoordinates()
 
         //init simulation
         val units = mutableListOf<UnitSimulationModel>()
@@ -34,8 +32,10 @@ class RoundSimulator {
                     TowerSimulationModel(
                     it.id, it.position, 2, path, 0, 1, ))}
 
+        var gameOver = false
         //perform simulation and populate eventlog
-        while(!gameOver){
+        while(!gameOver) {
+            val currentTick = arrayListOf<JsonAction>()
 
             units.forEach { it.incrementMovementProgress() }
             val unitActions = units.mapNotNull { calculateUnit(it) }
@@ -49,12 +49,15 @@ class RoundSimulator {
 
             eventLog.add(JsonTick(currentTick.clone() as ArrayList<JsonAction>))
 
-            currentTick.clear()
+            if (unitActions.any { it.type == ActionType.WIN }) {
+                win()
+                gameOver = true
+            }
 
-            if (unitActions.any { it.type == ActionType.WIN }) win()
-
-            //TODO possibly do this to something action based?
-            else if (units.all { it.isDead}) lose()
+            else if (units.all { it.isDead}) {
+                lose()
+                gameOver = true
+            }
 
 
         }
@@ -64,17 +67,17 @@ class RoundSimulator {
 
     private fun win() {
         println("attacker won")
-        gameOver = true
+        //gameOver = true
         //TODO return who won in gamestate
     }
 
     private fun lose() {
-        gameOver = true
+        //gameOver = true
         println("defender won")
         // return defender as winner
     }
 
-    fun calculateUnit(unit : UnitSimulationModel): SimulationAction? {
+    private fun calculateUnit(unit : UnitSimulationModel): SimulationAction? {
         if(unit.isDead) return null
         if(!unit.isSpawned){
             unit.timeToSpawn--
@@ -89,7 +92,7 @@ class RoundSimulator {
         return null
     }
 
-    fun calculateTowerAction(tower : TowerSimulationModel, units : MutableList<UnitSimulationModel>): SimulationAction? {
+    private fun calculateTowerAction(tower : TowerSimulationModel, units : MutableList<UnitSimulationModel>): SimulationAction? {
         // if no target, either set new target if a unit is in range, or do nothing if no unit in range
         if (tower.target == null) {
             val newTarget = tower.findNewTarget(units) ?: return null

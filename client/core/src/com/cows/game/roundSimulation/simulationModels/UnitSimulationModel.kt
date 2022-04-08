@@ -27,14 +27,13 @@ class UnitSimulationModel(
         }
 
         fun die() {
-                //TODO("Not yet implemented")
                 isDead = true
                 println("unit died!")
         }
 
         fun win() {
                 println("unit won!")
-                //TODO("Not yet implemented")
+                //TODO do something more here?
         }
         fun spawn(){
                 isSpawned = true;

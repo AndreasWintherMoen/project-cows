@@ -10,14 +10,12 @@ class TowerSimulationModel(val id: Int, val position: Coordinate, range: Int, un
 
 
     fun decrementCooldown() {
-
-
         if (cooldown > 0) {
             cooldown--
         }
     }
 
-    fun setCooldown() {
+    private fun setCooldown() {
         cooldown = timeBetweenAttacks
     }
 
@@ -50,7 +48,6 @@ class TowerSimulationModel(val id: Int, val position: Coordinate, range: Int, un
         pathIndicesInRange.forEach { index ->
             units.forEach { unit ->
                 if (unit.pathIndex == index && !unit.isDead && unit.isSpawned) {
-                    println("found unit "+ unit.id + "at pos " + index)
                     return unit
                 }
             }
