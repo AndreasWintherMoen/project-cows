@@ -7,24 +7,19 @@ class UnitSimulationModel(
         var movementProgress: Int,
         var health: Int,
         var pathIndex : Int, //represents position in the Path Array.
-        var timeToSpawn : Int //number of ticks before initial move for unit
+        var timeToSpawn : Int, //number of ticks before initial move for unit
+        var isSpawned: Boolean = false,
+        var isDead : Boolean = false
         ) {
 
         fun damage(damage : Int){
-                health.minus(damage)
-        }
-        fun isDead() : Boolean{
-                return health <= 0
+                health -=damage
         }
         fun resetMovementProgress(){
                 movementProgress -= movementSpeed;
         }
-        fun incrementMovementProgress(){
-                if(timeToSpawn < 0){
-                        movementProgress++
-                }else{
-                        timeToSpawn--
-                }
+        fun incrementMovementProgress() {
+                movementProgress++
         }
 
         fun move(){
@@ -32,10 +27,16 @@ class UnitSimulationModel(
         }
 
         fun die() {
-                TODO("Not yet implemented")
+                //TODO("Not yet implemented")
+                isDead = true
+                println("unit died!")
         }
 
         fun win() {
-                TODO("Not yet implemented")
+                println("unit won!")
+                //TODO("Not yet implemented")
+        }
+        fun spawn(){
+                isSpawned = true;
         }
 }

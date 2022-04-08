@@ -11,87 +11,101 @@ class RoundSimulator {
     private var gameOver = false
     private val eventLog = mutableListOf<JsonTick>();
     private val currentTick = arrayListOf<JsonAction>()
-
+    private val path = Map.getPathCoordinates()
 
     //Input: attackInstruction, defendInstruction og GameState
-    //Output RoundSimulatoion
+    //Output RoundSimulation
     //TODO add gameState, to simulate money, store map etc.
     fun simulate(defendInstruction : List<JsonTower>, attackInstruction : List<JsonUnit>) : JsonRoundSimulation {
-
-        val path = Map.getPathCoordinates()
 
         //init simulation
         val units = mutableListOf<UnitSimulationModel>()
         val towers = mutableListOf<TowerSimulationModel>()
 
-        //TODO add spawn instruction
+
         var timeToNextSpawn = 0
         attackInstruction.forEach{
-            timeToNextSpawn += 5; //TODO(make these attributes based on various units stats)
-            units.add(UnitSimulationModel(it.id, 4, 0, 5, 0, timeToNextSpawn))}
-        defendInstruction.forEach{towers.add(TowerSimulationModel(it.id, it.position, it.range.roundToInt(), path, 2, 2, ))}
+            units.add(UnitSimulationModel(it.id, 1, 0, 2, 0, timeToNextSpawn))
+            timeToNextSpawn += 2; //TODO(make these attributes based on various units stats)
 
+        }
+        defendInstruction.forEach{
+            towers.add(
+                    TowerSimulationModel(
+                    it.id, it.position, 2, path, 0, 1, ))}
 
         //perform simulation and populate eventlog
         while(!gameOver){
-            towers.forEach { it.decrementCooldown() }
-            val towerActions = towers.mapNotNull { calculateTowerAction(it, units) }
-            towerActions.forEach { it.processAction() }
-            currentTick += towerActions.map { it.toJsonAction() }
 
             units.forEach { it.incrementMovementProgress() }
             val unitActions = units.mapNotNull { calculateUnit(it) }
             unitActions.forEach { it.processAction() }
             currentTick += unitActions.map { it.toJsonAction() }
 
-            eventLog.add(JsonTick(currentTick))
+            towers.forEach { it.decrementCooldown() }
+            val towerActions = towers.mapNotNull { calculateTowerAction(it, units) }
+            towerActions.forEach { it.processAction() }
+            currentTick += towerActions.map { it.toJsonAction() }
+
+            eventLog.add(JsonTick(currentTick.clone() as ArrayList<JsonAction>))
+
             currentTick.clear()
 
             if (unitActions.any { it.type == ActionType.WIN }) win()
-            else if (unitActions.all { it.type == ActionType.DIE }) lose()
+
+            //TODO possibly do this to something action based?
+            else if (units.all { it.isDead}) lose()
+
+
         }
 
         return JsonRoundSimulation(defendInstruction, attackInstruction, eventLog)
     }
 
     private fun win() {
+        println("attacker won")
         gameOver = true
-        // return attacker as winner
+        //TODO return who won in gamestate
     }
 
     private fun lose() {
         gameOver = true
+        println("defender won")
         // return defender as winner
     }
 
     fun calculateUnit(unit : UnitSimulationModel): SimulationAction? {
-        if (unit.isDead()) return DieSimulationAction (unit)
+        if(unit.isDead) return null
+        if(!unit.isSpawned){
+            unit.timeToSpawn--
+            return if(unit.timeToSpawn > 0) null else SpawnSimulationAction(unit,0)
+        }
+        if (unit.health <= 0) return DieSimulationAction (unit)
         if (unit.pathIndex == Map.PATH.size-1) return WinSimulationAction(unit)
         if (unit.movementProgress >= unit.movementSpeed){
             unit.resetMovementProgress()
-            return MoveSimulationAction(unit, unit.pathIndex + 1)
+            return MoveSimulationAction(unit, unit.pathIndex+1)
         }
         return null
     }
 
     fun calculateTowerAction(tower : TowerSimulationModel, units : MutableList<UnitSimulationModel>): SimulationAction? {
         // if no target, either set new target if a unit is in range, or do nothing if no unit in range
-        if (tower.target == null || tower.target!!.isDead()) {
-            val newTarget = tower.findNewTarget(units) ?: return EmptySimulationAction()
+        if (tower.target == null) {
+            val newTarget = tower.findNewTarget(units) ?: return null
             return TargetSimulationAction(tower, newTarget)
         }
-
+        println(!tower.targetInRange())
         // if target is no longer in range, target a new unit (if in range), or null (if none in range)
-        if (!tower.targetInRange()) {
+        if (!tower.targetInRange() || tower.target!!.isDead) {
             val newTarget = tower.findNewTarget(units)
             return TargetSimulationAction(tower, newTarget)
         }
 
         // if cooldown is 0, attack target
-        if (tower.cooldown == 0) {
+        if (tower.cooldown <= 0) {
             return AttackSimulationAction(tower)
         }
-
         // has target, but tower is still on cooldown, so do nothing
         return null
     }
