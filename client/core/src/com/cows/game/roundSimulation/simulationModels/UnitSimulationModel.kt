@@ -3,11 +3,11 @@ package com.cows.game.roundSimulation.simulationModels
 
 class UnitSimulationModel(
         val id : Int,
-        val movementSpeed : Int, //ticks required for moving one square
-        var movementProgress: Int,
         var health: Int,
-        var pathIndex : Int, //represents position in the Path Array.
+        val movementSpeed : Int, //ticks required for moving one square
         var timeToSpawn : Int, //number of ticks before initial move for unit
+        var pathIndex : Int = 0, //represents position in the Path Array.
+        var movementProgress: Int = 0,
         var isSpawned: Boolean = false,
         var isDead : Boolean = false
         ) {
@@ -28,7 +28,6 @@ class UnitSimulationModel(
 
         fun die() {
                 isDead = true
-                println("unit died!")
         }
 
         fun win() {

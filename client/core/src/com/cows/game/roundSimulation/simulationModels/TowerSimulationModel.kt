@@ -20,8 +20,10 @@ class TowerSimulationModel(val id: Int, val position: Coordinate, range: Int, un
     }
 
     fun attack() {
-        target!!.damage(damage)
-        setCooldown()
+        target?.let {
+            it.damage(damage)
+            setCooldown()
+        }
     }
 
     fun targetInRange(): Boolean {
@@ -33,7 +35,7 @@ class TowerSimulationModel(val id: Int, val position: Coordinate, range: Int, un
     }
 
 
-    fun findPathIndicesInRange(range: Int, path: List<IntArray>): List<Int> = path
+    private fun findPathIndicesInRange(range: Int, path: List<IntArray>): List<Int> = path
             .withIndex()
             .filter { inXRange(range, it.value) && inYRange(range, it.value) }
             .map { it.index }
@@ -42,7 +44,7 @@ class TowerSimulationModel(val id: Int, val position: Coordinate, range: Int, un
     private fun inXRange(range: Int, coordinate: IntArray) = position.x - range <= coordinate[0] && coordinate[0] <= position.x + range
     private fun inYRange(range: Int, coordinate: IntArray) = position.y - range <= coordinate[1] && coordinate[1] <= position.y + range
 
-    fun findNewTarget(units: MutableList<UnitSimulationModel>): UnitSimulationModel? {
+    fun findNewTarget(units: List<UnitSimulationModel>): UnitSimulationModel? {
         //Assumption: pathIndicesInRange are ordered in decreasing order
         //room for optimization if needed, eg by checking if the unit pos is outside of the range, and then prune it away
         pathIndicesInRange.forEach { index ->

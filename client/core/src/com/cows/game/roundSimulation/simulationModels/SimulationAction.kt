@@ -33,9 +33,7 @@ data class TargetSimulationAction(val tower: TowerSimulationModel, val unit: Uni
 }
 
 data class AttackSimulationAction(val tower: TowerSimulationModel): SimulationAction() {
-    override fun processAction() {
-        tower.attack()
-    }
+    override fun processAction() = tower.attack()
     override val type = ActionType.ATTACK
     override fun toJsonAction(): JsonAction {
         return JsonAction(tower.id, type, null)
@@ -46,7 +44,7 @@ data class MoveSimulationAction(val unit: UnitSimulationModel, val tileIndex: In
     override fun processAction() = unit.move()
     override val type = ActionType.MOVE
     override fun toJsonAction(): JsonAction {
-        //TODO("check if this is necessary")
+        //TODO("check if this is a necessary action")
         return JsonAction(unit.id, type, tileIndex)
     }
 }
