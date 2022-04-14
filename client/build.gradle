@@ -102,5 +102,12 @@ project(":core") {
         implementation("io.ktor:ktor-websockets:$ktor_version")
         implementation("io.ktor:ktor-client-core:$ktor_version")
         implementation("io.ktor:ktor-client-cio:$ktor_version")
+        implementation("io.ktor:ktor-client-logging:$ktor_version")
+        testImplementation('org.jetbrains.kotlin:kotlin-test')
+
+    }
+    test {
+        useJUnitPlatform()
     }
 }
+

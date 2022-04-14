@@ -53,14 +53,19 @@ object ConnectionMapper {
         return gameSetup
     }
 
-    fun getUserInGame(userUUID:UUID, gameUUID:UUID): ClientConnection?{
-        if (gameMap.containsKey(gameUUID) &&
-            gameMap[gameUUID]!!.isConnectionInGame(userUUID)){
-            return gameMap[gameUUID]!!.getClientConnection(userUUID)
+    fun getClientConnectionInGame(userUUID: UUID,gameUUID:UUID): ClientConnection?{
+        return if (gameMap.containsKey(gameUUID) &&
+            (gameMap[gameUUID]!!.isConnectionInGame(userUUID) )) {
+            gameMap[gameUUID]!!.getClientConnection(userUUID)
         } else {
-            return null
+            for (gameCode:GameCode in gameCodeMap.values){
+                if (gameCode.gameCodeUUID == gameUUID && gameCode.creator.id == userUUID){
+                    return gameCode.creator
+                }
             }
+            null
         }
+    }
 
     // Convert game ID to a easier to read game code
     // Should be random enough, but could/should implement check to see if exists
@@ -108,6 +113,15 @@ object ConnectionMapper {
             // If the gameCodeMapEntry is null, it does not exist in the gameCodeMap and is therefore not valid.
             return null
         }
+    }
+
+    // If the game is not created, then the second client has not joined yet.
+    fun areGameSlotsFilled(gameUUID: UUID):Boolean{
+        return gameMap.containsKey(gameUUID)
+    }
+
+    fun getClientConnectionsFromGame(gameUUID: UUID): Pair<ClientConnection,ClientConnection>{
+        return gameMap[gameUUID]!!.gameConnections
     }
 
     private val gameCodeGarbageCollector =

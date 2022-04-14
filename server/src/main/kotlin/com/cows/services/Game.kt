@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import java.util.*
 
 
-class Game(private val gameConnections:Pair<ClientConnection,ClientConnection>) {
+class Game(val gameConnections:Pair<ClientConnection,ClientConnection>) {
     companion object {
         // TODO: Implement a UUID-system instead of a counter
         var lastId = AtomicInteger(0)
