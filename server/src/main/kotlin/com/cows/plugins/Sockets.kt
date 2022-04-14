@@ -78,7 +78,7 @@ suspend fun handleConnect(message: Message, userWebSocketSession: DefaultWebSock
         val messageString = gson.toJson(responseMessage)
         userWebSocketSession.outgoing.send(Frame.Text(messageString))
     } else{
-        /*userWebSocketSession.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, "You have not created or joined a game yet!"))*/
+        userWebSocketSession.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, "You have not created or joined a game yet!"))
     }
 }
 
