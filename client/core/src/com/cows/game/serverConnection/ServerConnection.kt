@@ -1,6 +1,7 @@
 package com.cows.game.serverConnection
 
-import com.google.gson.GsonBuilder
+import com.cows.game.serverConnection.shared.GameCreateResponse
+import com.cows.game.serverConnection.shared.GameJoinResponse
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.features.json.*
@@ -11,36 +12,12 @@ import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
 import java.util.*
 import io.ktor.client.features.logging.Logger
-import kotlinx.coroutines.*
 import java.time.Duration
-
-data class GameCreateResponse(
-    val userId: UUID,
-    val gameJoinCode: String,
-    val gameCodeUUID: UUID,
-)
-
-data class GameJoinResponse(
-    val userId: UUID,
-    val gameCodeUUID: UUID,
-)
-// TODO: Implement a more intuitive separation between connect and join
-enum class OpCode{
-    CONNECT,
-    JOIN,
-    AWAIT,
-    CONNECTED,
-    INSTRUCTIONLOG,
-    EVENTLOG,
-}
-
-
-// Todo: Implement data in its own class.
-data class Message(val userUUID: UUID,val gameUUID:UUID, val opCode:OpCode, val data:String?)
+import com.cows.game.serverConnection.shared.Message
+import com.cows.game.serverConnection.shared.OpCode
 
 object ServerConnection {
-    val gson = GsonBuilder().setPrettyPrinting().create()
-    private val client = HttpClient(CIO) {
+    val client = HttpClient(CIO) {
         install(Logging) {
             logger = Logger.DEFAULT
             level = LogLevel.ALL
@@ -53,37 +30,42 @@ object ServerConnection {
             serializer = GsonSerializer()
         }
     }
-    var userId: UUID? = null
-    var gameJoinCode: String? = null
-    var gameCodeUUID: UUID? = null
+    var websocketSession:DefaultWebSocketSession? = null
 
-    // User will automatically join game after creating it
-    // TODO: Send user to a websocket connection to check when user 2 joins the game
-    suspend fun createGame(client:HttpClient): GameCreateResponse {
+    suspend fun sendGameCreateRequest(client:HttpClient): GameCreateResponse {
         val response: GameCreateResponse = client.request("http://0.0.0.0:8080/game/create")
-        userId = response.userId
-        gameJoinCode = response.gameJoinCode
-        gameCodeUUID = response.gameCodeUUID
-
         return response
     }
 
-    suspend fun generateWebsocketConnection(client: HttpClient): DefaultWebSocketSession{
-        return client.webSocketSession(method = HttpMethod.Get, host = "127.0.0.1", port = 8080, path = "/ws")
+    suspend fun generateWebsocketClient(client: HttpClient): DefaultWebSocketSession{
+        return client.webSocketSession(method = HttpMethod.Get, host = "0.0.0.0", port = 8080, path = "/ws")
     }
 
-    suspend fun establishWSConnection(wsSession:DefaultWebSocketSession, userUUID: UUID, gameUUID: UUID): DefaultWebSocketSession{
+    suspend fun createGame(client: HttpClient){
+        val createGameResponse = sendGameCreateRequest(client)
+        val websocketClient = generateWebsocketClient(client)
+        websocketSession = establishGameConnection(websocketClient,createGameResponse.userId,createGameResponse.gameCodeUUID)
+
+    }
+
+    suspend fun joinGame(client: HttpClient, gameJoinCode: String){
+        val joinGameResponse = sendGameJoinRequest(client,gameJoinCode)
+        val websocketClient = generateWebsocketClient(client)
+        websocketSession = establishGameConnection(websocketClient,joinGameResponse.userId,joinGameResponse.gameCodeUUID)
+    }
+
+    suspend fun establishGameConnection(wsSession:DefaultWebSocketSession, userUUID: UUID, gameUUID: UUID): DefaultWebSocketSession{
         var isConnected = false
-        val connectMessage = Message(userUUID,gameUUID,OpCode.CONNECT,null)
+        val connectMessage = Message(userUUID,gameUUID, OpCode.CONNECT,null)
         wsSession.send(
-            generateWSFrame(
+            Message.generateWSFrame(
                 connectMessage
             )
         )
         while (!isConnected){
             when (val incoming = wsSession.incoming.receive()){
                 is Frame.Text -> {
-                    val message = retrieveWSMessage(incoming)
+                    val message = Message.retrieveWSMessage(incoming)
                     if (message!!.opCode == OpCode.CONNECTED){
                         isConnected = true
                     }
@@ -93,34 +75,8 @@ object ServerConnection {
         return wsSession
     }
 
-
-
-    // TODO: Send user to a websocket connection to automatically get game updates
-    suspend fun joinGame(gameJoinCode: String): GameJoinResponse {
+    suspend fun sendGameJoinRequest(client: HttpClient,gameJoinCode: String): GameJoinResponse {
         val response: GameJoinResponse = client.request("http://0.0.0.0:8080/game/join/${gameJoinCode}")
-        userId = response.userId
-        gameCodeUUID = response.gameCodeUUID
         return response
-    }
-
-    fun clearGameData() {
-        userId = null
-        gameJoinCode = null
-        gameCodeUUID = null
-    }
-
-
-    //TODO: Implement into message class
-    suspend fun generateWSFrame(message: Message):Frame{
-        return Frame.Text(
-            gson.toJson(
-                message
-            )
-        )
-    }
-
-    //TODO: Implement into message class
-    suspend fun retrieveWSMessage(frame:Frame.Text):Message?{
-        return gson.fromJson(frame.readText(),Message::class.java)
     }
 }

@@ -2,25 +2,13 @@ package com.cows.plugins
 
 import com.cows.services.ClientConnection
 import com.cows.services.ConnectionMapper
-import com.google.gson.Gson
+import com.cows.services.shared.GameCreateResponse
+import com.cows.services.shared.GameJoinResponse
 import com.google.gson.GsonBuilder
 import io.ktor.http.*
 import io.ktor.server.routing.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
-import io.ktor.server.websocket.*
-import java.util.*
-
-data class GameCreateResponse(
-    val userId: UUID,
-    val gameJoinCode: String,
-    val gameCodeUUID: UUID,
-)
-
-data class GameJoinResponse(
-    val userId: UUID,
-    val gameCodeUUID: UUID,
-)
 
 fun Application.configureRouting() {
     val gson = GsonBuilder().setPrettyPrinting().create()

@@ -13,9 +13,9 @@ buildscript {
         classpath 'com.android.tools.build:gradle:7.0.4'
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.15'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-
     }
 }
+
 
 allprojects {
     apply plugin: "eclipse"
@@ -104,7 +104,7 @@ project(":core") {
         implementation("io.ktor:ktor-client-cio:$ktor_version")
         implementation("io.ktor:ktor-client-logging:$ktor_version")
         testImplementation('org.jetbrains.kotlin:kotlin-test')
-
+        api "io.github.libktx:ktx-async:1.10.0-rc1"
     }
     test {
         useJUnitPlatform()

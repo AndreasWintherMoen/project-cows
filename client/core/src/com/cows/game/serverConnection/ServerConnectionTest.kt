@@ -1,5 +1,9 @@
 package com.cows.game.serverConnection
 
+import com.cows.game.serverConnection.shared.GameCreateResponse
+import com.cows.game.serverConnection.shared.GameJoinResponse
+import com.cows.game.serverConnection.shared.Message
+import com.cows.game.serverConnection.shared.OpCode
 import com.google.gson.GsonBuilder
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -52,9 +56,9 @@ internal class ServerConnectionTest {
 
             launch {
                 val message:Message = Message(userId1,gameCodeUUID1,OpCode.CONNECT,null)
-                val string:String = ServerConnection.gson.toJson(message)
+                val string:String = Message.gson.toJson(message)
                 var isConnected = false
-                client1.webSocket(method = HttpMethod.Get, host = "127.0.0.1", port = 8080, path = "/ws") {
+                client1.webSocket(method = HttpMethod.Get, host = "0.0.0.0", port = 8080, path = "/ws") {
                     send(Frame.Text(string))
                     while(!isConnected){
                         if (!incoming.isEmpty){
@@ -78,10 +82,10 @@ internal class ServerConnectionTest {
                 val userId2 = response2.userId
                 val gameUUID2 = response2.gameCodeUUID
 
-                val message:Message = Message(userId2,gameUUID2,OpCode.CONNECT,null)
-                val string:String = ServerConnection.gson.toJson(message)
+                val message:Message = Message(userId2,gameUUID2, OpCode.CONNECT,null)
+                val string:String = Message.gson.toJson(message)
                 var isConnected = false
-                client2.webSocket(method = HttpMethod.Get, host = "127.0.0.1", port = 8080, path = "/ws") {
+                client2.webSocket(method = HttpMethod.Get, host = "0.0.0.0", port = 8080, path = "/ws") {
                     while(!isConnected){
                         send(Frame.Text(string))
                         if (!incoming.isEmpty){
