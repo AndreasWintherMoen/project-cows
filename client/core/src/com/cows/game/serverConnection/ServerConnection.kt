@@ -8,7 +8,6 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.logging.*
 import io.ktor.client.features.websocket.*
 import io.ktor.client.request.*
-import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
 import java.util.*
 import io.ktor.client.features.logging.Logger
@@ -55,15 +54,6 @@ object ServerConnection {
 
     suspend fun createGame(client: HttpClient){
         val createGameResponse = sendGameCreateRequest(client)
-        //TODO: Get secure websocket session object
-        client.wss(method = HttpMethod.Get, host = host, path = "/cows/ws"){
-            val connectMessage = Message(createGameResponse.userId,createGameResponse.gameCodeUUID, OpCode.CONNECT,null)
-            send(
-                Message.generateWSFrame(
-                    connectMessage
-                )
-            )
-        }
         val websocketClient = generateWebsocketClient(client)
         websocketSession = establishGameConnection(websocketClient,createGameResponse.userId,createGameResponse.gameCodeUUID)
 
@@ -84,12 +74,19 @@ object ServerConnection {
             )
         )
         while (!isConnected){
-            when (val incoming = wsSession.incoming.receive()){
+            val nullableIncoming = wsSession.incoming.tryReceive()
+            if (nullableIncoming.isFailure || nullableIncoming.isClosed) continue
+            when (val incoming = nullableIncoming.getOrThrow()) {
                 is Frame.Text -> {
                     val message = Message.retrieveWSMessage(incoming)
-                    if (message!!.opCode == OpCode.CONNECTED){
+                    println(message)
+                    if (message!!.opCode == OpCode.CONNECTED || message!!.opCode == OpCode.AWAIT){
                         isConnected = true
                     }
+                }
+                else -> {
+                    println("Not text frame")
+                    println(incoming)
                 }
             }
         }
