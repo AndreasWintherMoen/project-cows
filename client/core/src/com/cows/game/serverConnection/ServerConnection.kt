@@ -15,8 +15,20 @@ import io.ktor.client.features.logging.Logger
 import java.time.Duration
 import com.cows.game.serverConnection.shared.Message
 import com.cows.game.serverConnection.shared.OpCode
+import io.github.cdimascio.dotenv.Dotenv
+import io.github.cdimascio.dotenv.dotenv
+
+val dotenv:Dotenv = dotenv {
+    filename = "./assets/env"
+}
+
+val host: String = dotenv["HOST"] ?: "0.0.0.0"
+
+val port: String = dotenv["PORT"] ?: "8080"
 
 object ServerConnection {
+
+
     val client = HttpClient(CIO) {
         install(Logging) {
             logger = Logger.DEFAULT
@@ -33,15 +45,18 @@ object ServerConnection {
     var websocketSession:DefaultWebSocketSession? = null
 
     suspend fun sendGameCreateRequest(client:HttpClient): GameCreateResponse {
-        val response: GameCreateResponse = client.request("http://0.0.0.0:8080/game/create")
+        val response: GameCreateResponse = client.request("http://${host}:${port}/game/create")
         return response
     }
 
     suspend fun generateWebsocketClient(client: HttpClient): DefaultWebSocketSession{
-        return client.webSocketSession(method = HttpMethod.Get, host = "0.0.0.0", port = 8080, path = "/ws")
+        return client.webSocketSession(method = HttpMethod.Get, host = host, port = port.toInt(), path = "/ws")
     }
 
     suspend fun createGame(client: HttpClient){
+
+        println(host)
+        println(port)
         val createGameResponse = sendGameCreateRequest(client)
         val websocketClient = generateWebsocketClient(client)
         websocketSession = establishGameConnection(websocketClient,createGameResponse.userId,createGameResponse.gameCodeUUID)
@@ -76,7 +91,7 @@ object ServerConnection {
     }
 
     suspend fun sendGameJoinRequest(client: HttpClient,gameJoinCode: String): GameJoinResponse {
-        val response: GameJoinResponse = client.request("http://0.0.0.0:8080/game/join/${gameJoinCode}")
+        val response: GameJoinResponse = client.request("http://${host}:${port}/game/join/${gameJoinCode}")
         return response
     }
 }

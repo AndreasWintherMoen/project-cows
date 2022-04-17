@@ -13,7 +13,6 @@ import com.cows.game.models.TileModel
 import com.cows.game.roundSimulation.GameTickProcessor
 import com.cows.game.roundSimulation.RoundSimulationDeserializer
 import com.cows.game.serverConnection.ServerConnection
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import ktx.async.KtxAsync
