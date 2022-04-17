@@ -45,19 +45,25 @@ object ServerConnection {
     var websocketSession:DefaultWebSocketSession? = null
 
     suspend fun sendGameCreateRequest(client:HttpClient): GameCreateResponse {
-        val response: GameCreateResponse = client.request("http://${host}:${port}/game/create")
+        val response: GameCreateResponse = client.request("https://${host}/cows/game/create")
         return response
     }
 
     suspend fun generateWebsocketClient(client: HttpClient): DefaultWebSocketSession{
-        return client.webSocketSession(method = HttpMethod.Get, host = host, port = port.toInt(), path = "/ws")
+        return client.webSocketSession(method = HttpMethod.Get, host = host, path = "/cows/ws")
     }
 
     suspend fun createGame(client: HttpClient){
-
-        println(host)
-        println(port)
         val createGameResponse = sendGameCreateRequest(client)
+        //TODO: Get secure websocket session object
+        client.wss(method = HttpMethod.Get, host = host, path = "/cows/ws"){
+            val connectMessage = Message(createGameResponse.userId,createGameResponse.gameCodeUUID, OpCode.CONNECT,null)
+            send(
+                Message.generateWSFrame(
+                    connectMessage
+                )
+            )
+        }
         val websocketClient = generateWebsocketClient(client)
         websocketSession = establishGameConnection(websocketClient,createGameResponse.userId,createGameResponse.gameCodeUUID)
 
@@ -91,7 +97,7 @@ object ServerConnection {
     }
 
     suspend fun sendGameJoinRequest(client: HttpClient,gameJoinCode: String): GameJoinResponse {
-        val response: GameJoinResponse = client.request("http://${host}:${port}/game/join/${gameJoinCode}")
+        val response: GameJoinResponse = client.request("https://${host}/cows/game/join/${gameJoinCode}")
         return response
     }
 }

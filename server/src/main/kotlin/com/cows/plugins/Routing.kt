@@ -15,13 +15,13 @@ fun Application.configureRouting() {
 
     //  Find a solution to hinder a user to call this end-point lots of times
     routing {
-        get("/game/create"){
+        get("/cows/game/create"){
             val user = ClientConnection()
             val gameSetup = ConnectionMapper.createGameCode(user)
             call.respondText(gson.toJson(GameCreateResponse(user.id, gameSetup.gameJoinCode, gameSetup.gameCodeUUID)), ContentType.Application.Json, HttpStatusCode.OK)
         }
 
-        get("/game/join/{gameJoinCode}"){
+        get("/cows/game/join/{gameJoinCode}"){
             if(call.parameters["gameJoinCode"].isNullOrEmpty()) call.respond(HttpStatusCode.NotFound, "gameJoinCode not given")
             val user = ClientConnection()
             val gameCodeUUID = ConnectionMapper.createGame(user, call.parameters["gameJoinCode"]!!)
