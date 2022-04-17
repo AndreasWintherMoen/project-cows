@@ -21,9 +21,8 @@ val dotenv:Dotenv = dotenv {
     filename = "./assets/env"
 }
 
-val host: String = dotenv["HOST"] ?: "0.0.0.0"
-
-val port: String = dotenv["PORT"] ?: "8080"
+val httpApiBase: String = dotenv["HTTP_API_BASE"] ?: "http://127.0.0.1:8080/cows"
+val wsApiBase: String = dotenv["WS_API_BASE"] ?: "ws://127.0.0.1:8080/cows/ws"
 
 object ServerConnection {
 
@@ -44,12 +43,12 @@ object ServerConnection {
     var websocketSession:DefaultWebSocketSession? = null
 
     suspend fun sendGameCreateRequest(client:HttpClient): GameCreateResponse {
-        val response: GameCreateResponse = client.request("https://${host}/cows/game/create")
+        val response: GameCreateResponse = client.request("$httpApiBase/game/create")
         return response
     }
 
     suspend fun generateWebsocketClient(client: HttpClient): DefaultWebSocketSession{
-        return client.webSocketSession(method = HttpMethod.Get, host = host, path = "/cows/ws")
+        return client.webSocketSession { url("$wsApiBase") }
     }
 
     suspend fun createGame(client: HttpClient){
@@ -94,7 +93,7 @@ object ServerConnection {
     }
 
     suspend fun sendGameJoinRequest(client: HttpClient,gameJoinCode: String): GameJoinResponse {
-        val response: GameJoinResponse = client.request("https://${host}/cows/game/join/${gameJoinCode}")
+        val response: GameJoinResponse = client.request("$httpApiBase/game/join/${gameJoinCode}")
         return response
     }
 }
