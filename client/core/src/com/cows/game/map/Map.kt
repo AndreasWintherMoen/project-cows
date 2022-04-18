@@ -1,8 +1,10 @@
 package com.cows.game.map
 
 import com.badlogic.gdx.math.Vector2
+import com.cows.game.Application
 import com.cows.game.controllers.TileController
 import com.cows.game.enums.TileType
+import com.cows.game.hud.ActionPanel
 import com.cows.game.models.TileModel
 import java.io.File
 import java.lang.Exception
@@ -79,9 +81,15 @@ object Map {
         return getTile(coordinate.x, coordinate.y)
     }
 
-    fun getTileAtPixel(pixel: Vector2): TileController {
+    fun getTileAtPixel(pixel: Vector2): TileController? {
+        if (pixel.x > (WIDTH * TileModel.WIDTH)) {
+            println(pixel.x)
+            println("Outside map")
+            return null
+        }
         val x = (pixel.x / TileModel.WIDTH).toInt()
         val y = (pixel.y / TileModel.HEIGHT).toInt()
+        println("Inside map")
         return getTile(x, y)
     }
 }

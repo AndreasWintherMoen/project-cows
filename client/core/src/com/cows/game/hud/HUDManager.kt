@@ -14,7 +14,6 @@ class HUDManager(private val onStartGame: () -> Unit): GameStateSubscriber() {
 
     override fun onChangeGameState(oldGameState: GameState, newGameState: GameState) {
         println("Changing game state from $oldGameState to $newGameState")
-
         buttons.forEach { it.die() }
         buttons.clear()
         when (newGameState) {
@@ -60,9 +59,12 @@ class HUDManager(private val onStartGame: () -> Unit): GameStateSubscriber() {
     }
 
     private fun createPlanningAttackButtons() {
-        val startGameButton = Button("HUD/start-button.png", { onStartGame.invoke() })
+        val startGameButton = Button("HUD/start-button.png") { onStartGame.invoke() }
+        val cancelPlacementButton = Button("HUD/cancel-button.png", Vector2(Gdx.graphics.width - 150f, 30f))
 
         buttons.add(startGameButton)
+
+        
     }
 
     private fun createActiveGameButtons() {

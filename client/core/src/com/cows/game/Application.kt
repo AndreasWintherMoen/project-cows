@@ -2,7 +2,9 @@ package com.cows.game
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.cows.game.enums.GameState
+import com.cows.game.hud.ActionPanel
 import com.cows.game.hud.HUDManager
 import com.cows.game.managers.FunctionDelayer
 import com.cows.game.managers.GameStateManager
@@ -16,13 +18,14 @@ import java.io.File
 
 class Application : ApplicationAdapter() {
     companion object {
-        const val WIDTH = Map.WIDTH * TileModel.WIDTH
+        const val WIDTH = Map.WIDTH * TileModel.WIDTH + ActionPanel.WIDTH
         const val HEIGHT = Map.HEIGHT * TileModel.HEIGHT
     }
-
     val tickDuration = 1f // in seconds
     private lateinit var gameTickProcessor: GameTickProcessor
     private lateinit var hudManager: HUDManager
+
+    private lateinit var actionPanel: ActionPanel
 
     override fun create() {
         Map.init()
@@ -40,7 +43,6 @@ class Application : ApplicationAdapter() {
 
         Updater.update(tickAdjustedDeltaTime)
         Renderer.render(tickAdjustedDeltaTime)
-
         FunctionDelayer.invokeRegisteredFunctions()
     }
 

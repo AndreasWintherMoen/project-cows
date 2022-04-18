@@ -1,3 +1,5 @@
 package com.cows.game.roundSimulation
 
-data class Tick( val actions: ArrayList<Action> )
+data class Tick(
+    val actions: ArrayList<Action>
+)

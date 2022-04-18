@@ -25,6 +25,7 @@ object GameStateManager {
 
     fun isValidGameState(newGameState: GameState): Boolean{
         if(newGameState == currentGameState) return false
+        //TODO: Add more logic here.
         return true
     }
 
