@@ -79,7 +79,7 @@ object ServerConnection {
                 is Frame.Text -> {
                     val message = Message.retrieveWSMessage(incoming)
                     println(message)
-                    if (message!!.opCode == OpCode.CONNECTED || message!!.opCode == OpCode.AWAIT){
+                    if (message!!.opCode == OpCode.CONNECTED){
                         isConnected = true
                     }
                 }
