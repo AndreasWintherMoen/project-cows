@@ -1,9 +1,10 @@
 package com.cows.game.roundSimulation
 
+import com.cows.game.controllers.BulletController
 import com.cows.game.controllers.TileController
 import com.cows.game.controllers.TowerController
 import com.cows.game.controllers.UnitController
-import com.cows.game.roundSimulation.rawJsonData.JsonAction
+import com.cows.game.models.BulletModel
 
 enum class ActionType {
     NONE,
@@ -28,7 +29,7 @@ class EmptyAction(): Action() {
 data class TargetAction(val tower: TowerController, val unit: UnitController?): Action() {
     override fun processAction() {
         if (unit == null) tower.removeTarget()
-        else tower.target(unit)
+        else tower.target(unit, BulletController(BulletModel(tower.model.tileCoordinate.toVector2())))
     }
     override val type = ActionType.TARGET
 
