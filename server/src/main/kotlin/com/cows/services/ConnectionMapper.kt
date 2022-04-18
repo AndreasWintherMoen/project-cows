@@ -1,7 +1,6 @@
 package com.cows.services
 
 import io.ktor.util.date.*
-import java.security.MessageDigest
 import java.util.*
 
 // This object will map connections to the game id's
@@ -46,7 +45,7 @@ object ConnectionMapper {
     fun createGameCode(clientConnection: ClientConnection): GameCode {
         // Generates the gameCodeInteger and initializes the gameCode with the creator connection
         val gameCodeUUID = UUID.randomUUID()
-        val gameJoinCode = generateGameCode()
+        val gameJoinCode = generateValidGameCode()
         val gameSetup = GameCode(gameJoinCode, gameCodeUUID, clientConnection)
         gameCodeMap[gameJoinCode] = gameSetup
         return gameSetup
@@ -66,20 +65,22 @@ object ConnectionMapper {
         }
     }
 
-    private fun generateGameCode(): String {
-        var code = generateCode(GameCode.CODE_LENGTH)
+    private fun generateValidGameCode(): String {
+        var code = generateCode()
 
-        while (gameCodeMap.containsKey(code)) {
-            code = generateCode(GameCode.CODE_LENGTH)
+        while (gameCodeIsInvalid(code)) {
+            code = generateCode()
         }
 
         return code
     }
 
-    private fun generateCode(length: Int): String {
+    private fun generateCode(): String {
         val chars = ('A'..'Z')
-        return (1..length).map { chars.random() }.joinToString("")
+        return (1..GameCode.CODE_LENGTH).map { chars.random() }.joinToString("")
     }
+
+    private fun gameCodeIsInvalid(gameCode: String) = !gameCodeMap.containsKey(gameCode)
 
     // Checks if the inserted integer code is valid, based on the timestamp being not more than
     // 15 minutes old and if it is in the set of valid codes.
