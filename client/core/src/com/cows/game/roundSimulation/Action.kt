@@ -3,6 +3,7 @@ package com.cows.game.roundSimulation
 import com.cows.game.controllers.TileController
 import com.cows.game.controllers.TowerController
 import com.cows.game.controllers.UnitController
+import com.cows.game.roundSimulation.rawJsonData.JsonAction
 
 enum class ActionType {
     NONE,
@@ -30,6 +31,7 @@ data class TargetAction(val tower: TowerController, val unit: UnitController?): 
         else tower.target(unit)
     }
     override val type = ActionType.TARGET
+
 }
 
 data class AttackAction(val tower: TowerController): Action() {

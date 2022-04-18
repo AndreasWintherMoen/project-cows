@@ -1,175 +1,804 @@
 {
   "towerList": [
-    {
-      "id": 0,
-      "type": "STONE",
-      "position": {
-        "x": 8,
-        "y": 4
+      {
+          "id": 0,
+          "type": "STONE",
+          "position": {
+              "x": 3,
+              "y": 2
+          },
+          "range": 1.0
+      },
+      {
+          "id": 1,
+          "type": "STONE",
+          "position": {
+              "x": 15,
+              "y": 2
+          },
+          "range": 1.0
       }
-    },
-    {
-      "id": 1,
-      "type": "WOOD",
-      "position": {
-        "x": 5,
-        "y": 3
-      }
-    }
   ],
   "unitList": [
-    {
-      "id": 2,
-      "type": "SWORDMAN",
-      "movementSpeed": 0.8
-    },
-    {
-      "id": 3,
-      "type": "SWORDMAN",
-      "movementSpeed": 0.8
-    },
-    {
-      "id": 4,
-      "type": "RUNNER",
-      "movementSpeed": 1.9
-    }
+      {
+          "id": 10,
+          "type": "RUNNER",
+          "movementSpeed": 1.0
+      },
+      {
+          "id": 11,
+          "type": "SWORDMAN",
+          "movementSpeed": 1.0
+      },
+      {
+          "id": 12,
+          "type": "SWORDMAN",
+          "movementSpeed": 1.0
+      },
+      {
+          "id": 13,
+          "type": "RUNNER",
+          "movementSpeed": 1.0
+      },
+      {
+          "id": 14,
+          "type": "RUNNER",
+          "movementSpeed": 1.0
+      },
+      {
+          "id": 15,
+          "type": "SWORDMAN",
+          "movementSpeed": 1.0
+      }
   ],
   "eventLog": [
-    {
-      "actions": [
-        {
-          "subject": 2,
-          "verb": "SPAWN",
-          "obj": 0
-        },
-        {
-          "subject": 2,
-          "verb": "MOVE",
-          "obj": 1
-        }
-      ]
-    },
-    {
-      "actions": []
-    },
-    {
-      "actions": [
-        {
-          "subject": 2,
-          "verb": "MOVE",
-          "obj": 2
-        },
-        {
-          "subject": 3,
-          "verb": "SPAWN",
-          "obj": 0
-        },
-        {
-          "subject": 1,
-          "verb": "TARGET",
-          "obj": 2
-        }
-      ]
-    },
-    {
-      "actions": []
-    },
-    {
-      "actions": []
-    },
-    {
-      "actions": []
-    },
-    {
-      "actions": []
-    },
-    {
-      "actions": [
-        {
-          "subject": 4,
-          "verb": "SPAWN",
-          "obj": 0
-        }
-      ]
-    },
-    {
-      "actions": [
-        {
-          "subject": 0,
-          "verb": "TARGET",
-          "obj": 2
-        }
-      ]
-    },
-    {
-      "actions": []
-    },
-    {
-      "actions": []
-    },
-    {
-      "actions": []
-    },
-    {
-      "actions": []
-    },
-    {
-      "actions": []
-    },
-    {
-      "actions": [
-        {
-          "subject": 1,
-          "verb": "TARGET",
-          "obj": 3
-        }
-      ]
-    },
-    {
-      "actions": []
-    },
-    {
-      "actions": [
-        {
-          "subject": 1,
-          "verb": "TARGET"
-        }
-      ]
-    },
-    {
-      "actions": []
-    },
-    {
-      "actions": []
-    },
-    {
-      "actions": []
-    },
-    {
-      "actions": []
-    },
-    {
-      "actions": [
-        {
-          "subject": 0,
-          "verb": "TARGET",
-          "obj": 3
-        }
-      ]
-    },
-    {
-      "actions": []
-    },
-    {
-      "actions": []
-    },
-    {
-      "actions": [
-        {
-          "subject": 0,
-          "verb": "TARGET"
-        }
-      ]
-    }
+      {
+          "actions": [
+              {
+                  "subject": 10,
+                  "verb": "SPAWN",
+                  "obj": 0
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 10,
+                  "verb": "MOVE",
+                  "obj": 1
+              },
+              {
+                  "subject": 11,
+                  "verb": "SPAWN",
+                  "obj": 0
+              },
+              {
+                  "subject": 0,
+                  "verb": "TARGET",
+                  "obj": 10
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 10,
+                  "verb": "MOVE",
+                  "obj": 2
+              },
+              {
+                  "subject": 11,
+                  "verb": "MOVE",
+                  "obj": 1
+              },
+              {
+                  "subject": 0,
+                  "verb": "ATTACK"
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 10,
+                  "verb": "MOVE",
+                  "obj": 3
+              },
+              {
+                  "subject": 11,
+                  "verb": "MOVE",
+                  "obj": 2
+              },
+              {
+                  "subject": 12,
+                  "verb": "SPAWN",
+                  "obj": 0
+              },
+              {
+                  "subject": 0,
+                  "verb": "ATTACK"
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 10,
+                  "verb": "DIE"
+              },
+              {
+                  "subject": 11,
+                  "verb": "MOVE",
+                  "obj": 3
+              },
+              {
+                  "subject": 12,
+                  "verb": "MOVE",
+                  "obj": 1
+              },
+              {
+                  "subject": 0,
+                  "verb": "TARGET",
+                  "obj": 11
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 11,
+                  "verb": "MOVE",
+                  "obj": 4
+              },
+              {
+                  "subject": 12,
+                  "verb": "MOVE",
+                  "obj": 2
+              },
+              {
+                  "subject": 13,
+                  "verb": "SPAWN",
+                  "obj": 0
+              },
+              {
+                  "subject": 0,
+                  "verb": "ATTACK"
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 11,
+                  "verb": "MOVE",
+                  "obj": 5
+              },
+              {
+                  "subject": 12,
+                  "verb": "MOVE",
+                  "obj": 3
+              },
+              {
+                  "subject": 13,
+                  "verb": "MOVE",
+                  "obj": 1
+              },
+              {
+                  "subject": 0,
+                  "verb": "ATTACK"
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 11,
+                  "verb": "DIE"
+              },
+              {
+                  "subject": 12,
+                  "verb": "MOVE",
+                  "obj": 4
+              },
+              {
+                  "subject": 13,
+                  "verb": "MOVE",
+                  "obj": 2
+              },
+              {
+                  "subject": 14,
+                  "verb": "SPAWN",
+                  "obj": 0
+              },
+              {
+                  "subject": 0,
+                  "verb": "TARGET",
+                  "obj": 12
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 12,
+                  "verb": "MOVE",
+                  "obj": 5
+              },
+              {
+                  "subject": 13,
+                  "verb": "MOVE",
+                  "obj": 3
+              },
+              {
+                  "subject": 14,
+                  "verb": "MOVE",
+                  "obj": 1
+              },
+              {
+                  "subject": 0,
+                  "verb": "ATTACK"
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 12,
+                  "verb": "MOVE",
+                  "obj": 6
+              },
+              {
+                  "subject": 13,
+                  "verb": "MOVE",
+                  "obj": 4
+              },
+              {
+                  "subject": 14,
+                  "verb": "MOVE",
+                  "obj": 2
+              },
+              {
+                  "subject": 15,
+                  "verb": "SPAWN",
+                  "obj": 0
+              },
+              {
+                  "subject": 0,
+                  "verb": "TARGET",
+                  "obj": 13
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 12,
+                  "verb": "MOVE",
+                  "obj": 7
+              },
+              {
+                  "subject": 13,
+                  "verb": "MOVE",
+                  "obj": 5
+              },
+              {
+                  "subject": 14,
+                  "verb": "MOVE",
+                  "obj": 3
+              },
+              {
+                  "subject": 15,
+                  "verb": "MOVE",
+                  "obj": 1
+              },
+              {
+                  "subject": 0,
+                  "verb": "ATTACK"
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 12,
+                  "verb": "MOVE",
+                  "obj": 8
+              },
+              {
+                  "subject": 13,
+                  "verb": "MOVE",
+                  "obj": 6
+              },
+              {
+                  "subject": 14,
+                  "verb": "MOVE",
+                  "obj": 4
+              },
+              {
+                  "subject": 15,
+                  "verb": "MOVE",
+                  "obj": 2
+              },
+              {
+                  "subject": 0,
+                  "verb": "TARGET",
+                  "obj": 14
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 12,
+                  "verb": "MOVE",
+                  "obj": 9
+              },
+              {
+                  "subject": 13,
+                  "verb": "MOVE",
+                  "obj": 7
+              },
+              {
+                  "subject": 14,
+                  "verb": "MOVE",
+                  "obj": 5
+              },
+              {
+                  "subject": 15,
+                  "verb": "MOVE",
+                  "obj": 3
+              },
+              {
+                  "subject": 0,
+                  "verb": "ATTACK"
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 12,
+                  "verb": "MOVE",
+                  "obj": 10
+              },
+              {
+                  "subject": 13,
+                  "verb": "MOVE",
+                  "obj": 8
+              },
+              {
+                  "subject": 14,
+                  "verb": "MOVE",
+                  "obj": 6
+              },
+              {
+                  "subject": 15,
+                  "verb": "MOVE",
+                  "obj": 4
+              },
+              {
+                  "subject": 0,
+                  "verb": "TARGET",
+                  "obj": 15
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 12,
+                  "verb": "MOVE",
+                  "obj": 11
+              },
+              {
+                  "subject": 13,
+                  "verb": "MOVE",
+                  "obj": 9
+              },
+              {
+                  "subject": 14,
+                  "verb": "MOVE",
+                  "obj": 7
+              },
+              {
+                  "subject": 15,
+                  "verb": "MOVE",
+                  "obj": 5
+              },
+              {
+                  "subject": 0,
+                  "verb": "ATTACK"
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 12,
+                  "verb": "MOVE",
+                  "obj": 12
+              },
+              {
+                  "subject": 13,
+                  "verb": "MOVE",
+                  "obj": 10
+              },
+              {
+                  "subject": 14,
+                  "verb": "MOVE",
+                  "obj": 8
+              },
+              {
+                  "subject": 15,
+                  "verb": "MOVE",
+                  "obj": 6
+              },
+              {
+                  "subject": 0,
+                  "verb": "TARGET"
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 12,
+                  "verb": "MOVE",
+                  "obj": 13
+              },
+              {
+                  "subject": 13,
+                  "verb": "MOVE",
+                  "obj": 11
+              },
+              {
+                  "subject": 14,
+                  "verb": "MOVE",
+                  "obj": 9
+              },
+              {
+                  "subject": 15,
+                  "verb": "MOVE",
+                  "obj": 7
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 12,
+                  "verb": "MOVE",
+                  "obj": 14
+              },
+              {
+                  "subject": 13,
+                  "verb": "MOVE",
+                  "obj": 12
+              },
+              {
+                  "subject": 14,
+                  "verb": "MOVE",
+                  "obj": 10
+              },
+              {
+                  "subject": 15,
+                  "verb": "MOVE",
+                  "obj": 8
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 12,
+                  "verb": "MOVE",
+                  "obj": 15
+              },
+              {
+                  "subject": 13,
+                  "verb": "MOVE",
+                  "obj": 13
+              },
+              {
+                  "subject": 14,
+                  "verb": "MOVE",
+                  "obj": 11
+              },
+              {
+                  "subject": 15,
+                  "verb": "MOVE",
+                  "obj": 9
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 12,
+                  "verb": "MOVE",
+                  "obj": 16
+              },
+              {
+                  "subject": 13,
+                  "verb": "MOVE",
+                  "obj": 14
+              },
+              {
+                  "subject": 14,
+                  "verb": "MOVE",
+                  "obj": 12
+              },
+              {
+                  "subject": 15,
+                  "verb": "MOVE",
+                  "obj": 10
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 12,
+                  "verb": "MOVE",
+                  "obj": 17
+              },
+              {
+                  "subject": 13,
+                  "verb": "MOVE",
+                  "obj": 15
+              },
+              {
+                  "subject": 14,
+                  "verb": "MOVE",
+                  "obj": 13
+              },
+              {
+                  "subject": 15,
+                  "verb": "MOVE",
+                  "obj": 11
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 12,
+                  "verb": "MOVE",
+                  "obj": 18
+              },
+              {
+                  "subject": 13,
+                  "verb": "MOVE",
+                  "obj": 16
+              },
+              {
+                  "subject": 14,
+                  "verb": "MOVE",
+                  "obj": 14
+              },
+              {
+                  "subject": 15,
+                  "verb": "MOVE",
+                  "obj": 12
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 12,
+                  "verb": "MOVE",
+                  "obj": 19
+              },
+              {
+                  "subject": 13,
+                  "verb": "MOVE",
+                  "obj": 17
+              },
+              {
+                  "subject": 14,
+                  "verb": "MOVE",
+                  "obj": 15
+              },
+              {
+                  "subject": 15,
+                  "verb": "MOVE",
+                  "obj": 13
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 12,
+                  "verb": "MOVE",
+                  "obj": 20
+              },
+              {
+                  "subject": 13,
+                  "verb": "MOVE",
+                  "obj": 18
+              },
+              {
+                  "subject": 14,
+                  "verb": "MOVE",
+                  "obj": 16
+              },
+              {
+                  "subject": 15,
+                  "verb": "MOVE",
+                  "obj": 14
+              },
+              {
+                  "subject": 1,
+                  "verb": "TARGET",
+                  "obj": 12
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 12,
+                  "verb": "MOVE",
+                  "obj": 21
+              },
+              {
+                  "subject": 13,
+                  "verb": "MOVE",
+                  "obj": 19
+              },
+              {
+                  "subject": 14,
+                  "verb": "MOVE",
+                  "obj": 17
+              },
+              {
+                  "subject": 15,
+                  "verb": "MOVE",
+                  "obj": 15
+              },
+              {
+                  "subject": 1,
+                  "verb": "ATTACK"
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 12,
+                  "verb": "DIE"
+              },
+              {
+                  "subject": 13,
+                  "verb": "MOVE",
+                  "obj": 20
+              },
+              {
+                  "subject": 14,
+                  "verb": "MOVE",
+                  "obj": 18
+              },
+              {
+                  "subject": 15,
+                  "verb": "MOVE",
+                  "obj": 16
+              },
+              {
+                  "subject": 1,
+                  "verb": "TARGET",
+                  "obj": 13
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 13,
+                  "verb": "MOVE",
+                  "obj": 21
+              },
+              {
+                  "subject": 14,
+                  "verb": "MOVE",
+                  "obj": 19
+              },
+              {
+                  "subject": 15,
+                  "verb": "MOVE",
+                  "obj": 17
+              },
+              {
+                  "subject": 1,
+                  "verb": "ATTACK"
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 13,
+                  "verb": "DIE"
+              },
+              {
+                  "subject": 14,
+                  "verb": "MOVE",
+                  "obj": 20
+              },
+              {
+                  "subject": 15,
+                  "verb": "MOVE",
+                  "obj": 18
+              },
+              {
+                  "subject": 1,
+                  "verb": "TARGET",
+                  "obj": 14
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 14,
+                  "verb": "MOVE",
+                  "obj": 21
+              },
+              {
+                  "subject": 15,
+                  "verb": "MOVE",
+                  "obj": 19
+              },
+              {
+                  "subject": 1,
+                  "verb": "ATTACK"
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 14,
+                  "verb": "DIE"
+              },
+              {
+                  "subject": 15,
+                  "verb": "MOVE",
+                  "obj": 20
+              },
+              {
+                  "subject": 1,
+                  "verb": "TARGET",
+                  "obj": 15
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 15,
+                  "verb": "MOVE",
+                  "obj": 21
+              },
+              {
+                  "subject": 1,
+                  "verb": "ATTACK"
+              }
+          ]
+      },
+      {
+          "actions": [
+              {
+                  "subject": 15,
+                  "verb": "DIE"
+              },
+              {
+                  "subject": 1,
+                  "verb": "TARGET"
+              }
+          ]
+      }
   ]
 }

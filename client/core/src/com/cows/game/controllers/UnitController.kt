@@ -55,7 +55,8 @@ class UnitController(val model: UnitModel): Updatable() {
     }
 
     fun move(tile: TileController) {
-        target = tile.tileModel.coordinate.toVector2()
+        //removed as it caused movement to be buggy as there are competing calls in a single tick
+        //target = tile.tileModel.coordinate.toVector2()
     }
 
     override fun die() {
