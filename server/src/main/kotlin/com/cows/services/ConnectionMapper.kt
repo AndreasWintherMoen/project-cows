@@ -46,7 +46,7 @@ object ConnectionMapper {
     fun createGameCode(clientConnection: ClientConnection): GameCode {
         // Generates the gameCodeInteger and initializes the gameCode with the creator connection
         val gameCodeUUID = UUID.randomUUID()
-        val gameJoinCode = generateGameCode(gameCodeUUID)
+        val gameJoinCode = generateGameCode()
         val gameSetup = GameCode(gameJoinCode, gameCodeUUID, clientConnection)
         gameCodeMap[gameJoinCode] = gameSetup
         return gameSetup
@@ -68,26 +68,20 @@ object ConnectionMapper {
 
     // Convert game ID to a easier to read game code
     // Should be random enough, but could/should implement check to see if exists
-    private fun generateGameCode(gameCodeUUID: UUID): String {
-        var indexModifier = 0;
-        var code = hashAndExtractCode(gameCodeUUID.toString(), indexModifier)
+    private fun generateGameCode(): String {
+        val codeLength = 5;
+        var code = generateCode(codeLength)
 
-        // Max length of sha256 string is 64 characters
-        while (gameCodeMap.containsKey(code) && indexModifier < 52) {
-            indexModifier++
-            code = hashAndExtractCode(gameCodeUUID.toString(), indexModifier)
+        while (gameCodeMap.containsKey(code)) {
+            code = generateCode(codeLength)
         }
 
         return code
     }
 
-    private fun hashAndExtractCode(id: String, mod: Int): String {
-        return MessageDigest
-            .getInstance("SHA-256")
-            .digest(id.toByteArray())
-            .joinToString("") { "%02x".format(it) }
-            .substring(0 + mod, 11 + mod)
-            .uppercase()
+    private fun generateCode(length: Int): String {
+        val chars = ('A'..'Z')
+        return (1..length).map { chars.random() }.joinToString("")
     }
 
     // Checks if the inserted integer code is valid, based on the timestamp being not more than
