@@ -29,7 +29,7 @@ class EmptyAction(): Action() {
 data class TargetAction(val tower: TowerController, val unit: UnitController?): Action() {
     override fun processAction() {
         if (unit == null) tower.removeTarget()
-        else tower.target(unit, BulletController(BulletModel(tower.model.tileCoordinate.toVector2())))
+        else tower.target(unit)
     }
     override val type = ActionType.TARGET
 

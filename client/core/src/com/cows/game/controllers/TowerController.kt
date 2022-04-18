@@ -2,9 +2,9 @@ package com.cows.game.controllers
 
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
+import com.cows.game.models.BulletModel
 import com.cows.game.models.TowerModel
 import com.cows.game.views.TowerView
-import kotlin.math.sin
 
 class TowerController(val model: TowerModel): Updatable() {
     private var currentTarget: UnitController? = null
@@ -26,19 +26,16 @@ class TowerController(val model: TowerModel): Updatable() {
     val renderableView = TowerView(model)
 
 
-    fun target(unit: UnitController, bulletController: BulletController) {
+    fun target(unit: UnitController) {
         currentTarget = unit
         model.hasTarget = true
-
-        currentBullet = bulletController
-
+        currentBullet = BulletController(BulletModel(model.tileCoordinate.toVector2()))
     }
 
     fun removeTarget() {
         currentTarget = null
         model.hasTarget = false
-        currentBullet?.die()
-
+        currentBullet = null
     }
 
     fun attack() {
