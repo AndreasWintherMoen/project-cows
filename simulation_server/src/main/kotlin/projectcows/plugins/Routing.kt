@@ -11,8 +11,8 @@ import projectcows.rawJsonData.JsonUnit
 import projectcows.simulationModels.RoundSimulator
 
 data class SimulationBody (
-    val defendInstruction: List<JsonTower>,
-    val attackInstruction: List<JsonUnit>,
+    val defendInstructions: List<JsonTower>,
+    val attackInstructions: List<JsonUnit>,
     val path: List<IntArray>
 )
 
@@ -23,7 +23,7 @@ fun Application.configureRouting() {
     routing {
         post("cows/round/simulate"){
             val body = call.receive<SimulationBody>()
-            val roundSimulation = roundSimulator.simulate(body.defendInstruction, body.attackInstruction, body.path)
+            val roundSimulation = roundSimulator.simulate(body.defendInstructions, body.attackInstructions, body.path)
             call.respondText(gson.toJson(roundSimulation), ContentType.Application.Json, HttpStatusCode.OK)
         }
     }

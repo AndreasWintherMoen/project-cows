@@ -24,6 +24,8 @@ repositories {
 dependencies {
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
+    implementation("io.ktor:ktor-serialization-gson:$ktor_version")
+    implementation("io.ktor:ktor-server-content-negotiation:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("org.mini2Dx:gdx-math:1.9.13")
     implementation("com.google.code.gson:gson:2.9.0")
