@@ -54,6 +54,7 @@ object ServerConnection {
     suspend fun createGame(client: HttpClient){
         val createGameResponse = sendGameCreateRequest(client)
         val websocketClient = generateWebsocketClient(client)
+        println("created game with game code ${createGameResponse.gameJoinCode}")
         websocketSession = establishGameConnection(websocketClient,createGameResponse.userId,createGameResponse.gameCodeUUID)
 
     }
