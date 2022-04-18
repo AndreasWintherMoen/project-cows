@@ -10,40 +10,21 @@ import java.util.*
 // maps the requested instruction list to the incoming game.
 object ConnectionMapper {
 
-    // This is the timeout value for the gameCodes. 900 000 is 15 minutes
+    // 900 000 seconds is 15 minutes
     private val gameCodeTimeoutMillis = 900000
-
-    // This map is used to map the gameId to the actual game, should the client be able to prove that they are
-    // one of the clients in the game.
 
     private var gameMap: MutableMap<UUID, Game> = Collections.synchronizedMap(mutableMapOf())
 
-    // This is an API function which takes in a new connecting client and a gameCodeInteger to create a game
-    // The function will check if the requested gameCode is valid and if so will create a UUID for
-    // the newly instantiated game. It will then use this Game-UUID as a key in the gameMap,
-    // where the value is a Game.
     fun createGame(clientConnection: ClientConnection, gameJoinCode: String): UUID? {
-        val gameCode: GameCode? = getGameCode(gameJoinCode)
-        return if (gameCode != null) {
-            gameMap[gameCode.gameCodeUUID] = Game(Pair(gameCode.creator, clientConnection))
-            gameCode.gameCodeUUID
-        } else {
-            // If this returns null, then the gameCodeInteger is not valid.
-            // This may occur if the code was used more than 15 minutes after the creation
-            // or if the code did not exist in the GameCodeMap in the first place
-            null
-        }
+        val gameCode = getGameCodeIfValid(gameJoinCode) ?: return null
+        gameMap[gameCode.gameCodeUUID] = Game(Pair(gameCode.creator, clientConnection))
+        return gameCode.gameCodeUUID
     }
 
-    // This map will list the currently active and valid gameCodes
     private var gameCodeMap: MutableMap<String, GameCode> =
         Collections.synchronizedMap(mutableMapOf())
 
-    // This API function is used by the API endpoints to generate a valid code.
-    // This function will generate a valid GameCodeInteger and a valid GameCode based on this integer
-    // It will then store this GameCode in the GameCodeMap with the key being the GameCodeInteger and the value being the GameCode
     fun createGameCode(clientConnection: ClientConnection): GameCode {
-        // Generates the gameCodeInteger and initializes the gameCode with the creator connection
         val gameCodeUUID = UUID.randomUUID()
         val gameJoinCode = generateValidGameCode()
         val gameSetup = GameCode(gameJoinCode, gameCodeUUID, clientConnection)
@@ -82,38 +63,23 @@ object ConnectionMapper {
 
     private fun gameCodeIsInvalid(gameCode: String) = !gameCodeMap.containsKey(gameCode)
 
-    // Checks if the inserted integer code is valid, based on the timestamp being not more than
-    // 15 minutes old and if it is in the set of valid codes.
-    // If so, it returns a valid GameCode instance.
-    private fun getGameCode(gameCodeUUID: String): GameCode? {
-        // This gameCode may be null if the gameCode does not exist in the set of valid gameCodes
-        val gameCodeMapEntry: GameCode? = gameCodeMap[gameCodeUUID]
-        if (gameCodeMapEntry != null) {
-            return if (
-            // Checks if the gameCodeMapEntry is no less than 15 minutes old
-                getTimeMillis() - gameCodeMapEntry.timeOfCreation < gameCodeTimeoutMillis
-            ) {
-                gameCodeMapEntry
-            } else {
-                // If this returns null, then the gameCodeMapEntry has been created later than 15 minutes and therefore is not valid.
-                // Thus the code must also be removed as it should not be in the map and the method returns null.
-                gameCodeMap.remove(gameCodeUUID)
-                null
-            }
-        } else {
-            // If the gameCodeMapEntry is null, it does not exist in the gameCodeMap and is therefore not valid.
+    private fun getGameCodeIfValid(gameCodeUUID: String): GameCode? {
+        val gameCodeMapEntry = gameCodeMap[gameCodeUUID] ?: return null
+
+        if (gameCodeIsExpired(gameCodeMapEntry)) {
+            gameCodeMap.remove(gameCodeUUID)
             return null
         }
+        return gameCodeMapEntry
     }
 
-    // If the game is not created, then the second client has not joined yet.
-    fun areGameSlotsFilled(gameUUID: UUID):Boolean{
-        return gameMap.containsKey(gameUUID)
-    }
+    private fun gameCodeIsExpired(gameCode: GameCode): Boolean =
+        getTimeMillis() - gameCode.timeOfCreation > gameCodeTimeoutMillis
 
-    fun getClientConnectionsFromGame(gameUUID: UUID): Pair<ClientConnection,ClientConnection>{
-        return gameMap[gameUUID]!!.gameConnections
-    }
+    fun areGameSlotsFilled(gameUUID: UUID): Boolean = gameMap.containsKey(gameUUID)
+
+    fun getClientConnectionsFromGame(gameUUID: UUID): Pair<ClientConnection,ClientConnection> =
+        gameMap[gameUUID]!!.gameConnections
 
     private val gameCodeGarbageCollector =
         GameCodeGarbageCollector(gameCodeMap, gameCodeTimeoutMillis, 30000L)
