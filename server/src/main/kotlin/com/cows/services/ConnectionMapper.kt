@@ -66,14 +66,11 @@ object ConnectionMapper {
         }
     }
 
-    // Convert game ID to a easier to read game code
-    // Should be random enough, but could/should implement check to see if exists
     private fun generateGameCode(): String {
-        val codeLength = 5;
-        var code = generateCode(codeLength)
+        var code = generateCode(GameCode.CODE_LENGTH)
 
         while (gameCodeMap.containsKey(code)) {
-            code = generateCode(codeLength)
+            code = generateCode(GameCode.CODE_LENGTH)
         }
 
         return code
