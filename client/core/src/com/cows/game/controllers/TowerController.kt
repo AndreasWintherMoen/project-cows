@@ -17,10 +17,9 @@ class TowerController(val model: TowerModel): Updatable() {
         val startPos = model.tileCoordinate.toVector2()
         val directionToTarget = Vector2(targetPos.x - startPos.x, targetPos.y - startPos.y)
         model.rotation = MathUtils.atan2(directionToTarget.y, directionToTarget.x) * MathUtils.radDeg
-        currentBullet?.model?.rotation = model.rotation
 
-        currentBullet?.model?.destination = targetPos
-        currentBullet?.update(deltaTime)
+        currentBullet = BulletController(BulletModel(model.tileCoordinate.toVector2()))
+
     }
 
     val renderableView = TowerView(model)
@@ -29,16 +28,14 @@ class TowerController(val model: TowerModel): Updatable() {
     fun target(unit: UnitController) {
         currentTarget = unit
         model.hasTarget = true
-        currentBullet = BulletController(BulletModel(model.tileCoordinate.toVector2()))
     }
 
     fun removeTarget() {
         currentTarget = null
         model.hasTarget = false
-        currentBullet = null
     }
 
     fun attack() {
-        currentBullet?.attack()
+        currentBullet?.attack(currentTarget, model.tileCoordinate.toVector2())
     }
 }

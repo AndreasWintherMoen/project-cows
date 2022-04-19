@@ -7,7 +7,7 @@ import com.cows.game.models.BulletModel
 
 class BulletView (val model: BulletModel ) : Renderable() {
     companion object {
-        fun modelToSprite(): Sprite = Sprite(Texture("Bullets/bullet-bill.png", ))
+        fun modelToSprite(): Sprite = Sprite(Texture("Bullets/blue.png", ))
     }
 
     private var sprite = modelToSprite()

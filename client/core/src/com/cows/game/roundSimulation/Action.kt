@@ -1,10 +1,8 @@
 package com.cows.game.roundSimulation
 
-import com.cows.game.controllers.BulletController
 import com.cows.game.controllers.TileController
 import com.cows.game.controllers.TowerController
 import com.cows.game.controllers.UnitController
-import com.cows.game.models.BulletModel
 
 enum class ActionType {
     NONE,
