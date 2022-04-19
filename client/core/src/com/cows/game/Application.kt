@@ -12,9 +12,12 @@ import com.cows.game.map.Map
 import com.cows.game.models.TileModel
 import com.cows.game.roundSimulation.GameTickProcessor
 import com.cows.game.roundSimulation.RoundSimulationDeserializer
+import com.cows.game.serverConnection.ServerConnection
+import kotlinx.coroutines.launch
 import java.io.File
+import ktx.async.KtxAsync
 
-class Application : ApplicationAdapter() {
+class Application : ApplicationAdapter()  {
     companion object {
         const val WIDTH = Map.WIDTH * TileModel.WIDTH
         const val HEIGHT = Map.HEIGHT * TileModel.HEIGHT
@@ -25,9 +28,19 @@ class Application : ApplicationAdapter() {
     private lateinit var hudManager: HUDManager
 
     override fun create() {
-        Map.init()
-        hudManager = HUDManager { startGame() }
-        GameStateManager.currentGameState = GameState.PLANNING_DEFENSE
+        KtxAsync.initiate()
+
+        KtxAsync.launch{
+
+            launch { Map.init()
+                hudManager = HUDManager { startGame() }
+                GameStateManager.currentGameState = GameState.PLANNING_DEFENSE
+            }
+            launch {
+                ServerConnection.createGame(ServerConnection.client)
+            }
+        }
+
     }
 
     override fun render() {

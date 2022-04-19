@@ -1,5 +1,6 @@
 buildscript {
     ext.kotlinVersion = '1.6.10'
+    ext.ktor_version = '1.6.8'
 
     repositories {
         mavenLocal()
@@ -12,9 +13,9 @@ buildscript {
         classpath 'com.android.tools.build:gradle:7.0.4'
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.15'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-
     }
 }
+
 
 allprojects {
     apply plugin: "eclipse"
@@ -93,5 +94,21 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
         implementation 'com.google.code.gson:gson:2.9.0'
+        implementation("io.ktor:ktor-client-core:1.6.8")
+        implementation("io.ktor:ktor-client-cio:1.6.8")
+        implementation("io.ktor:ktor-client-auth:$ktor_version")
+        implementation("io.ktor:ktor-client-gson:$ktor_version")
+        implementation("io.ktor:ktor-gson:$ktor_version")
+        implementation("io.ktor:ktor-websockets:$ktor_version")
+        implementation("io.ktor:ktor-client-core:$ktor_version")
+        implementation("io.ktor:ktor-client-cio:$ktor_version")
+        implementation("io.ktor:ktor-client-logging:$ktor_version")
+        testImplementation('org.jetbrains.kotlin:kotlin-test')
+        api "io.github.libktx:ktx-async:1.10.0-rc1"
+        implementation("io.github.cdimascio:dotenv-kotlin:6.2.2")
+    }
+    test {
+        useJUnitPlatform()
     }
 }
+
