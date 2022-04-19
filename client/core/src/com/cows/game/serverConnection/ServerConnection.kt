@@ -54,6 +54,7 @@ object ServerConnection {
     suspend fun createGame(client: HttpClient){
         val createGameResponse = sendGameCreateRequest(client)
         val websocketClient = generateWebsocketClient(client)
+        println("created game with game code ${createGameResponse.gameJoinCode}")
         websocketSession = establishGameConnection(websocketClient,createGameResponse.userId,createGameResponse.gameCodeUUID)
 
     }
@@ -79,7 +80,7 @@ object ServerConnection {
                 is Frame.Text -> {
                     val message = Message.retrieveWSMessage(incoming)
                     println(message)
-                    if (message!!.opCode == OpCode.CONNECTED || message!!.opCode == OpCode.AWAIT){
+                    if (message!!.opCode == OpCode.CONNECTED){
                         isConnected = true
                     }
                 }
