@@ -1,6 +1,6 @@
 package projectcows.models
 
-import com.cows.game.enums.TileType
+import projectcows.enums.TileType
 
 data class TileModel(
     val type: TileType,

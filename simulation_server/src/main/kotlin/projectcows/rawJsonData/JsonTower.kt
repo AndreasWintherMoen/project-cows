@@ -1,6 +1,6 @@
 package projectcows.rawJsonData
 
-import com.cows.game.enums.TowerType
+import projectcows.enums.TowerType
 import projectcows.models.Coordinate
 import projectcows.models.TowerModel
 

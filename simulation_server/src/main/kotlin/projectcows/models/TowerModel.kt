@@ -1,6 +1,6 @@
 package projectcows.models
 
-import com.cows.game.enums.TowerType
+import projectcows.enums.TowerType
 
 data class TowerModel (
     val type: TowerType,
