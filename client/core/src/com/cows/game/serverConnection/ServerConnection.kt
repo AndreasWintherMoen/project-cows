@@ -43,8 +43,7 @@ object ServerConnection {
     var websocketSession:DefaultWebSocketSession? = null
 
     suspend fun sendGameCreateRequest(client:HttpClient): GameCreateResponse {
-        val response: GameCreateResponse = client.request("$httpApiBase/game/create")
-        return response
+        return client.request<GameCreateResponse>("$httpApiBase/game/create")
     }
 
     suspend fun generateWebsocketClient(client: HttpClient): DefaultWebSocketSession{
