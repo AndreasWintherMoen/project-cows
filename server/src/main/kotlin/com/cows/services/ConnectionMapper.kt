@@ -61,7 +61,7 @@ object ConnectionMapper {
         return (1..GameCode.CODE_LENGTH).map { chars.random() }.joinToString("")
     }
 
-    private fun gameCodeIsInvalid(gameCode: String) = !gameCodeMap.containsKey(gameCode)
+    private fun gameCodeIsInvalid(gameCode: String) = gameCodeMap.containsKey(gameCode)
 
     private fun getGameCodeIfValid(gameCodeUUID: String): GameCode? {
         val gameCodeMapEntry = gameCodeMap[gameCodeUUID] ?: return null
