@@ -9,7 +9,6 @@ import com.cows.game.managers.FunctionDelayer
 import com.cows.game.managers.TowerSpawner
 
 class PlanningDefenseActionPanel(private val onStartGame: () -> Unit): PlanningActionPanel() {
-    //val panelBatch = SpriteBatch()
     //private val buttons = mutableListOf<Button>()
     private val unitCounterPanel = UnitCounterPanel(10)
     val cancelPlacementButton = Button("HUD/cancel-button.png", Vector2(Gdx.graphics.width - 100f, 30f)) { cancelPlacement() }
