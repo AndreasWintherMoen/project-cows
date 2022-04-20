@@ -6,7 +6,7 @@ import com.cows.game.enums.UnitType
 class PlanningAttackActionPanel(private val onStartGame: () -> Unit) : PlanningActionPanel() {
     private val unitCounterPanel = UnitCounterPanel(10)
 
-    val startGameButton = Button("Buttons/start-button.png", Vector2(this.position.x+45f, 0f)) { println("STARTING GAME") }
+    val startGameButton = Button("Buttons/start-button.png", Vector2(this.position.x+45f, 0f)) { onStartGame.invoke() }
 
     // FIRE TOWER🔥
     val fireTowerButton = Button("Towers/fire-tower.png", Vector2(this.position.x + 45f, 100f)) { println("OPEN FIRE TOWER INFO")}
@@ -25,4 +25,22 @@ class PlanningAttackActionPanel(private val onStartGame: () -> Unit) : PlanningA
         UnitType.WATER)}
     val addWaterTowerButton = Button("Buttons/add-button.png", Vector2(this.position.x+ 150f, 300f)) { unitCounterPanel.addUnit(
         UnitType.WATER)}
+
+    override fun die() {
+        super.die()
+
+        startGameButton.die()
+
+        fireTowerButton.die()
+        removeFireTowerButton.die()
+        addFireTowerButton.die()
+
+        waterTowerButton.die()
+        removeWaterTowerButton.die()
+        addWaterTowerButton.die()
+
+        grassTowerButton.die()
+        removeGrassTowerButton.die()
+        addGrassTowerButton.die()
+    }
 }

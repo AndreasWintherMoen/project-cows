@@ -41,11 +41,13 @@ class PlanningDefenseActionPanel(private val onStartGame: () -> Unit): PlanningA
         super.die()
         unitCounterPanel.die()
         startGameButton.die()
+        fireTowerButton.die()
         grassTowerButton.die()
         waterTowerButton.die()
+        cancelPlacementButton.die()
     }
 
-    val startGameButton = Button("Buttons/start-button.png", Vector2(this.position.x+45f, 0f)) { println("STARTING GAME") }
+    val startGameButton = Button("Buttons/start-button.png", Vector2(this.position.x+45f, 0f)) { onStartGame.invoke() }
 
     // FIRE TOWER🔥
     val fireTowerButton = Button("Towers/fire-tower.png", Vector2(this.position.x + 45f, 100f)) { selectTower(UnitType.FIRE) }

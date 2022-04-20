@@ -12,9 +12,9 @@ class UnitView (val model: UnitModel): Renderable() {
         fun unitTypeToFolder(unitType: UnitType): String =
             when(unitType) {
                 UnitType.NONE -> "NONE"
-                UnitType.FIRE -> "fire"
-                UnitType.WATER -> "water"
-                UnitType.GRASS -> "grass"
+                UnitType.FIRE -> "IndianUnit"
+                UnitType.WATER -> "IndianUnit"
+                UnitType.GRASS -> "IndianUnit"
                 else -> throw Error("Could not find unit type $unitType")
             }
         fun directionToFileName(direction: Coordinate): String {

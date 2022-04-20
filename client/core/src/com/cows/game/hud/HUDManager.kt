@@ -11,13 +11,16 @@ import com.cows.game.managers.TowerSpawner
 // Should manage which naviagations buttons that should be displayed
 class HUDManager(private val onStartGame: () -> Unit): GameStateSubscriber() {
     //private val buttons = mutableListOf<Button>()
-    private lateinit var actionPanel: ActionPanel
+    private var actionPanel: ActionPanel? = null
 
 
     override fun onChangeGameState(oldGameState: GameState, newGameState: GameState) {
         println("Changing game state from $oldGameState to $newGameState")
         //buttons.forEach { it.die() }
         //buttons.clear()
+        actionPanel?.let {
+            it.die()
+        }
         when (newGameState) {
             GameState.ACTIVE_GAME -> {
                 actionPanel = ActiveGameActionPanel()

@@ -2,7 +2,7 @@
   "towerList": [
       {
           "id": 0,
-          "type": "STONE",
+          "type": "FIRE",
           "position": {
               "x": 3,
               "y": 2
@@ -11,7 +11,7 @@
       },
       {
           "id": 1,
-          "type": "STONE",
+          "type": "FIRE",
           "position": {
               "x": 15,
               "y": 2
@@ -22,32 +22,32 @@
   "unitList": [
       {
           "id": 10,
-          "type": "RUNNER",
+          "type": "WATER",
           "movementSpeed": 1.0
       },
       {
           "id": 11,
-          "type": "SWORDMAN",
+          "type": "GRASS",
           "movementSpeed": 1.0
       },
       {
           "id": 12,
-          "type": "SWORDMAN",
+          "type": "GRASS",
           "movementSpeed": 1.0
       },
       {
           "id": 13,
-          "type": "RUNNER",
+          "type": "WATER",
           "movementSpeed": 1.0
       },
       {
           "id": 14,
-          "type": "RUNNER",
+          "type": "WATER",
           "movementSpeed": 1.0
       },
       {
           "id": 15,
-          "type": "SWORDMAN",
+          "type": "GRASS",
           "movementSpeed": 1.0
       }
   ],

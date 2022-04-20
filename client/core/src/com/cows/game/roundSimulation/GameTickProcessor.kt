@@ -54,6 +54,6 @@ class GameTickProcessor (private val roundSimulation: JsonRoundSimulation) {
             println("Could not concretize action $jsonAction. Returning empty action. Error message: $e")
             EmptyAction()
         }
-    };
+    }
 
 }
