@@ -3,12 +3,25 @@ package com.cows.game.views
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.cows.game.enums.TileType
+import com.cows.game.enums.UnitType
 import com.cows.game.models.TileModel
 import com.cows.game.models.TowerModel
 
 class TowerView(private val model: TowerModel): Renderable() {
-    private val tower = Sprite(Texture("Towers/tower1.png"))
+    //private val tower = Sprite(Texture("Towers/tower1.png"))
+    private val tower = Sprite(typeToTowerTexture(model.type))
     private val turret = Sprite(Texture("Turrets/turret1.png"))
+
+    companion object {
+        fun typeToTowerTexture(unitType: UnitType): Texture =
+            when(unitType) {
+                UnitType.FIRE -> Texture("Towers/tower1.png")
+                UnitType.GRASS -> Texture("Towers/tower2.png")
+                UnitType.WATER -> Texture("Towers/tower3.png")
+                else -> throw Error("Could not find tile type $unitType")
+            }
+    }
 
     init {
         val pixel = model.tileCoordinate.toVector2()

@@ -1,4 +1,4 @@
 package com.cows.game.hud
 
-class StartMenuActionPanel {
+class StartMenuActionPanel:ActionPanel() {
 }

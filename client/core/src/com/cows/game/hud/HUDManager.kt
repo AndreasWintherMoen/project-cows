@@ -10,21 +10,33 @@ import com.cows.game.managers.TowerSpawner
 
 // Should manage which naviagations buttons that should be displayed
 class HUDManager(private val onStartGame: () -> Unit): GameStateSubscriber() {
-    private val buttons = mutableListOf<Button>()
+    //private val buttons = mutableListOf<Button>()
+    private lateinit var actionPanel: ActionPanel
+
 
     override fun onChangeGameState(oldGameState: GameState, newGameState: GameState) {
         println("Changing game state from $oldGameState to $newGameState")
-        buttons.forEach { it.die() }
-        buttons.clear()
+        //buttons.forEach { it.die() }
+        //buttons.clear()
         when (newGameState) {
-            GameState.ACTIVE_GAME -> createActiveGameButtons()
+            GameState.ACTIVE_GAME -> {
+                actionPanel = ActiveGameActionPanel()
+                //createActiveGameButtons()
+            }
             GameState.NONE -> {}
-            GameState.START_MENU -> {}
-            GameState.PLANNING_DEFENSE -> createPlanningDefenseButtons()
-            GameState.PLANNING_ATTACK -> createPlanningAttackButtons()
+            GameState.START_MENU -> actionPanel = StartMenuActionPanel()
+            GameState.PLANNING_DEFENSE -> {
+                actionPanel = PlanningDefenseActionPanel {onStartGame.invoke()}
+                //createPlanningDefenseButtons()
+            }
+            GameState.PLANNING_ATTACK -> {
+                actionPanel = PlanningAttackActionPanel {onStartGame.invoke()}
+                //createPlanningAttackButtons()
+            }
         }
     }
 
+/**
     private fun createPlanningDefenseButtons() {
         val startGameButton = Button("HUD/start-button.png") { onStartGame.invoke() }
         val cancelPlacementButton = Button("HUD/cancel-button.png", Vector2(Gdx.graphics.width - 150f, 30f))
@@ -61,13 +73,12 @@ class HUDManager(private val onStartGame: () -> Unit): GameStateSubscriber() {
     private fun createPlanningAttackButtons() {
         val startGameButton = Button("HUD/start-button.png") { onStartGame.invoke() }
         val cancelPlacementButton = Button("HUD/cancel-button.png", Vector2(Gdx.graphics.width - 150f, 30f))
-
+        buttons.add(cancelPlacementButton)
         buttons.add(startGameButton)
-
-        
     }
 
     private fun createActiveGameButtons() {
-        //TODO: Implement this
+        println("Creating Game Buttons")
     }
+**/
 }

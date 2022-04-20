@@ -7,23 +7,24 @@ import com.cows.game.controllers.TileController
 import com.cows.game.enums.GameState
 import com.cows.game.enums.TileType
 import com.cows.game.enums.TowerType
+import com.cows.game.enums.UnitType
 import com.cows.game.gameState.GameStateSubscriber
 import com.cows.game.map.Coordinate
 import com.cows.game.models.TowerModel
 
 object TowerSpawner: GameStateSubscriber(), ClickSubscriber {
-    private var towerToBeSpawned = TowerType.NONE
+    private var towerToBeSpawned = UnitType.NONE
     private val spawnedTowers = mutableListOf<PlanningTowerController>()
     private var onSpawnTower: (() -> Unit)? = null
 
-    fun selectTower(type: TowerType, onSpawnTower: () -> Unit) {
+    fun selectTower(type: UnitType, onSpawnTower: () -> Unit) {
         towerToBeSpawned = type
         subscribeToClickEvents()
         this.onSpawnTower = onSpawnTower
     }
 
     fun cancelPlacement() {
-        towerToBeSpawned = TowerType.NONE
+        towerToBeSpawned = UnitType.NONE
         unsubscribeToClickEvents()
     }
 
@@ -39,7 +40,7 @@ object TowerSpawner: GameStateSubscriber(), ClickSubscriber {
             // TODO: serialize spawnedTowers and send info to API module
             spawnedTowers.forEach { it.view.die() }
             spawnedTowers.clear()
-            towerToBeSpawned = TowerType.NONE
+            towerToBeSpawned = UnitType.NONE
         }
     }
 

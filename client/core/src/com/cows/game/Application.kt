@@ -2,10 +2,10 @@ package com.cows.game
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.cows.game.enums.GameState
 import com.cows.game.hud.ActionPanel
 import com.cows.game.hud.HUDManager
+import com.cows.game.hud.PlanningAttackActionPanel
 import com.cows.game.managers.FunctionDelayer
 import com.cows.game.managers.GameStateManager
 import com.cows.game.managers.Renderer
@@ -25,12 +25,10 @@ class Application : ApplicationAdapter() {
     private lateinit var gameTickProcessor: GameTickProcessor
     private lateinit var hudManager: HUDManager
 
-    private lateinit var actionPanel: ActionPanel
-
     override fun create() {
         Map.init()
         hudManager = HUDManager { startGame() }
-        GameStateManager.currentGameState = GameState.PLANNING_DEFENSE
+        GameStateManager.currentGameState = GameState.PLANNING_ATTACK
     }
 
     override fun render() {

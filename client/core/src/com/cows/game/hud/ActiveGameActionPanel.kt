@@ -1,4 +1,4 @@
 package com.cows.game.hud
 
-class ActiveGameActionPanel {
+class ActiveGameActionPanel:ActionPanel() {
 }
