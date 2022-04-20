@@ -24,7 +24,6 @@ class TowerController(val model: TowerModel): Updatable() {
 
     val renderableView = TowerView(model)
 
-
     fun target(unit: UnitController) {
         currentTarget = unit
         model.hasTarget = true
