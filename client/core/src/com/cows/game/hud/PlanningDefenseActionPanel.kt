@@ -1,16 +1,11 @@
 package com.cows.game.hud
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
-import com.cows.game.enums.TowerType
 import com.cows.game.enums.UnitType
-import com.cows.game.managers.FunctionDelayer
 import com.cows.game.managers.TowerSpawner
 
 class PlanningDefenseActionPanel(private val onStartGame: () -> Unit): PlanningActionPanel() {
-    //val panelBatch = SpriteBatch()
-    //private val buttons = mutableListOf<Button>()
     private val unitCounterPanel = UnitCounterPanel(10)
     val cancelPlacementButton = Button("HUD/cancel-button.png", Vector2(Gdx.graphics.width - 100f, 30f)) { cancelPlacement() }
 

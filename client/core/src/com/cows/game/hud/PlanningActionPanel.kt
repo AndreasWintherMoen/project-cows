@@ -8,8 +8,8 @@ abstract class PlanningActionPanel(): ActionPanel() {
         val counterPanelHeight = getPercentOfScreen(15f, Application.HEIGHT)
         val buttonPanelHeight = getPercentOfScreen(15f, Application.HEIGHT)
 
-        private fun getPercentOfScreen(percentage: Float, screenWidth: Float): Any {
-            return screenWidth/(percentage/100)
+        private fun getPercentOfScreen(percentage: Float, screenLength: Float): Float {
+            return screenLength/(percentage/100)
         }
     }
 

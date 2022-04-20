@@ -1,7 +1,6 @@
 package com.cows.game.models
 
 import com.cows.game.map.Coordinate
-import com.cows.game.enums.TowerType
 import com.cows.game.enums.UnitType
 
 data class TowerModel (

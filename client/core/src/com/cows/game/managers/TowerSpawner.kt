@@ -6,7 +6,6 @@ import com.cows.game.controllers.PlanningTowerController
 import com.cows.game.controllers.TileController
 import com.cows.game.enums.GameState
 import com.cows.game.enums.TileType
-import com.cows.game.enums.TowerType
 import com.cows.game.enums.UnitType
 import com.cows.game.gameState.GameStateSubscriber
 import com.cows.game.map.Coordinate
