@@ -30,6 +30,7 @@ class UnitView (val model: UnitModel): Renderable() {
     private var sprite = modelToSprite(model)
 
     override fun render(batch: SpriteBatch, deltaTime: Float) {
+        if (model.isDead) return
         sprite.setPosition(model.position.x, model.position.y)
         sprite.draw(batch)
     }
