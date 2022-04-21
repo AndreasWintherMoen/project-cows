@@ -46,39 +46,43 @@ fun Application.configureSockets() {
 suspend fun handleConnect(message: Message, userWebSocketSession: DefaultWebSocketServerSession){
 
     val userConnection:ClientConnection? = getClientFromConnectMessage(message)
-    if (userConnection != null){
+    userConnection?.let {
         connectionMap[userConnection] = userWebSocketSession
-        val responseMessage:Message = if (ConnectionMapper.areGameSlotsFilled(gameUUID = message.gameUUID)){
-            val creatorConnection = getCreatorConnection(message.gameUUID, message.userUUID)
+        val responseMessage: Message =
+            if (ConnectionMapper.areGameSlotsFilled(gameUUID = message.gameUUID)) {
+                val creatorConnection = getCreatorConnection(message.gameUUID, message.userUUID)
 
-            connectionMap[creatorConnection]!!.outgoing.send(Frame.Text(
-                gson.toJson(
-                    Message(
-                        userUUID = creatorConnection.id,
-                        gameUUID = message.gameUUID,
-                        opCode = OpCode.CONNECTED,
-                        null
+                connectionMap[creatorConnection]!!.outgoing.send(
+                    Frame.Text(
+                        gson.toJson(
+                            Message(
+                                userUUID = creatorConnection.id,
+                                gameUUID = message.gameUUID,
+                                opCode = OpCode.CONNECTED,
+                                null
+                            )
                         )
                     )
                 )
-            )
 
-            Message(
-                userUUID= message.userUUID,
-                gameUUID = message.gameUUID,
-                OpCode.CONNECTED,
-                null)
+                Message(
+                    userUUID = message.userUUID,
+                    gameUUID = message.gameUUID,
+                    OpCode.CONNECTED,
+                    null
+                )
 
-        } else{
-            Message(
-                userUUID= message.userUUID,
-                gameUUID = message.gameUUID,
-                OpCode.AWAIT,
-                null)
-        }
+            } else {
+                Message(
+                    userUUID = message.userUUID,
+                    gameUUID = message.gameUUID,
+                    OpCode.AWAIT,
+                    null
+                )
+            }
         val messageString = gson.toJson(responseMessage)
         userWebSocketSession.outgoing.send(Frame.Text(messageString))
-    } else{
+    } ?: run {
         userWebSocketSession.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, "You have not created or joined a game yet!"))
     }
 }
