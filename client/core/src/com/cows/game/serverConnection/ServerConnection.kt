@@ -54,7 +54,6 @@ object ServerConnection {
     var gameSession: GameSession? = null
 
     private suspend fun sendGameCreateRequest(client:HttpClient): GameCreateResponse {
-        println("Sending request to $httpApiBase/game/create")
         return client.request<GameCreateResponse>("$httpApiBase/game/create")
     }
 
@@ -71,7 +70,6 @@ object ServerConnection {
     }
 
     suspend fun connectToActiveGame() {
-        println("Connect to active game")
         websocketSession?.let {
             websocketSession = establishGameConnection(it)
         } ?: run {
@@ -98,7 +96,6 @@ object ServerConnection {
                     val message = Message.retrieveWSMessage(incoming)
                     println(message)
                     if (message!!.opCode == OpCode.AWAIT){
-                        println("Received await message...")
                         continue
                     } else if (message!!.opCode == OpCode.EVENTLOG) {
                         val defendInstructionsType = object : TypeToken<JsonRoundSimulation>() {}.type
@@ -126,7 +123,6 @@ object ServerConnection {
                     val message = Message.retrieveWSMessage(incoming)
                     println(message)
                     if (message!!.opCode == OpCode.AWAIT){
-                        println("Received await message...")
                         continue
                     } else if (message!!.opCode == OpCode.EVENTLOG) {
                         val defendInstructionsType = object : TypeToken<JsonRoundSimulation>() {}.type
@@ -153,7 +149,6 @@ object ServerConnection {
         while (!isConnected){
             val nullableIncoming = wsSession.incoming.tryReceive()
             if (nullableIncoming.isFailure || nullableIncoming.isClosed) continue
-            println("Received frame ${Frame}")
             when (val incoming = nullableIncoming.getOrThrow()) {
                 is Frame.Text -> {
                     val message = Message.retrieveWSMessage(incoming)

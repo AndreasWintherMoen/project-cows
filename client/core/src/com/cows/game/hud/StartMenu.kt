@@ -80,14 +80,12 @@ class StartMenu(): Renderable() {
     }
 
     fun foo() {
-        println("Foo")
         runBlocking {
             createGame()
         }
     }
 
     fun bar() {
-        println("Bar")
         runBlocking {
             joinGame()
         }
@@ -97,16 +95,13 @@ class StartMenu(): Renderable() {
         val joinCode = ServerConnection.createGame()
         println("joinCode: $joinCode")
         ServerConnection.connectToActiveGame()
-        println("Finished joining!!!")
         die()
         GameStateManager.currentGameState = GameState.PLANNING_ATTACK
     }
 
     suspend fun joinGame() {
         val joinCode = numbers.joinToString("")
-        println("joining game with joinCode $joinCode")
         ServerConnection.joinGame(joinCode)
-        println("Joined as joiner")
         die()
         GameStateManager.currentGameState = GameState.PLANNING_DEFENSE
     }
