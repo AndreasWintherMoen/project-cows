@@ -70,7 +70,7 @@ object Map {
     }
 
     fun flipPath(): List<Coordinate> {
-        return PATH.map { Coordinate(15 - it.x, it.y) }
+        return PATH.map { Coordinate((WIDTH - 1) - it.x, it.y) }
     }
 
     fun getTile(x: Int, y: Int): TileController {
