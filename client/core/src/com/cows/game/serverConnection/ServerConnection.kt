@@ -1,5 +1,8 @@
 package com.cows.game.serverConnection
 
+import com.cows.game.roundSimulation.rawJsonData.JsonRoundSimulation
+import com.cows.game.roundSimulation.rawJsonData.JsonTower
+import com.cows.game.roundSimulation.rawJsonData.JsonUnit
 import com.cows.game.serverConnection.shared.GameCreateResponse
 import com.cows.game.serverConnection.shared.GameJoinResponse
 import io.ktor.client.*
@@ -14,8 +17,14 @@ import io.ktor.client.features.logging.Logger
 import java.time.Duration
 import com.cows.game.serverConnection.shared.Message
 import com.cows.game.serverConnection.shared.OpCode
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import io.github.cdimascio.dotenv.Dotenv
 import io.github.cdimascio.dotenv.dotenv
+
+data class GameSession (
+    val userUUID: UUID,
+    val gameUUID: UUID)
 
 val dotenv:Dotenv = dotenv {
     filename = "./assets/env"
@@ -41,6 +50,8 @@ object ServerConnection {
         }
     }
     var websocketSession:DefaultWebSocketSession? = null
+    val gson = Gson()
+    var gameSession: GameSession? = null
 
     private suspend fun sendGameCreateRequest(client:HttpClient): GameCreateResponse {
         return client.request<GameCreateResponse>("$httpApiBase/game/create")
@@ -52,20 +63,78 @@ object ServerConnection {
 
     suspend fun createGame(){
         val createGameResponse = sendGameCreateRequest(client)
+        gameSession = GameSession(createGameResponse.userId, createGameResponse.gameCodeUUID)
         val websocketClient = generateWebsocketClient(client)
         println("created game with game code ${createGameResponse.gameJoinCode}")
-        websocketSession = establishGameConnection(websocketClient,createGameResponse.userId,createGameResponse.gameCodeUUID)
+        websocketSession = establishGameConnection(websocketClient)
     }
 
     suspend fun joinGame(gameJoinCode: String){
         val joinGameResponse = sendGameJoinRequest(client,gameJoinCode)
+        gameSession = GameSession(joinGameResponse.userId, joinGameResponse.gameCodeUUID)
         val websocketClient = generateWebsocketClient(client)
-        websocketSession = establishGameConnection(websocketClient,joinGameResponse.userId,joinGameResponse.gameCodeUUID)
+        websocketSession = establishGameConnection(websocketClient)
     }
 
-    suspend fun establishGameConnection(wsSession:DefaultWebSocketSession, userUUID: UUID, gameUUID: UUID): DefaultWebSocketSession{
+    suspend fun sendAttackInstructions(unitList: List<JsonUnit>): JsonRoundSimulation {
+        val data = gson.toJson(unitList)
+        val message = createMessage(OpCode.INSTRUCTIONLOG, data)
+        websocketSession!!.send(Message.generateWSFrame(message))
+        while (true) {
+            val nullableIncoming = websocketSession!!.incoming.tryReceive()
+            if (nullableIncoming.isFailure || nullableIncoming.isClosed) continue
+            when (val incoming = nullableIncoming.getOrThrow()) {
+                is Frame.Text -> {
+                    val message = Message.retrieveWSMessage(incoming)
+                    println(message)
+                    if (message!!.opCode == OpCode.AWAIT){
+                        println("Received await message...")
+                        continue
+                    } else if (message!!.opCode == OpCode.EVENTLOG) {
+                        val defendInstructionsType = object : TypeToken<JsonRoundSimulation>() {}.type
+                        val roundSimulation: JsonRoundSimulation = gson.fromJson(message.data!!, defendInstructionsType)
+                        return roundSimulation
+                    }
+                }
+                else -> {
+                    println("Not text frame")
+                    println(incoming)
+                }
+            }
+        }
+    }
+
+    suspend fun sendDefendInstructions(towerList: List<JsonTower>): JsonRoundSimulation {
+        val data = gson.toJson(towerList)
+        val message = createMessage(OpCode.INSTRUCTIONLOG, data)
+        websocketSession!!.send(Message.generateWSFrame(message))
+        while (true) {
+            val nullableIncoming = websocketSession!!.incoming.tryReceive()
+            if (nullableIncoming.isFailure || nullableIncoming.isClosed) continue
+            when (val incoming = nullableIncoming.getOrThrow()) {
+                is Frame.Text -> {
+                    val message = Message.retrieveWSMessage(incoming)
+                    println(message)
+                    if (message!!.opCode == OpCode.AWAIT){
+                        println("Received await message...")
+                        continue
+                    } else if (message!!.opCode == OpCode.EVENTLOG) {
+                        val defendInstructionsType = object : TypeToken<JsonRoundSimulation>() {}.type
+                        val roundSimulation: JsonRoundSimulation = gson.fromJson(message.data!!, defendInstructionsType)
+                        return roundSimulation
+                    }
+                }
+                else -> {
+                    println("Not text frame")
+                    println(incoming)
+                }
+            }
+        }
+    }
+
+    suspend fun establishGameConnection(wsSession:DefaultWebSocketSession): DefaultWebSocketSession{
         var isConnected = false
-        val connectMessage = Message(userUUID,gameUUID, OpCode.CONNECT,null)
+        val connectMessage = createMessage(OpCode.CONNECT, null)
         wsSession.send(
             Message.generateWSFrame(
                 connectMessage
@@ -94,5 +163,13 @@ object ServerConnection {
     suspend fun sendGameJoinRequest(client: HttpClient,gameJoinCode: String): GameJoinResponse {
         val response: GameJoinResponse = client.request("$httpApiBase/game/join/${gameJoinCode}")
         return response
+    }
+
+    private fun createMessage(opCode: OpCode, data: String?): Message {
+        gameSession?.let {
+            return Message(it.userUUID, it.gameUUID, opCode, data)
+        } ?: run {
+            throw Exception("No game details set (you must join a game first)")
+        }
     }
 }
