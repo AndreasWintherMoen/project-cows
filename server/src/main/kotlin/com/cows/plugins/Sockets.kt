@@ -119,7 +119,6 @@ suspend fun handleInstructionLog(message: Message, userWebSocketSession: Default
     }
     val responseMessage: Message = if (roundSimulation == null) {
         Message(message.userUUID, message.gameUUID, OpCode.AWAIT, null)
-
     } else {
         val roundSimulationString = gson.toJson(roundSimulation)
         val otherUserId = game.getOtherClientConnection(message.userUUID)

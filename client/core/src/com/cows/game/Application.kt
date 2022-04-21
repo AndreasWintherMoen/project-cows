@@ -37,7 +37,7 @@ class Application : ApplicationAdapter()  {
                 GameStateManager.currentGameState = GameState.PLANNING_DEFENSE
             }
             launch {
-                ServerConnection.createGame(ServerConnection.client)
+                ServerConnection.createGame()
             }
         }
 

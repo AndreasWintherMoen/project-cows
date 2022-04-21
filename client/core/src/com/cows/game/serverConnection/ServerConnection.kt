@@ -42,7 +42,7 @@ object ServerConnection {
     }
     var websocketSession:DefaultWebSocketSession? = null
 
-    suspend fun sendGameCreateRequest(client:HttpClient): GameCreateResponse {
+    private suspend fun sendGameCreateRequest(client:HttpClient): GameCreateResponse {
         return client.request<GameCreateResponse>("$httpApiBase/game/create")
     }
 
@@ -50,15 +50,14 @@ object ServerConnection {
         return client.webSocketSession { url("$wsApiBase") }
     }
 
-    suspend fun createGame(client: HttpClient){
+    suspend fun createGame(){
         val createGameResponse = sendGameCreateRequest(client)
         val websocketClient = generateWebsocketClient(client)
         println("created game with game code ${createGameResponse.gameJoinCode}")
         websocketSession = establishGameConnection(websocketClient,createGameResponse.userId,createGameResponse.gameCodeUUID)
-
     }
 
-    suspend fun joinGame(client: HttpClient, gameJoinCode: String){
+    suspend fun joinGame(){
         val joinGameResponse = sendGameJoinRequest(client,gameJoinCode)
         val websocketClient = generateWebsocketClient(client)
         websocketSession = establishGameConnection(websocketClient,joinGameResponse.userId,joinGameResponse.gameCodeUUID)
