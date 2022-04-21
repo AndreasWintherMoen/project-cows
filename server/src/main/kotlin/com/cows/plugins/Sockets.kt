@@ -36,6 +36,7 @@ fun Application.configureSockets() {
                             handleConnect(message,this)
                         }
                     }
+                    else -> { println("Frame type $frame not found in when statement in /cows/ws endpoint") }
                 }
             }
         }
