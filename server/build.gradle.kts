@@ -48,6 +48,7 @@ dependencies {
     implementation("io.ktor:ktor-client-serialization:$ktor_version")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    implementation("io.github.cdimascio:dotenv-kotlin:6.2.2")
 }
 
 
