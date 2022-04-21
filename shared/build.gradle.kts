@@ -1,9 +1,9 @@
 plugins {
-    kotlin("multiplatform") version "1.6.20"
+    kotlin("multiplatform")
 }
 
 group = "me.pa10"
-version = "1.0-SNAPSHOT"
+version = "0.0.1"
 
 repositories {
     mavenCentral()
