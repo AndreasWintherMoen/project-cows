@@ -37,9 +37,9 @@ class Application : ApplicationAdapter()  {
                 hudManager = HUDManager { startGame() }
                 GameStateManager.currentGameState = GameState.START_MENU
             }
-            launch {
-                ServerConnection.createGame()
-            }
+            //launch {
+            //    ServerConnection.createGame()
+            //}
         }
     }
 

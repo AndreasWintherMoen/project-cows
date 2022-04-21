@@ -54,27 +54,36 @@ object ServerConnection {
     var gameSession: GameSession? = null
 
     private suspend fun sendGameCreateRequest(client:HttpClient): GameCreateResponse {
+        println("Sending request to $httpApiBase/game/create")
         return client.request<GameCreateResponse>("$httpApiBase/game/create")
     }
 
-    suspend fun generateWebsocketClient(client: HttpClient): DefaultWebSocketSession{
+    private suspend fun generateWebsocketClient(client: HttpClient): DefaultWebSocketSession{
         return client.webSocketSession { url("$wsApiBase") }
     }
 
     suspend fun createGame(): String {
         val createGameResponse = sendGameCreateRequest(client)
         gameSession = GameSession(createGameResponse.userId, createGameResponse.gameCodeUUID)
-        val websocketClient = generateWebsocketClient(client)
+        websocketSession = generateWebsocketClient(client)
         println("created game with game code ${createGameResponse.gameJoinCode}")
-        websocketSession = establishGameConnection(websocketClient)
         return createGameResponse.gameJoinCode
     }
 
-    suspend fun joinGame(gameJoinCode: String){
+    suspend fun connectToActiveGame() {
+        println("Connect to active game")
+        websocketSession?.let {
+            websocketSession = establishGameConnection(it)
+        } ?: run {
+            println("null websocket session!")
+        }
+    }
+
+    suspend fun joinGame(gameJoinCode: String) {
         val joinGameResponse = sendGameJoinRequest(client,gameJoinCode)
         gameSession = GameSession(joinGameResponse.userId, joinGameResponse.gameCodeUUID)
-        val websocketClient = generateWebsocketClient(client)
-        websocketSession = establishGameConnection(websocketClient)
+        websocketSession = generateWebsocketClient(client)
+        connectToActiveGame()
     }
 
     suspend fun sendAttackInstructions(unitList: List<JsonUnit>): JsonRoundSimulation {
@@ -144,6 +153,7 @@ object ServerConnection {
         while (!isConnected){
             val nullableIncoming = wsSession.incoming.tryReceive()
             if (nullableIncoming.isFailure || nullableIncoming.isClosed) continue
+            println("Received frame ${Frame}")
             when (val incoming = nullableIncoming.getOrThrow()) {
                 is Frame.Text -> {
                     val message = Message.retrieveWSMessage(incoming)
