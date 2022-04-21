@@ -16,7 +16,7 @@ object Renderer {
     private val renderablesToBeAdded = mutableListOf<Renderable>()
     private val renderablesToBeRemoved = mutableListOf<Renderable>()
     private val cam = OrthographicCamera()
-    private val viewport = FitViewport(Application.WIDTH, Application.HEIGHT, cam)
+    val viewport = FitViewport(Application.WIDTH, Application.HEIGHT, cam)
     private val stage = Stage(viewport, batch)
 
     init {
