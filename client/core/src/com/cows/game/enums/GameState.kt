@@ -1,6 +1,6 @@
 package com.cows.game.enums
 
-// The defferent states the game can be in. The game always start with START_MENU
+// The different states the game can be in. The game always start with START_MENU
 enum class GameState {
     NONE,
     START_MENU,

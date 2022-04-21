@@ -11,10 +11,10 @@ class UnitView (val model: UnitModel): Renderable() {
     companion object {
         fun unitTypeToFolder(unitType: UnitType): String =
             when(unitType) {
-                UnitType.INDIAN_UNIT -> "IndianUnit"
-                UnitType.SWORDMAN -> "IndianUnit"
-                UnitType.RUNNER -> "Runner"
-                UnitType.TANK -> "IndianUnit"
+                UnitType.NONE -> "NONE"
+                UnitType.FIRE -> "IndianUnit"
+                UnitType.WATER -> "IndianUnit"
+                UnitType.GRASS -> "IndianUnit"
                 else -> throw Error("Could not find unit type $unitType")
             }
         fun directionToFileName(direction: Coordinate): String {
@@ -30,6 +30,7 @@ class UnitView (val model: UnitModel): Renderable() {
     private var sprite = modelToSprite(model)
 
     override fun render(batch: SpriteBatch, deltaTime: Float) {
+        if (model.isDead) return
         sprite.setPosition(model.position.x, model.position.y)
         sprite.draw(batch)
     }

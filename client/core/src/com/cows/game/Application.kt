@@ -3,7 +3,9 @@ package com.cows.game
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.cows.game.enums.GameState
+import com.cows.game.hud.ActionPanel
 import com.cows.game.hud.HUDManager
+import com.cows.game.hud.PlanningAttackActionPanel
 import com.cows.game.managers.FunctionDelayer
 import com.cows.game.managers.GameStateManager
 import com.cows.game.managers.Renderer
@@ -12,22 +14,34 @@ import com.cows.game.map.Map
 import com.cows.game.models.TileModel
 import com.cows.game.roundSimulation.GameTickProcessor
 import com.cows.game.roundSimulation.RoundSimulationDeserializer
+import com.cows.game.serverConnection.ServerConnection
+import kotlinx.coroutines.launch
 import java.io.File
+import ktx.async.KtxAsync
 
-class Application : ApplicationAdapter() {
+class Application : ApplicationAdapter()  {
     companion object {
-        const val WIDTH = Map.WIDTH * TileModel.WIDTH
+        const val WIDTH = Map.WIDTH * TileModel.WIDTH + ActionPanel.WIDTH
         const val HEIGHT = Map.HEIGHT * TileModel.HEIGHT
     }
-
     val tickDuration = 1f // in seconds
     private lateinit var gameTickProcessor: GameTickProcessor
     private lateinit var hudManager: HUDManager
 
     override fun create() {
-        Map.init()
-        hudManager = HUDManager { startGame() }
-        GameStateManager.currentGameState = GameState.PLANNING_DEFENSE
+        KtxAsync.initiate()
+
+        KtxAsync.launch{
+
+            launch {
+                Map.init()
+                hudManager = HUDManager { startGame() }
+                GameStateManager.currentGameState = GameState.PLANNING_DEFENSE
+            }
+            launch {
+                ServerConnection.createGame(ServerConnection.client)
+            }
+        }
     }
 
     override fun render() {
@@ -40,7 +54,6 @@ class Application : ApplicationAdapter() {
 
         Updater.update(tickAdjustedDeltaTime)
         Renderer.render(tickAdjustedDeltaTime)
-
         FunctionDelayer.invokeRegisteredFunctions()
     }
 
@@ -50,8 +63,9 @@ class Application : ApplicationAdapter() {
 
     private fun startGame() {
         println("Starting game")
-        GameStateManager.currentGameState = GameState.ACTIVE_GAME
         loadRoundSimulation()
+        GameStateManager.currentGameState = GameState.ACTIVE_GAME
+
     }
 
     // this will load from API at some point
