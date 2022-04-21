@@ -49,3 +49,5 @@ hs_err_pid*.log
 gradle-user-home
 
 local.properties
+
+../shared/*
