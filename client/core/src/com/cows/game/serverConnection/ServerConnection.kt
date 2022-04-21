@@ -57,7 +57,7 @@ object ServerConnection {
         websocketSession = establishGameConnection(websocketClient,createGameResponse.userId,createGameResponse.gameCodeUUID)
     }
 
-    suspend fun joinGame(){
+    suspend fun joinGame(gameJoinCode: String){
         val joinGameResponse = sendGameJoinRequest(client,gameJoinCode)
         val websocketClient = generateWebsocketClient(client)
         websocketSession = establishGameConnection(websocketClient,joinGameResponse.userId,joinGameResponse.gameCodeUUID)
