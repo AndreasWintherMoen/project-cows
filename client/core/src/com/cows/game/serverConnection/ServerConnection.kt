@@ -57,23 +57,31 @@ object ServerConnection {
         return client.request<GameCreateResponse>("$httpApiBase/game/create")
     }
 
-    suspend fun generateWebsocketClient(client: HttpClient): DefaultWebSocketSession{
+    private suspend fun generateWebsocketClient(client: HttpClient): DefaultWebSocketSession{
         return client.webSocketSession { url("$wsApiBase") }
     }
 
-    suspend fun createGame(){
+    suspend fun createGame(): String {
         val createGameResponse = sendGameCreateRequest(client)
         gameSession = GameSession(createGameResponse.userId, createGameResponse.gameCodeUUID)
-        val websocketClient = generateWebsocketClient(client)
+        websocketSession = generateWebsocketClient(client)
         println("created game with game code ${createGameResponse.gameJoinCode}")
-        websocketSession = establishGameConnection(websocketClient)
+        return createGameResponse.gameJoinCode
     }
 
-    suspend fun joinGame(gameJoinCode: String){
+    suspend fun connectToActiveGame() {
+        websocketSession?.let {
+            websocketSession = establishGameConnection(it)
+        } ?: run {
+            println("null websocket session!")
+        }
+    }
+
+    suspend fun joinGame(gameJoinCode: String) {
         val joinGameResponse = sendGameJoinRequest(client,gameJoinCode)
         gameSession = GameSession(joinGameResponse.userId, joinGameResponse.gameCodeUUID)
-        val websocketClient = generateWebsocketClient(client)
-        websocketSession = establishGameConnection(websocketClient)
+        websocketSession = generateWebsocketClient(client)
+        connectToActiveGame()
     }
 
     suspend fun sendAttackInstructions(unitList: List<JsonUnit>): JsonRoundSimulation {
@@ -88,7 +96,6 @@ object ServerConnection {
                     val message = Message.retrieveWSMessage(incoming)
                     println(message)
                     if (message!!.opCode == OpCode.AWAIT){
-                        println("Received await message...")
                         continue
                     } else if (message!!.opCode == OpCode.EVENTLOG) {
                         val defendInstructionsType = object : TypeToken<JsonRoundSimulation>() {}.type
@@ -116,7 +123,6 @@ object ServerConnection {
                     val message = Message.retrieveWSMessage(incoming)
                     println(message)
                     if (message!!.opCode == OpCode.AWAIT){
-                        println("Received await message...")
                         continue
                     } else if (message!!.opCode == OpCode.EVENTLOG) {
                         val defendInstructionsType = object : TypeToken<JsonRoundSimulation>() {}.type

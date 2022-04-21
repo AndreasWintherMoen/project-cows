@@ -34,12 +34,8 @@ class Application : ApplicationAdapter()  {
         KtxAsync.launch{
 
             launch {
-                Map.init()
                 hudManager = HUDManager { startGame() }
-                GameStateManager.currentGameState = GameState.PLANNING_DEFENSE
-            }
-            launch {
-                ServerConnection.createGame()
+                GameStateManager.currentGameState = GameState.START_MENU
             }
         }
     }
@@ -62,13 +58,10 @@ class Application : ApplicationAdapter()  {
     }
 
     private fun startGame() {
-        println("Starting game")
         loadRoundSimulation()
         GameStateManager.currentGameState = GameState.ACTIVE_GAME
-
     }
 
-    // this will load from API at some point
     private fun loadRoundSimulation() {
         val parsedFile = File("roundSimulation.json").readText()
         val roundSimulation = RoundSimulationDeserializer.deserialize(parsedFile)

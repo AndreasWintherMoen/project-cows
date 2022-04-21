@@ -40,4 +40,5 @@ class Button(textureFilePath: String, var position: Vector2, var onClick: () -> 
         if (hide) return
         if (isWithinBounds(clickPosition)) onClick.invoke()
     }
+
 }

@@ -17,7 +17,7 @@ object Renderer {
     private val renderablesToBeRemoved = mutableListOf<Renderable>()
     private val cam = OrthographicCamera()
     val viewport = FitViewport(Application.WIDTH, Application.HEIGHT, cam)
-    private val stage = Stage(viewport, batch)
+    val stage = Stage(viewport, batch)
 
     init {
         cam.setToOrtho(false, Application.WIDTH, Application.HEIGHT)

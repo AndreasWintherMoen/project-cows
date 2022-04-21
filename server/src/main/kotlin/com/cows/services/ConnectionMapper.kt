@@ -59,7 +59,7 @@ object ConnectionMapper {
     }
 
     private fun generateCode(): String {
-        val chars = ('A'..'Z')
+        val chars = ('0'..'9')
         return (1..GameCode.CODE_LENGTH).map { chars.random() }.joinToString("")
     }
 
