@@ -17,7 +17,9 @@ object ConnectionMapper {
 
     fun createGame(clientConnection: ClientConnection, gameJoinCode: String): UUID? {
         val gameCode = getGameCodeIfValid(gameJoinCode) ?: return null
-        gameMap[gameCode.gameCodeUUID] = Game(Pair(gameCode.creator, clientConnection))
+        gameMap[gameCode.gameCodeUUID] = Game(
+            Pair(gameCode.creator, clientConnection),
+            Pair(PlayerState(), PlayerState()))
         return gameCode.gameCodeUUID
     }
 
@@ -80,6 +82,8 @@ object ConnectionMapper {
 
     fun getClientConnectionsFromGame(gameUUID: UUID): Pair<ClientConnection,ClientConnection> =
         gameMap[gameUUID]!!.gameConnections
+
+    fun getGameFromUUID(gameUUID: UUID) = gameMap[gameUUID]
 
     private val gameCodeGarbageCollector =
         GameCodeGarbageCollector(gameCodeMap, gameCodeTimeoutMillis, 30000L)
