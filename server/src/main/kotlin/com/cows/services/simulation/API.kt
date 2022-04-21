@@ -12,6 +12,7 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.gson.*
 import io.ktor.server.application.*
+import kotlinx.coroutines.Deferred
 import projectcows.rawJsonData.JsonRoundSimulation
 import projectcows.rawJsonData.JsonTower
 import projectcows.rawJsonData.JsonUnit
@@ -38,7 +39,7 @@ object API {
         }
     }
 
-    suspend fun simulate(defendInstructions: List<JsonTower>, attackInstructions: List<JsonUnit>, path: List<IntArray>): JsonRoundSimulation {
+    suspend fun simulate(defendInstructions: List<JsonTower>, attackInstructions: List<JsonUnit>, path: List<IntArray>): Deferred<JsonRoundSimulation> {
         val body = SimulationBody(defendInstructions, attackInstructions, path)
         return client.post("http://127.0.0.1:8069/cows/round/simulate") {
             contentType(ContentType.Application.Json)
