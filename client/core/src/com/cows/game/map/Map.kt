@@ -62,12 +62,15 @@ object Map {
             }
             tempPath += tempCoordinates
         }
-
         return tempPath
     }
 
     fun getPathCoordinates(): List<IntArray> {
         return PATH.map { c -> intArrayOf(c.x, c.y) }
+    }
+
+    fun flipPath(): List<Coordinate> {
+        return PATH.map { Coordinate(15 - it.x, it.y) }
     }
 
     fun getTile(x: Int, y: Int): TileController {
