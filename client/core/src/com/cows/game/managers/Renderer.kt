@@ -1,8 +1,11 @@
 package com.cows.game.managers
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.ScreenUtils
+import com.badlogic.gdx.utils.viewport.FitViewport
 import com.cows.game.Application
 import com.cows.game.views.Renderable
 
@@ -13,18 +16,24 @@ object Renderer {
     private val renderablesToBeAdded = mutableListOf<Renderable>()
     private val renderablesToBeRemoved = mutableListOf<Renderable>()
     private val cam = OrthographicCamera()
-
+    private val viewport = FitViewport(Application.WIDTH, Application.HEIGHT, cam)
+    private val stage = Stage(viewport, batch)
 
     init {
         cam.setToOrtho(false, Application.WIDTH, Application.HEIGHT)
+        Gdx.input.inputProcessor = stage
     }
 
     fun render(deltaTime: Float) {
         ScreenUtils.clear(0f, 0f, 0f, 1f)
-        batch.projectionMatrix = cam.combined
-        batch.begin()
+        stage.batch.projectionMatrix = stage.camera.combined
+        stage.camera.update()
+
+        stage.viewport.apply(true)
+
+        stage.batch.begin()
         renderables.forEach { if (!it.hide) it.render(batch, deltaTime) }
-        batch.end()
+        stage.batch.end()
 
         renderablesToBeAdded.forEach { renderables.add(it) }
         renderablesToBeAdded.clear()
