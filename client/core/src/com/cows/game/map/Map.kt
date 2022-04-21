@@ -69,15 +69,6 @@ object Map {
         return PATH.map { c -> intArrayOf(c.x, c.y) }
     }
 
-    fun flip(kart: List<List<Int>>): List<List<Int>>{
-        val temp = kart.toMutableList()
-        for (list in kart){
-            temp.remove(list)
-            temp.add(list.reversed())
-        }
-        return temp.toList()
-    }
-
     fun flipPath(): List<Coordinate> {
         return PATH.map { Coordinate(15 - it.x, it.y) }
     }
