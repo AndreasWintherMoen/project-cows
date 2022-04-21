@@ -34,9 +34,8 @@ class Application : ApplicationAdapter()  {
         KtxAsync.launch{
 
             launch {
-                Map.init()
                 hudManager = HUDManager { startGame() }
-                GameStateManager.currentGameState = GameState.PLANNING_DEFENSE
+                GameStateManager.currentGameState = GameState.START_MENU
             }
             launch {
                 ServerConnection.createGame()
@@ -65,7 +64,6 @@ class Application : ApplicationAdapter()  {
         println("Starting game")
         loadRoundSimulation()
         GameStateManager.currentGameState = GameState.ACTIVE_GAME
-
     }
 
     // this will load from API at some point

@@ -61,12 +61,13 @@ object ServerConnection {
         return client.webSocketSession { url("$wsApiBase") }
     }
 
-    suspend fun createGame(){
+    suspend fun createGame(): String {
         val createGameResponse = sendGameCreateRequest(client)
         gameSession = GameSession(createGameResponse.userId, createGameResponse.gameCodeUUID)
         val websocketClient = generateWebsocketClient(client)
         println("created game with game code ${createGameResponse.gameJoinCode}")
         websocketSession = establishGameConnection(websocketClient)
+        return createGameResponse.gameJoinCode
     }
 
     suspend fun joinGame(gameJoinCode: String){

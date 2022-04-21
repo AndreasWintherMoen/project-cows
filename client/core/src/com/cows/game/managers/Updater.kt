@@ -1,6 +1,7 @@
 package com.cows.game.managers
 
 import com.cows.game.controllers.Updatable
+import com.cows.game.enums.GameState
 
 object Updater {
     private val updatables = mutableListOf<Updatable>()
