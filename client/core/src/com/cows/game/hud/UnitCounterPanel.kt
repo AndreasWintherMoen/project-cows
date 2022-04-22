@@ -14,7 +14,6 @@ class UnitCounterPanel(availableUnits:Int):Renderable(){
     private val fireUnitCounter = UnitCounter(UnitType.FIRE, 0)
     private val waterUnitCounter = UnitCounter(UnitType.WATER, 0)
     private val grassUnitCounter = UnitCounter(UnitType.GRASS, 0)
-    //val FONT_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;,{}\"´`'<>"
 
     var generator: FreeTypeFontGenerator = FreeTypeFontGenerator(Gdx.files.internal("Fonts/pokemon_pixel_font.ttf"))
     var headerParameter: FreeTypeFontGenerator.FreeTypeFontParameter
