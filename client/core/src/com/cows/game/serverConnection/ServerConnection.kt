@@ -21,6 +21,10 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.github.cdimascio.dotenv.Dotenv
 import io.github.cdimascio.dotenv.dotenv
+import io.ktor.utils.io.*
+import io.ktor.utils.io.core.internal.*
+import kotlinx.coroutines.channels.onClosed
+import kotlinx.coroutines.channels.onFailure
 
 data class GameSession (
     val userUUID: UUID,
@@ -41,10 +45,7 @@ object ServerConnection {
             logger = Logger.DEFAULT
             level = LogLevel.ALL
         }
-        install(WebSockets){
-            pingInterval = Duration.ofSeconds(15).seconds
-            maxFrameSize = Long.MAX_VALUE
-        }
+        install(WebSockets)
         install(JsonFeature){
             serializer = GsonSerializer()
         }

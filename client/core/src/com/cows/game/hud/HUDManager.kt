@@ -19,6 +19,7 @@ class HUDManager(private val onStartGame: () -> Unit): GameStateSubscriber() {
             // Initializing map here in HUDManager seems like a bad choice, but we'll have to change how we load
             // the map, since we're going to get it from the API somehow, so let's just keep it here for now
             Map.init()
+            startMenu?.die()
             startMenu = null
         }
         when (newGameState) {
