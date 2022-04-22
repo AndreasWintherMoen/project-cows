@@ -1,3 +1,3 @@
-package projectcows.enums
+package com.cows.services.simulation.enums
 
-enum class UnitType { SWORDMAN, RUNNER, TANK, INDIAN_UNIT }
+enum class UnitType { NONE, FIRE, WATER, GRASS }

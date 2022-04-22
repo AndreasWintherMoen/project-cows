@@ -1,6 +1,6 @@
 package projectcows.rawJsonData
 
-import projectcows.enums.UnitType
+import com.cows.services.simulation.enums.UnitType
 import projectcows.models.UnitModel
 
 data class JsonUnit(

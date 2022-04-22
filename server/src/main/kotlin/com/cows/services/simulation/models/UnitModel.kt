@@ -1,6 +1,6 @@
 package projectcows.models
 
-import projectcows.enums.UnitType
+import com.cows.services.simulation.enums.UnitType
 import org.mini2Dx.gdx.math.Vector2
 
 data class UnitModel (
