@@ -20,8 +20,8 @@ import kotlinx.coroutines.runBlocking
 
 class StartMenu(): Renderable() {
     private val sprite = Sprite(Texture("HUD/StartScreen/startscreen.png"))
-    private val joinGameBtn = Button("Buttons/joinbutton.png", Vector2(725f, Application.HEIGHT-300f)){bar()}
-    private val createGameBtn = Button("Buttons/start-button.png", Vector2(700f, Application.HEIGHT-400f)){foo()}
+    private val joinGameBtn = Button("Buttons/joinbutton.png", Vector2(725f, Application.HEIGHT-300f)){joinGame()}
+    private val createGameBtn = Button("Buttons/start-button.png", Vector2(700f, Application.HEIGHT-400f)){createGame()}
 
     private var gameCodeXPosition = listOf<Float>(5f, 155f, 305f, 455f, 605f, 5f, 155f, 305f, 455f, 605f)
     private var gameCodeYPosition = listOf<Float>(Application.HEIGHT-120f, Application.HEIGHT-300f)
@@ -79,35 +79,22 @@ class StartMenu(): Renderable() {
         buttons.forEach { it.die() }
     }
 
-    fun foo() {
-        println("Foo")
+     private fun createGame() {
         runBlocking {
-            createGame()
+            val joinCode = ServerConnection.createGame()
+            println("joinCode: $joinCode")
+            ServerConnection.connectToActiveGame()
+            die()
+            GameStateManager.currentGameState = GameState.PLANNING_ATTACK
         }
     }
 
-    fun bar() {
-        println("Bar")
+     private fun joinGame() {
         runBlocking {
-            joinGame()
+            val joinCode = numbers.joinToString("")
+            ServerConnection.joinGame(joinCode)
+            die()
+            GameStateManager.currentGameState = GameState.PLANNING_DEFENSE
         }
-    }
-
-    suspend fun createGame() {
-        val joinCode = ServerConnection.createGame()
-        println("joinCode: $joinCode")
-        ServerConnection.connectToActiveGame()
-        println("Finished joining!!!")
-        die()
-        GameStateManager.currentGameState = GameState.PLANNING_ATTACK
-    }
-
-    suspend fun joinGame() {
-        val joinCode = numbers.joinToString("")
-        println("joining game with joinCode $joinCode")
-        ServerConnection.joinGame(joinCode)
-        println("Joined as joiner")
-        die()
-        GameStateManager.currentGameState = GameState.PLANNING_DEFENSE
     }
 }

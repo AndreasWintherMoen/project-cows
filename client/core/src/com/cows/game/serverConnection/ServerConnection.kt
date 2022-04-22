@@ -98,7 +98,6 @@ object ServerConnection {
                     val message = Message.retrieveWSMessage(incoming)
                     println(message)
                     if (message!!.opCode == OpCode.AWAIT){
-                        println("Received await message...")
                         continue
                     } else if (message!!.opCode == OpCode.EVENTLOG) {
                         val defendInstructionsType = object : TypeToken<JsonRoundSimulation>() {}.type
@@ -126,7 +125,6 @@ object ServerConnection {
                     val message = Message.retrieveWSMessage(incoming)
                     println(message)
                     if (message!!.opCode == OpCode.AWAIT){
-                        println("Received await message...")
                         continue
                     } else if (message!!.opCode == OpCode.EVENTLOG) {
                         val defendInstructionsType = object : TypeToken<JsonRoundSimulation>() {}.type

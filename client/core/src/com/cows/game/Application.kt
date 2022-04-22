@@ -61,12 +61,10 @@ class Application : ApplicationAdapter()  {
     }
 
     private fun startGame() {
-        println("Starting game")
         loadRoundSimulation()
         GameStateManager.currentGameState = GameState.ACTIVE_GAME
     }
 
-    // this will load from API at some point
     private fun loadRoundSimulation() {
         val parsedFile = File("roundSimulation.json").readText()
         val roundSimulation = RoundSimulationDeserializer.deserialize(parsedFile)

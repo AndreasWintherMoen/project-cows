@@ -3,7 +3,6 @@ package com.cows.game.roundSimulation
 import com.cows.game.controllers.TileController
 import com.cows.game.controllers.TowerController
 import com.cows.game.controllers.UnitController
-import com.cows.game.roundSimulation.rawJsonData.JsonAction
 
 enum class ActionType {
     NONE,
