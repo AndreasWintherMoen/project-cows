@@ -32,7 +32,7 @@ fun Application.configureSockets() {
     }
 
     routing {
-        webSocket("/cows/ws") {
+        webSocket("/ws-cows") {
             // Checks if user already has a connection
             for (frame in incoming) {
                 when (frame) {

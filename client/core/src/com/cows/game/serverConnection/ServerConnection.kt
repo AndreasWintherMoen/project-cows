@@ -31,7 +31,7 @@ val dotenv:Dotenv = dotenv {
 }
 
 val httpApiBase: String = dotenv["HTTP_API_BASE"] ?: "http://127.0.0.1:8080/cows"
-val wsApiBase: String = dotenv["WS_API_BASE"] ?: "ws://127.0.0.1:8080/cows/ws"
+val wsApiBase: String = dotenv["WS_API_BASE"] ?: "ws://127.0.0.1:8080/ws-cows"
 
 object ServerConnection {
 
