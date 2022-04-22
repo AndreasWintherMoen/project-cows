@@ -8,7 +8,6 @@ import com.cows.game.ClickSubscriber
 import com.cows.game.controllers.TileController
 import com.cows.game.views.Renderable
 
-
 class Button(textureFilePath: String, var position: Vector2, var onClick: () -> Unit): Renderable(), ClickSubscriber {
     constructor(textureFilePath: String) : this(textureFilePath, Vector2(), {})
     constructor(textureFilePath: String, position: Vector2) : this(textureFilePath, position, {})
