@@ -26,13 +26,13 @@ private val gson = GsonBuilder().setPrettyPrinting().create()
 fun Application.configureSockets() {
     install(WebSockets) {
         pingPeriod = Duration.ofSeconds(15)
-        timeout = Duration.ofSeconds(15)
+        timeout = Duration.ofSeconds(200)
         maxFrameSize = Long.MAX_VALUE
         masking = false
     }
 
     routing {
-        webSocket("/cows/ws") {
+        webSocket("/ws-cows") {
             // Checks if user already has a connection
             for (frame in incoming) {
                 when (frame) {

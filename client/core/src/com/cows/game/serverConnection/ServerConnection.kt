@@ -21,6 +21,10 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.github.cdimascio.dotenv.Dotenv
 import io.github.cdimascio.dotenv.dotenv
+import io.ktor.utils.io.*
+import io.ktor.utils.io.core.internal.*
+import kotlinx.coroutines.channels.onClosed
+import kotlinx.coroutines.channels.onFailure
 
 data class GameSession (
     val userUUID: UUID,
@@ -31,7 +35,7 @@ val dotenv:Dotenv = dotenv {
 }
 
 val httpApiBase: String = dotenv["HTTP_API_BASE"] ?: "http://127.0.0.1:8080/cows"
-val wsApiBase: String = dotenv["WS_API_BASE"] ?: "ws://127.0.0.1:8080/cows/ws"
+val wsApiBase: String = dotenv["WS_API_BASE"] ?: "ws://127.0.0.1:8080/ws-cows"
 
 object ServerConnection {
 
@@ -41,10 +45,7 @@ object ServerConnection {
             logger = Logger.DEFAULT
             level = LogLevel.ALL
         }
-        install(WebSockets){
-            pingInterval = Duration.ofSeconds(15).seconds
-            maxFrameSize = Long.MAX_VALUE
-        }
+        install(WebSockets)
         install(JsonFeature){
             serializer = GsonSerializer()
         }
