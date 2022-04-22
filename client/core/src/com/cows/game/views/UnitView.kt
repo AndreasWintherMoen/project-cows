@@ -18,19 +18,30 @@ class UnitView (val model: UnitModel): Renderable() {
                 else -> throw Error("Could not find unit type $unitType")
             }
         fun directionToFileName(direction: Coordinate): String {
-            if (direction.x < 0) return "left-0"
-            if (direction.x > 0) return "right-0"
-            if (direction.y < 0) return "front-0"
-            if (direction.y > 0) return "back-0"
+            if (direction.x < 0) return "left-"
+            if (direction.x > 0) return "right-"
+            if (direction.y < 0) return "front-"
+            if (direction.y > 0) return "back-"
             throw Error("Could not find direction $direction")
         }
-        fun modelToSprite(model: UnitModel): Sprite = Sprite(Texture("Units/${unitTypeToFolder(model.type)}/${unitTypeToFolder(model.type)}-${directionToFileName(model.currentDirection)}.png"))
+        fun modelToSprite(model: UnitModel): Sprite = Sprite(Texture("Units/${unitTypeToFolder(model.type)}/${unitTypeToFolder(model.type)}-${directionToFileName(model.currentDirection)}0.png"))
     }
 
+    private var walkState = 0;
+    private var stepsPerSecond = 5f;
+    private var elapsedTime = 0f;
     private var sprite = modelToSprite(model)
 
     override fun render(batch: SpriteBatch, deltaTime: Float) {
         if (model.isDead) return
+
+        elapsedTime += deltaTime
+        if (elapsedTime >= 1/stepsPerSecond){
+            elapsedTime = 0f
+            walkState = if(walkState == 1) 0 else 1
+            sprite.texture = Texture("Units/${unitTypeToFolder(model.type)}/${unitTypeToFolder(model.type)}-${directionToFileName(model.currentDirection)}${walkState}.png")
+        }
+
         sprite.setPosition(model.position.x, model.position.y)
         sprite.draw(batch)
     }
