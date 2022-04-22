@@ -17,14 +17,11 @@ import com.cows.game.serverConnection.ServerConnection
 import com.cows.game.views.Renderable
 import kotlinx.coroutines.runBlocking
 
-class StartMenu(): Renderable() {
+class StartMenu(private val onJoinGameButton: () -> Unit, private val onCreateGameButton: () -> Unit): Renderable() {
     //Start menu
     private val backgroundImg = Sprite(Texture("HUD/StartScreen/startscreen.png"))
     private val joinGameBtn = Button("Buttons/joinbutton.png", Vector2(725f, Application.HEIGHT-300f)){showJoinGameMenu()}
-    private val createGameBtn = Button("Buttons/start-button.png", Vector2(700f, Application.HEIGHT-400f)){createGame()}
-
-    // Join game
-
+    private val createGameBtn = Button("Buttons/start-button.png", Vector2(700f, Application.HEIGHT-400f)){showCreateGameMenu()}
 
     init {
         backgroundImg.setSize(Application.WIDTH, Application.HEIGHT)
@@ -44,14 +41,18 @@ class StartMenu(): Renderable() {
         createGameBtn.die()
     }
 
-     private fun createGame() {
-        runBlocking {
-            val joinCode = ServerConnection.createGame()
-            println("joinCode: $joinCode")
-            ServerConnection.connectToActiveGame()
-            die()
-            GameStateManager.currentGameState = GameState.PLANNING_ATTACK
-        }
+    private fun showCreateGameMenu(){
+        this.hide = true
+        joinGameBtn.hide = true
+        createGameBtn.hide = true
+        onCreateGameButton.invoke()
+    }
+
+    private fun showJoinGameMenu(){
+        this.hide = true
+        joinGameBtn.hide = true
+        createGameBtn.hide = true
+        onJoinGameButton.invoke()
     }
 
 }

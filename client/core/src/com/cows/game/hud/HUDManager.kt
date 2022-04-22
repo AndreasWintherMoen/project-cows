@@ -19,8 +19,9 @@ class HUDManager(private val onStartGame: () -> Unit): GameStateSubscriber() {
         if (oldGameState == GameState.START_MENU) {
             // Initializing map here in HUDManager seems like a bad choice, but we'll have to change how we load
             // the map, since we're going to get it from the API somehow, so let's just keep it here for now
-            Map.init()
+            menuController?.die()
             menuController = null
+            Map.init()
         }
         when (newGameState) {
             GameState.ACTIVE_GAME -> actionPanel = ActiveGameActionPanel()
