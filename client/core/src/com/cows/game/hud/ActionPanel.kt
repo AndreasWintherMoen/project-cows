@@ -13,6 +13,10 @@ abstract class ActionPanel(): Renderable() {
     protected val position = Vector2(Application.WIDTH - WIDTH, 0f)
     companion object {
         const val WIDTH = 200f
+        const val PADDING = 10f
+        const val HEADER_HEIGHT = 50f
+        const val ACTION_HEIGHT = Application.HEIGHT - HEADER_HEIGHT - PADDING
+        const val UNIT_MARGIN = 12f
     }
 
     override fun render(batch: SpriteBatch, deltaTime: Float) {

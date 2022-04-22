@@ -6,11 +6,26 @@ import com.cows.game.enums.UnitType
 import com.cows.game.managers.TowerSpawner
 
 class PlanningDefenseActionPanel(private val onStartGame: () -> Unit): PlanningActionPanel() {
-    private val unitCounterPanel = UnitCounterPanel(10)
     val cancelPlacementButton = Button("HUD/cancel-button.png", Vector2(Gdx.graphics.width - 100f, 30f)) { cancelPlacement() }
+
+    val startGameButton = Button("Buttons/start-button.png", Vector2(this.position.x + 50f, 0f)) { onStartGame.invoke() }
+
+    // FIRE TOWER🔥
+    val fireTowerButton = Button("Towers/charizard-panel.png", Vector2(this.position.x, ACTION_HEIGHT - 109f- UNIT_MARGIN*0)) { selectTower(UnitType.FIRE) }
+
+    // GRASS TOWER🌿
+    val waterTowerButton = Button("Towers/blastoise-panel.png", Vector2(this.position.x , ACTION_HEIGHT - 109f*2f - UNIT_MARGIN*1)) { selectTower(UnitType.WATER) }
+
+    // WATER TOWER💧
+    val grassTowerButton = Button("Towers/venosaur-panel.png", Vector2(this.position.x, ACTION_HEIGHT - 109f*3f- UNIT_MARGIN*2)) { selectTower(UnitType.GRASS) }
+
+    private val unitCounterPanel = UnitCounterPanel(10)
 
     init {
         cancelPlacementButton.hide = true
+        fireTowerButton.position.x += ActionPanel.WIDTH/2 - fireTowerButton.texture.width/2
+        waterTowerButton.position.x += ActionPanel.WIDTH/2 - waterTowerButton.texture.width/2
+        grassTowerButton.position.x += ActionPanel.WIDTH/2 - grassTowerButton.texture.width/2
     }
 
     fun cancelPlacement() {
@@ -41,15 +56,4 @@ class PlanningDefenseActionPanel(private val onStartGame: () -> Unit): PlanningA
         waterTowerButton.die()
         cancelPlacementButton.die()
     }
-
-    val startGameButton = Button("Buttons/start-button.png", Vector2(this.position.x+45f, 0f)) { onStartGame.invoke() }
-
-    // FIRE TOWER🔥
-    val fireTowerButton = Button("Towers/fire-tower.png", Vector2(this.position.x + 45f, 100f)) { selectTower(UnitType.FIRE) }
-
-    // GRASS TOWER🌿
-    val grassTowerButton = Button("Towers/grass-tower.png", Vector2(this.position.x + 45f, 200f)) { selectTower(UnitType.GRASS) }
-
-    // WATER TOWER💧
-    val waterTowerButton = Button("Towers/water-tower.png", Vector2(this.position.x + 45f, 300f)) { selectTower(UnitType.WATER) }
 }

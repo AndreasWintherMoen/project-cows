@@ -1,9 +1,12 @@
 package com.cows.game.hud
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.cows.game.Application
 import com.cows.game.enums.UnitType
+import com.cows.game.managers.FunctionDelayer
 import com.cows.game.views.Renderable
 
 class UnitCounterPanel(availableUnits:Int):Renderable(){
@@ -11,8 +14,20 @@ class UnitCounterPanel(availableUnits:Int):Renderable(){
     private val fireUnitCounter = UnitCounter(UnitType.FIRE, 0)
     private val waterUnitCounter = UnitCounter(UnitType.WATER, 0)
     private val grassUnitCounter = UnitCounter(UnitType.GRASS, 0)
-    val font = BitmapFont()
 
+    var generator: FreeTypeFontGenerator = FreeTypeFontGenerator(Gdx.files.internal("Fonts/pokemon_pixel_font.ttf"))
+    var headerParameter: FreeTypeFontGenerator.FreeTypeFontParameter
+    var headerFont:BitmapFont
+    var font:BitmapFont
+
+    init {
+        headerParameter = FreeTypeFontGenerator.FreeTypeFontParameter()
+        headerParameter.size = 60
+        headerFont = generator.generateFont(headerParameter)
+        headerParameter.size = 30
+        font = generator.generateFont(headerParameter)
+
+    }
     fun hasAvailableUnits():Boolean {
         return availableUnitCounter.count > 0
     }
@@ -54,19 +69,19 @@ class UnitCounterPanel(availableUnits:Int):Renderable(){
     }
 
     override fun render(batch: SpriteBatch, deltaTime: Float) {
-        val appWidth = Application.WIDTH
-        val appHeight = Application.HEIGHT
-        val panelWidth = ActionPanel.WIDTH
+        val panelStartX =  Application.WIDTH - ActionPanel.WIDTH + ActionPanel.PADDING
+        val headerStartY = Application.HEIGHT - ActionPanel.PADDING
+        val availableCoinTextX = panelStartX + 60
+        val availableCoinTextY = headerStartY - 5
 
         // This could be simplified if we put all UnitCounters in a list, and just loop through them
-        batch.draw(availableUnitCounter.iconTexture, appWidth - panelWidth + panelWidth/4*0, appHeight-64f)
-        font.draw(batch, availableUnitCounter.count.toString(), appWidth - panelWidth + panelWidth/4*0, appHeight-64f);
-        batch.draw(fireUnitCounter.iconTexture, appWidth - panelWidth + panelWidth/4*1, appHeight-64f)
-        font.draw(batch, fireUnitCounter.count.toString(), appWidth - panelWidth + panelWidth/4*1,appHeight-64f);
-        batch.draw(waterUnitCounter.iconTexture, appWidth - panelWidth + panelWidth/4*2, appHeight-64f)
-        font.draw(batch, waterUnitCounter.count.toString(), appWidth - panelWidth + panelWidth/4*2,appHeight-64f);
-        batch.draw(grassUnitCounter.iconTexture, appWidth - panelWidth + panelWidth/4*3, appHeight-64f)
-        font.draw(batch, grassUnitCounter.count.toString(), appWidth - panelWidth + panelWidth/4*3,appHeight-64f);
+
+        headerFont.draw(batch, availableUnitCounter.count.toString(), availableCoinTextX, availableCoinTextY);
+        font.draw(batch, fireUnitCounter.count.toString(), panelStartX + 85f, ActionPanel.ACTION_HEIGHT-109f + 20f);
+        font.draw(batch, waterUnitCounter.count.toString(), panelStartX + 85f, ActionPanel.ACTION_HEIGHT-109f*2f - ActionPanel.UNIT_MARGIN*1f + 20f);
+        font.draw(batch, grassUnitCounter.count.toString(), panelStartX + 85f, ActionPanel.ACTION_HEIGHT-109f*3f - ActionPanel.UNIT_MARGIN*2f + 20f);
+
+
     }
 
     override fun dispose() {
@@ -74,5 +89,6 @@ class UnitCounterPanel(availableUnits:Int):Renderable(){
         fireUnitCounter.iconTexture.dispose()
         waterUnitCounter.iconTexture.dispose()
         grassUnitCounter.iconTexture.dispose()
+        generator.dispose()
     }
 }

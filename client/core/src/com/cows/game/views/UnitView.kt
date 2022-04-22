@@ -12,19 +12,19 @@ class UnitView (val model: UnitModel): Renderable() {
         fun unitTypeToFolder(unitType: UnitType): String =
             when(unitType) {
                 UnitType.NONE -> "NONE"
-                UnitType.FIRE -> "IndianUnit"
-                UnitType.WATER -> "IndianUnit"
-                UnitType.GRASS -> "IndianUnit"
+                UnitType.FIRE -> "charmander"
+                UnitType.WATER -> "squirtle"
+                UnitType.GRASS -> "bulbasaur"
                 else -> throw Error("Could not find unit type $unitType")
             }
         fun directionToFileName(direction: Coordinate): String {
-            if (direction.x < 0) return "Left"
-            if (direction.x > 0) return "Right"
-            if (direction.y < 0) return "Down"
-            if (direction.y > 0) return "Up"
+            if (direction.x < 0) return "left-0"
+            if (direction.x > 0) return "right-0"
+            if (direction.y < 0) return "front-0"
+            if (direction.y > 0) return "back-0"
             throw Error("Could not find direction $direction")
         }
-        fun modelToSprite(model: UnitModel): Sprite = Sprite(Texture("Units/${unitTypeToFolder(model.type)}/${directionToFileName(model.currentDirection)}.png"))
+        fun modelToSprite(model: UnitModel): Sprite = Sprite(Texture("Units/${unitTypeToFolder(model.type)}/${unitTypeToFolder(model.type)}-${directionToFileName(model.currentDirection)}.png"))
     }
 
     private var sprite = modelToSprite(model)
