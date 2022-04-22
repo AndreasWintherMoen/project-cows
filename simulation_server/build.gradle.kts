@@ -11,7 +11,7 @@ plugins {
 group = "projectcows"
 version = "0.0.1"
 application {
-    mainClass.set("io.ktor.server.netty.EngineMain")
+    mainClass.set("projectcows.ApplicationKt")
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
@@ -37,7 +37,7 @@ dependencies {
 tasks {
     shadowJar {
         manifest {
-            attributes(Pair("Main-Class", "io.ktor.server.netty.EngineMain"))
+            attributes(Pair("Main-Class", "projectcows.ApplicationKt"))
         }
     }
 }

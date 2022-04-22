@@ -21,7 +21,7 @@ fun Application.configureRouting() {
     val gson = GsonBuilder().setPrettyPrinting().create()
 
     routing {
-        post("cows/round/simulate"){
+        post("ss-cows/round/simulate"){
             val body = call.receive<SimulationBody>()
             val roundSimulation = roundSimulator.simulate(body.defendInstructions, body.attackInstructions, body.path)
             call.respondText(gson.toJson(roundSimulation), ContentType.Application.Json, HttpStatusCode.OK)

@@ -7,6 +7,7 @@ abstract class Renderable {
     abstract fun render(batch: SpriteBatch, deltaTime: Float)
     abstract fun dispose()
     var hide: Boolean = false
+    var zIndex = 1
 
     open fun die() {
         Renderer.removeRenderable(this)
