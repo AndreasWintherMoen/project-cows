@@ -1,3 +1,4 @@
+/*
 package com.cows.game.managers
 
 import com.badlogic.gdx.math.Vector2
@@ -40,6 +41,8 @@ object TowerSpawner: GameStateSubscriber(), ClickSubscriber {
             spawnedTowers.forEach { it.view.die() }
             spawnedTowers.clear()
             towerToBeSpawned = UnitType.NONE
+        } else if (newGameState == GameState.PLANNING_DEFENSE) {
+            subscribeToClickEvents()
         }
     }
 
@@ -47,11 +50,12 @@ object TowerSpawner: GameStateSubscriber(), ClickSubscriber {
         if (tile == null) return
         if (tile.tileModel.type == TileType.PATH) return
         if (checkIfTileIsOccupied(tile.tileModel.coordinate)) return
-        spawnActiveTower(tile.tileModel.coordinate)
+        //spawnActiveTower(tile.tileModel.coordinate)
+        // clicked at an unoccupied tile
     }
 
     private fun checkIfTileIsOccupied(position: Coordinate): Boolean {
         return spawnedTowers.any { it.model.tileCoordinate == position }
     }
 
-}
+}*/
