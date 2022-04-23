@@ -1,19 +1,19 @@
 package com.cows.services
 
+import com.cows.map.Coordinate
 import com.cows.services.simulation.API
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.awaitAll
-import projectcows.rawJsonData.JsonRoundSimulation
 import projectcows.rawJsonData.JsonTower
+import com.cows.map.Map
+import projectcows.rawJsonData.JsonRoundSimulation
 import projectcows.rawJsonData.JsonUnit
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.*
-
+import kotlin.collections.ArrayList
 
 class Game(
     val gameConnections: Pair<ClientConnection, ClientConnection>,
     private val playerStates: Pair<PlayerState, PlayerState>) {
-    private val path: List<IntArray> = _TEMP_generatePath()
+    private val path: ArrayList<Coordinate> = Map.PATH
     private var attackInstructions: List<JsonUnit>? = null
     private var defendInstructions: List<JsonTower>? = null
     private var roundCounter = 0
@@ -34,6 +34,10 @@ class Game(
 
     fun getClientConnection(userUUID:UUID) : ClientConnection {
         return if (gameConnections.first.id == userUUID) gameConnections.first else gameConnections.second
+    }
+
+    fun getPath(): ArrayList<Coordinate> {
+        return path
     }
 
     fun getOtherClientConnection(userUUID: UUID) : ClientConnection {
@@ -68,36 +72,10 @@ class Game(
     private suspend fun simulateRound(): JsonRoundSimulation {
         val defense = defendInstructions!!.map { JsonTower(attackInstructions!!.size + it.id, it.type, it.position, it.range) }
         println("Simulating round!!!")
-        val roundSimulation = API.simulate(defense, attackInstructions!!, path)
+        val roundSimulation = API.simulate(defense, attackInstructions!!, Map.getPathCoordinates())
         println("Received round simulation")
         return roundSimulation
     }
 
     private val Id:Int = lastId.getAndIncrement()
-
-
-
-
-
-    private fun _TEMP_generatePath() = arrayListOf(
-        intArrayOf(0, 5),
-        intArrayOf(1, 5),
-        intArrayOf(2, 5),
-        intArrayOf(3, 5),
-        intArrayOf(4, 5),
-        intArrayOf(4, 6),
-        intArrayOf(4, 7),
-        intArrayOf(4, 8),
-        intArrayOf(5, 8),
-        intArrayOf(6, 8),
-        intArrayOf(7, 8),
-        intArrayOf(7, 7),
-        intArrayOf(7, 6),
-        intArrayOf(7, 5),
-        intArrayOf(8, 5),
-        intArrayOf(9, 5),
-        intArrayOf(10, 5),
-        intArrayOf(11, 5),
-        intArrayOf(12, 5),
-    )
 }

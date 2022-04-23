@@ -1,6 +1,7 @@
 package com.cows.plugins
 
 import ch.qos.logback.core.net.server.Client
+import com.cows.map.Coordinate
 import com.cows.models.Message
 import com.cows.models.OpCode
 import com.cows.services.ClientConnection
@@ -53,6 +54,10 @@ fun Application.configureSockets() {
     }
 }
 
+data class MapData(
+    val path: ArrayList<Coordinate>
+)
+
 suspend fun handleConnect(message: Message, userWebSocketSession: DefaultWebSocketServerSession){
     println("Handle connect")
     val userConnection:ClientConnection? = getClientFromConnectMessage(message)
@@ -65,6 +70,7 @@ suspend fun handleConnect(message: Message, userWebSocketSession: DefaultWebSock
     val responseMessage: Message =
         if (ConnectionMapper.areGameSlotsFilled(gameUUID = message.gameUUID)) {
             val creatorConnection = getCreatorConnection(message.gameUUID, message.userUUID)
+            val pathString = gson.toJson(MapData(ConnectionMapper.getGameFromUUID(message.gameUUID)!!.getPath()))
 
             connectionMap[creatorConnection]!!.outgoing.send(
                 Frame.Text(
@@ -73,7 +79,7 @@ suspend fun handleConnect(message: Message, userWebSocketSession: DefaultWebSock
                             userUUID = creatorConnection.id,
                             gameUUID = message.gameUUID,
                             opCode = OpCode.CONNECTED,
-                            null
+                            pathString
                         )
                     )
                 )
@@ -83,7 +89,7 @@ suspend fun handleConnect(message: Message, userWebSocketSession: DefaultWebSock
                 userUUID = message.userUUID,
                 gameUUID = message.gameUUID,
                 OpCode.CONNECTED,
-                null
+                pathString
             )
 
         } else {

@@ -1,18 +1,13 @@
 package com.cows.services.simulation
 
-import com.google.gson.GsonBuilder
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.ContentNegotiation
-import io.ktor.client.plugins.json.*
 import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.gson.*
-import io.ktor.server.application.*
-import kotlinx.coroutines.Deferred
 import projectcows.rawJsonData.JsonRoundSimulation
 import projectcows.rawJsonData.JsonTower
 import projectcows.rawJsonData.JsonUnit
