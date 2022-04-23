@@ -65,7 +65,6 @@ class JoinGameMenu(private val onJoinGame: (code: String) -> Unit, private val o
     }
 
     override fun die() {
-        println("KILL ALL BUTTONS")
         super.die()
         submitGameCodeBtn.die()
         goBackBtn.die()
