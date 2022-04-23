@@ -86,6 +86,7 @@ object ServerConnection {
     }
 
     suspend fun sendAttackInstructions(unitList: List<JsonUnit>): JsonRoundSimulation {
+        println("Send attack instructions")
         val data = gson.toJson(unitList)
         val message = createMessage(OpCode.INSTRUCTIONLOG, data)
         websocketSession!!.send(Message.generateWSFrame(message))
@@ -113,7 +114,9 @@ object ServerConnection {
     }
 
     suspend fun sendDefendInstructions(towerList: List<JsonTower>): JsonRoundSimulation {
+        println("Send defend instructions")
         val data = gson.toJson(towerList)
+        println(data)
         val message = createMessage(OpCode.INSTRUCTIONLOG, data)
         websocketSession!!.send(Message.generateWSFrame(message))
         while (true) {
