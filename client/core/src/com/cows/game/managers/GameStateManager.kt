@@ -14,6 +14,11 @@ object GameStateManager {
             onChangeGameStateChange(field, newGameState)
             field = newGameState
         }
+    var nextAsyncGameState: GameState? = null
+
+    fun setGameStateAsync(newGameState: GameState) {
+        nextAsyncGameState = newGameState
+    }
 
     fun addSubscriber(subscriber: GameStateSubscriber){
         gameStateSubscribers.add(subscriber)
