@@ -45,13 +45,17 @@ object API {
     }
 
     suspend fun getUnitStats(fireLevel: Int, waterLevel: Int, grassLevel: Int): JsonAvailableUnits {
-        return client.get("http://127.0.0.1:8069/ss-cows/stats/units/$fireLevel/$waterLevel/$grassLevel") {
+        val url = "http://127.0.0.1:8069/ss-cows/stats/units/"
+//        val url = "https://api.winthermoen.no/ss-cows/stats/units/"
+        return client.get("$url$fireLevel/$waterLevel/$grassLevel") {
             contentType(ContentType.Application.Json)
         }.body()
     }
 
     suspend fun getTowerStats(fireLevel: Int, waterLevel: Int, grassLevel: Int): JsonAvailableTowers {
-        return client.get("http://127.0.0.1:8069/ss-cows/stats/towers/$fireLevel/$waterLevel/$grassLevel"){
+        val url = "http://127.0.0.1:8069/ss-cows/stats/towers/"
+//        val url = "https://api.winthermoen.no/ss-cows/stats/towers/"
+        return client.get("$url$fireLevel/$waterLevel/$grassLevel"){
             contentType(ContentType.Application.Json)
         }.body()
     }

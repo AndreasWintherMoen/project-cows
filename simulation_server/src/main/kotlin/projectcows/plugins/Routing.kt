@@ -49,7 +49,7 @@ fun Application.configureRouting() {
             val fireUnit = UnitStatsMapper.createJsonUnitWithStats(UnitType.FIRE, intFireLevel!!)
             val waterUnit = UnitStatsMapper.createJsonUnitWithStats(UnitType.WATER, intWaterLevel!!)
             val grassUnit = UnitStatsMapper.createJsonUnitWithStats(UnitType.GRASS, intGrassLevel!!)
-            call.respondText(gson.toJson(JsonAvailableUnits(fireUnit, waterUnit, grassUnit)))
+            call.respondText(gson.toJson(JsonAvailableUnits(fireUnit, waterUnit, grassUnit)), ContentType.Application.Json, HttpStatusCode.OK)
         }
     }
 
@@ -70,7 +70,7 @@ fun Application.configureRouting() {
             val fireUnit = UnitStatsMapper.createJsonTowerWithStats(UnitType.FIRE, intFireLevel!!)
             val waterUnit = UnitStatsMapper.createJsonTowerWithStats(UnitType.WATER, intWaterLevel!!)
             val grassUnit = UnitStatsMapper.createJsonTowerWithStats(UnitType.GRASS, intGrassLevel!!)
-            call.respondText(gson.toJson(JsonAvailableTowers(fireUnit, waterUnit, grassUnit)))
+            call.respondText(gson.toJson(JsonAvailableTowers(fireUnit, waterUnit, grassUnit)), ContentType.Application.Json, HttpStatusCode.OK)
         }
     }
 
