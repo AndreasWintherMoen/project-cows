@@ -13,7 +13,7 @@ import com.cows.game.models.TowerModel
 
 object TowerSpawner: GameStateSubscriber(), ClickSubscriber {
     private var towerToBeSpawned = UnitType.NONE
-    private val spawnedTowers = mutableListOf<PlanningTowerController>()
+    val spawnedTowers = mutableListOf<PlanningTowerController>()
     private var onSpawnTower: (() -> Unit)? = null
 
     fun selectTower(type: UnitType, onSpawnTower: () -> Unit) {

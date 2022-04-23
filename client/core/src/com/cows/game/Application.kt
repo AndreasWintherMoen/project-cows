@@ -14,6 +14,7 @@ import com.cows.game.map.Map
 import com.cows.game.models.TileModel
 import com.cows.game.roundSimulation.GameTickProcessor
 import com.cows.game.roundSimulation.RoundSimulationDeserializer
+import com.cows.game.roundSimulation.rawJsonData.JsonRoundSimulation
 import com.cows.game.serverConnection.ServerConnection
 import kotlinx.coroutines.launch
 import java.io.File
@@ -34,7 +35,8 @@ class Application : ApplicationAdapter()  {
         KtxAsync.launch{
 
             launch {
-                hudManager = HUDManager { startGame() }
+                Redux.init()
+                hudManager = HUDManager()
                 GameStateManager.currentGameState = GameState.START_MENU
             }
 //            launch {
@@ -44,6 +46,8 @@ class Application : ApplicationAdapter()  {
     }
 
     override fun render() {
+        Redux.jsonRoundSimulation?.let { startGame(it); Redux.jsonRoundSimulation = null }
+
         val deltaTime = Gdx.graphics.deltaTime
         val tickAdjustedDeltaTime = deltaTime / tickDuration
 
@@ -61,8 +65,9 @@ class Application : ApplicationAdapter()  {
         Renderer.dispose()
     }
 
-    private fun startGame() {
-        loadRoundSimulation()
+    private fun startGame(roundSimulation: JsonRoundSimulation) {
+//        loadRoundSimulation()
+        gameTickProcessor = GameTickProcessor(roundSimulation)
         GameStateManager.currentGameState = GameState.ACTIVE_GAME
     }
 

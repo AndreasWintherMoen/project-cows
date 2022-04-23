@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.cows.game.Application
 import com.cows.game.enums.UnitType
 import com.cows.game.managers.FunctionDelayer
+import com.cows.game.roundSimulation.rawJsonData.JsonUnit
 import com.cows.game.views.Renderable
 
 class UnitCounterPanel(availableUnits:Int):Renderable(){
@@ -28,6 +29,16 @@ class UnitCounterPanel(availableUnits:Int):Renderable(){
         font = generator.generateFont(headerParameter)
 
     }
+
+    // this is (hopefully) temporary, since it doesn't set the order based on when they were clicked
+    fun getJsonUnitList(): List<JsonUnit> {
+        val units = mutableListOf<JsonUnit>()
+        repeat(fireUnitCounter.count, { units.add(JsonUnit(units.size, UnitType.FIRE, 1f)) })
+        repeat(waterUnitCounter.count, { units.add(JsonUnit(units.size, UnitType.WATER, 1f)) })
+        repeat(grassUnitCounter.count, { units.add(JsonUnit(units.size, UnitType.GRASS, 1f)) })
+        return units
+    }
+
     fun hasAvailableUnits():Boolean {
         return availableUnitCounter.count > 0
     }

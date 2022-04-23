@@ -74,7 +74,7 @@ object Map {
     }
 
     fun getTile(x: Int, y: Int): TileController {
-        if (x < 0 || x > WIDTH || y < 0 || y > HEIGHT) throw Error("Tile ($x, $y) out of bounds")
+        if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT) throw Error("Tile ($x, $y) out of bounds")
         return tiles[x][y]
     }
 

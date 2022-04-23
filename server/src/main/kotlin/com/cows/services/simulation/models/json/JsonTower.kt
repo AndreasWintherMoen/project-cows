@@ -1,12 +1,12 @@
 package projectcows.rawJsonData
 
-import projectcows.enums.TowerType
+import com.cows.services.simulation.enums.UnitType
 import projectcows.models.Coordinate
 import projectcows.models.TowerModel
 
 data class JsonTower (
     val id: Int,
-    val type: TowerType,
+    val type: UnitType,
     val position: Coordinate,
     val range: Float
  ) {

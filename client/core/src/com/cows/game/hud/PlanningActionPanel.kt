@@ -3,6 +3,7 @@ package com.cows.game.hud
 import com.badlogic.gdx.math.Vector2
 import com.cows.game.Application
 import com.cows.game.enums.UnitType
+import com.cows.game.roundSimulation.rawJsonData.JsonUnit
 
 
 abstract class PlanningActionPanel(): ActionPanel() {

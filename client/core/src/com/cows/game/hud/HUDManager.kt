@@ -6,7 +6,7 @@ import com.cows.game.map.Map
 
 
 // Should manage which naviagations buttons that should be displayed
-class HUDManager(private val onStartGame: () -> Unit): GameStateSubscriber() {
+class HUDManager(): GameStateSubscriber() {
     private var actionPanel: ActionPanel? = null
     private var menuController: MenuController? = null
 
@@ -26,9 +26,9 @@ class HUDManager(private val onStartGame: () -> Unit): GameStateSubscriber() {
         when (newGameState) {
             GameState.ACTIVE_GAME -> actionPanel = ActiveGameActionPanel()
             GameState.NONE -> {}
+            GameState.PLANNING_DEFENSE -> actionPanel = PlanningDefenseActionPanel()
+            GameState.PLANNING_ATTACK -> actionPanel = PlanningAttackActionPanel()
             GameState.START_MENU -> menuController = MenuController()
-            GameState.PLANNING_DEFENSE -> actionPanel = PlanningDefenseActionPanel {onStartGame.invoke()}
-            GameState.PLANNING_ATTACK -> actionPanel = PlanningAttackActionPanel {onStartGame.invoke()}
         }
     }
 }
