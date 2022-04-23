@@ -20,8 +20,8 @@ import kotlinx.coroutines.runBlocking
 class StartMenu(private val onJoinGameButton: () -> Unit, private val onCreateGameButton: () -> Unit): Renderable() {
     //Start menu
     private val backgroundImg = Sprite(Texture("HUD/StartScreen/startscreen.png"))
-    private val joinGameBtn = Button("Buttons/joinbutton.png", Vector2(725f, Application.HEIGHT-300f)){showJoinGameMenu()}
-    private val createGameBtn = Button("Buttons/start-button.png", Vector2(700f, Application.HEIGHT-400f)){showCreateGameMenu()}
+    private val joinGameBtn = Button("Buttons/joinbutton.png", Vector2(725f, Application.HEIGHT-300f)) {showJoinGameMenu()}
+    private val createGameBtn = Button("Buttons/start-button.png", Vector2(700f, Application.HEIGHT-400f), {showCreateGameMenu()}, "select-action.wav")
 
     init {
         backgroundImg.setSize(Application.WIDTH, Application.HEIGHT)

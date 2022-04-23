@@ -12,8 +12,8 @@ import com.cows.game.views.Renderable
 import kotlinx.coroutines.runBlocking
 
 class JoinGameMenu(private val onJoinGame: (code: String) -> Unit, private val onBackButton: () -> Unit): Renderable(){
-    private val submitGameCodeBtn = Button("Buttons/enterBtn.png", Vector2(725f, Application.HEIGHT-300f)){joinGame()}
-    private val goBackBtn = Button("Buttons/enterBtn.png", Vector2(125f, 100f)){onBackButton.invoke()}
+    private val submitGameCodeBtn = Button("Buttons/enterBtn.png", Vector2(725f, Application.HEIGHT-300f), {joinGame()})
+    private val goBackBtn = Button("Buttons/enterBtn.png", Vector2(125f, 100f), {onBackButton.invoke()})
     private var gameCodeXPosition = listOf<Float>(5f, 155f, 305f, 455f, 605f, 5f, 155f, 305f, 455f, 605f)
     private var gameCodeYPosition = listOf<Float>(Application.HEIGHT-120f, Application.HEIGHT-300f)
     val numbers = mutableListOf<Int>(0,0,0,0,0)

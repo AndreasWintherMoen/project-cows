@@ -2,14 +2,13 @@ package com.cows.game
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.audio.Music
+import com.badlogic.gdx.audio.Sound
 import com.cows.game.enums.GameState
 import com.cows.game.hud.ActionPanel
 import com.cows.game.hud.HUDManager
 import com.cows.game.hud.PlanningAttackActionPanel
-import com.cows.game.managers.FunctionDelayer
-import com.cows.game.managers.GameStateManager
-import com.cows.game.managers.Renderer
-import com.cows.game.managers.Updater
+import com.cows.game.managers.*
 import com.cows.game.map.Map
 import com.cows.game.models.TileModel
 import com.cows.game.roundSimulation.GameTickProcessor
@@ -43,6 +42,7 @@ class Application : ApplicationAdapter()  {
 //                ServerConnection.createGame()
 //            }
         }
+        MusicPlayer.play()
     }
 
     override fun render() {
