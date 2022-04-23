@@ -62,7 +62,6 @@ class CreateGameMenu(private val onBackButton: () -> Unit): Renderable() {
     }
 
     override fun die() {
-        println("CreateGameMenu::Die")
         super.die()
         goBackBtn.die()
     }
