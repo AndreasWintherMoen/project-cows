@@ -33,9 +33,9 @@ class UnitCounterPanel(availableUnits:Int):Renderable(){
     // this is (hopefully) temporary, since it doesn't set the order based on when they were clicked
     fun getJsonUnitList(): List<JsonUnit> {
         val units = mutableListOf<JsonUnit>()
-        repeat(fireUnitCounter.count, { units.add(JsonUnit(units.size, UnitType.FIRE, 5f)) })
-        repeat(waterUnitCounter.count, { units.add(JsonUnit(units.size, UnitType.WATER, 5f)) })
-        repeat(grassUnitCounter.count, { units.add(JsonUnit(units.size, UnitType.GRASS, 5f)) })
+        repeat(fireUnitCounter.count, { units.add(JsonUnit(units.size, UnitType.FIRE, 1f)) })
+        repeat(waterUnitCounter.count, { units.add(JsonUnit(units.size, UnitType.WATER, 1f)) })
+        repeat(grassUnitCounter.count, { units.add(JsonUnit(units.size, UnitType.GRASS, 1f)) })
         return units
     }
 

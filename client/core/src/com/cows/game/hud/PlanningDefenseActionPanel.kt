@@ -48,7 +48,7 @@ class PlanningDefenseActionPanel(): PlanningActionPanel() {
         val towers = TowerSpawner
             .spawnedTowers
             .map { it.model }
-            .mapIndexed { index, tower -> JsonTower(index, tower.type, tower.tileCoordinate, 5f)}
+            .mapIndexed { index, tower -> JsonTower(index, tower.type, tower.tileCoordinate, 3f)}
         GlobalScope.launch(Dispatchers.IO) {
             val roundSimulation = ServerConnection.sendDefendInstructions(towers)
             println("Received sound simulation $roundSimulation")
