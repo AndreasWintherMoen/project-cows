@@ -67,9 +67,8 @@ class Game(
 
     private suspend fun simulateRound(): JsonRoundSimulation {
         println("Simulating round!!!")
-        val roundSimulation = API.simulate(defendInstructions!!, attackInstructions!!, path).await()
+        val roundSimulation = API.simulate(defendInstructions!!, attackInstructions!!, path)
         println("Received round simulation")
-        println(roundSimulation)
         return roundSimulation
     }
 

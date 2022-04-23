@@ -39,7 +39,7 @@ object API {
         }
     }
 
-    suspend fun simulate(defendInstructions: List<JsonTower>, attackInstructions: List<JsonUnit>, path: List<IntArray>): Deferred<JsonRoundSimulation> {
+    suspend fun simulate(defendInstructions: List<JsonTower>, attackInstructions: List<JsonUnit>, path: List<IntArray>): JsonRoundSimulation {
         val body = SimulationBody(defendInstructions, attackInstructions, path)
         return client.post("http://127.0.0.1:8069/ss-cows/round/simulate") {
             contentType(ContentType.Application.Json)
