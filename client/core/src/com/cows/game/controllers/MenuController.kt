@@ -2,6 +2,7 @@ package com.cows.game.controllers
 
 import androidx.lifecycle.Lifecycle
 import com.cows.game.CreateGameScope
+import com.cows.game.Redux
 import com.cows.game.enums.GameState
 import com.cows.game.hud.CreateGameMenu
 import com.cows.game.hud.JoinGameMenu
@@ -49,6 +50,9 @@ class MenuController {
             val joinCode = ServerConnection.createGame()
             createMenu?.setGameCode(joinCode)
             ServerConnection.connectToActiveGame()
+            Redux.jsonAvailableUnits = ServerConnection.getAvailableUnits()
+            println("heisann attack")
+            println(Redux.jsonAvailableUnits)
 //                GameStateManager.currentGameState = GameState.PLANNING_ATTACK
             GameStateManager.setGameStateAsync(GameState.PLANNING_ATTACK)
         }
@@ -64,7 +68,7 @@ class MenuController {
     private fun joinGame(joinCode: String) {
         runBlocking {
             ServerConnection.joinGame(joinCode)
-
+            Redux.jsonAvailableTowers = ServerConnection.getAvailableTowers()
             GameStateManager.currentGameState = GameState.PLANNING_DEFENSE
         }
     }

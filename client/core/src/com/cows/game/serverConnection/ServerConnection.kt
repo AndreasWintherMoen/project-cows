@@ -1,8 +1,6 @@
 package com.cows.game.serverConnection
 
-import com.cows.game.roundSimulation.rawJsonData.JsonRoundSimulation
-import com.cows.game.roundSimulation.rawJsonData.JsonTower
-import com.cows.game.roundSimulation.rawJsonData.JsonUnit
+import com.cows.game.roundSimulation.rawJsonData.*
 import com.cows.game.serverConnection.shared.GameCreateResponse
 import com.cows.game.serverConnection.shared.GameJoinResponse
 import io.ktor.client.*
@@ -91,6 +89,54 @@ object ServerConnection {
         gameSession = GameSession(joinGameResponse.userId, joinGameResponse.gameCodeUUID)
         websocketSession = generateWebsocketClient(client)
         connectToActiveGame()
+    }
+
+    suspend fun getAvailableUnits(): JsonAvailableUnits {
+        val message = createMessage(OpCode.AVAILABLEUNITS, null)
+        websocketSession!!.send(Message.generateWSFrame(message))
+        while (true) {
+        val nullableIncoming = websocketSession!!.incoming.tryReceive()
+        if (nullableIncoming.isFailure || nullableIncoming.isClosed) continue
+            when (val incoming = nullableIncoming.getOrThrow()) {
+                is Frame.Text -> {
+                    val message = Message.retrieveWSMessage(incoming)
+                    println(message)
+                    if (message!!.opCode == OpCode.AVAILABLEUNITS){
+                        val unitsType = object : TypeToken<JsonAvailableUnits>() {}.type
+                        val units: JsonAvailableUnits = gson.fromJson(message.data!!, unitsType)
+                        return units
+                    }
+                }
+                else -> {
+                    println("Not text frame")
+                    println(incoming)
+                }
+            }
+        }
+    }
+
+    suspend fun getAvailableTowers(): JsonAvailableTowers {
+        val message = createMessage(OpCode.AVAILABLETOWERS, null)
+        websocketSession!!.send(Message.generateWSFrame(message))
+        while (true) {
+            val nullableIncoming = websocketSession!!.incoming.tryReceive()
+            if (nullableIncoming.isFailure || nullableIncoming.isClosed) continue
+            when (val incoming = nullableIncoming.getOrThrow()) {
+                is Frame.Text -> {
+                    val message = Message.retrieveWSMessage(incoming)
+                    println(message)
+                    if (message!!.opCode == OpCode.AVAILABLEUNITS){
+                        val towersType = object : TypeToken<JsonAvailableTowers>() {}.type
+                        val towers: JsonAvailableTowers = gson.fromJson(message.data!!, towersType)
+                        return towers
+                    }
+                }
+                else -> {
+                    println("Not text frame")
+                    println(incoming)
+                }
+            }
+        }
     }
 
     suspend fun sendAttackInstructions(unitList: List<JsonUnit>): JsonRoundSimulation {

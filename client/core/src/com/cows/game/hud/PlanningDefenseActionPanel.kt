@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2
 import com.cows.game.Redux
 import com.cows.game.enums.UnitType
 import com.cows.game.managers.TowerSpawner
+import com.cows.game.models.TowerModel
 import com.cows.game.roundSimulation.rawJsonData.JsonTower
 import com.cows.game.serverConnection.ServerConnection
 import kotlinx.coroutines.Dispatchers
@@ -34,9 +35,9 @@ class PlanningDefenseActionPanel(): PlanningActionPanel() {
         cancelPlacementButton.hide = true
     }
 
-    private fun selectTower(type: UnitType) {
+    private fun selectTower(towerType: UnitType) {
         if (unitCounterPanel.hasAvailableUnits()) {
-            TowerSpawner.selectTower(type) { confirmPlacement(); unitCounterPanel.addUnit(type) }
+            TowerSpawner.selectTower(towerType) { confirmPlacement(); unitCounterPanel.addUnit(towerType) }
             cancelPlacementButton.hide = false
         } else {
             //TODO: Give the user some feedback that they don't have any units left
@@ -48,7 +49,7 @@ class PlanningDefenseActionPanel(): PlanningActionPanel() {
         val towers = TowerSpawner
             .spawnedTowers
             .map { it.model }
-            .mapIndexed { index, tower -> JsonTower(index, tower.type, tower.tileCoordinate, 3f)}
+            .map { JsonTower(null, it.type, it.level, it.tileCoordinate, null, null, null)}
         GlobalScope.launch(Dispatchers.IO) {
             val roundSimulation = ServerConnection.sendDefendInstructions(towers)
             println("Received sound simulation $roundSimulation")

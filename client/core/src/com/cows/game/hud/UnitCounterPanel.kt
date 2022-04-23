@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.cows.game.Application
+import com.cows.game.Redux
 import com.cows.game.enums.UnitType
 import com.cows.game.managers.FunctionDelayer
 import com.cows.game.roundSimulation.rawJsonData.JsonUnit
@@ -30,12 +31,14 @@ class UnitCounterPanel(availableUnits:Int):Renderable(){
 
     }
 
-    // this is (hopefully) temporary, since it doesn't set the order based on when they were clicked
     fun getJsonUnitList(): List<JsonUnit> {
+        val fireUnit = Redux.jsonAvailableUnits!!.fireUnit
+        val waterUnit = Redux.jsonAvailableUnits!!.waterUnit
+        val grassUnit = Redux.jsonAvailableUnits!!.grassUnit
         val units = mutableListOf<JsonUnit>()
-        repeat(fireUnitCounter.count, { units.add(JsonUnit(units.size, UnitType.FIRE, 1f)) })
-        repeat(waterUnitCounter.count, { units.add(JsonUnit(units.size, UnitType.WATER, 1f)) })
-        repeat(grassUnitCounter.count, { units.add(JsonUnit(units.size, UnitType.GRASS, 1f)) })
+        repeat(fireUnitCounter.count) { units.add(JsonUnit(null, UnitType.FIRE, fireUnit.level, fireUnit.movementSpeed, fireUnit.health )) }
+        repeat(waterUnitCounter.count) { units.add(JsonUnit(null, UnitType.WATER, waterUnit.level, waterUnit.movementSpeed, waterUnit.health )) }
+        repeat(grassUnitCounter.count) { units.add(JsonUnit(null, UnitType.GRASS, grassUnit.level, grassUnit.movementSpeed, grassUnit.health)) }
         return units
     }
 

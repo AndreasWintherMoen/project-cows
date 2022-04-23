@@ -4,9 +4,11 @@ import com.cows.game.enums.UnitType
 import com.cows.game.models.UnitModel
 
 data class JsonUnit(
-    val id: Int,
+    val id: Int?,
     val type: UnitType,
-    val movementSpeed: Float
+    val level: Int,
+    val movementSpeed: Int?,
+    val health: Int?
 ) {
-    fun toUnitModel() = UnitModel(type, movementSpeed)
+    fun toUnitModel() = UnitModel(type, level, movementSpeed!!.toFloat(), health!!)
 }

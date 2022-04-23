@@ -1,9 +1,7 @@
 package com.cows.services
 
 import com.cows.services.simulation.API
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.awaitAll
-import projectcows.rawJsonData.JsonRoundSimulation
+import com.cows.services.simulation.models.json.JsonRoundSimulation
 import projectcows.rawJsonData.JsonTower
 import projectcows.rawJsonData.JsonUnit
 import java.util.concurrent.atomic.AtomicInteger
@@ -66,9 +64,10 @@ class Game(
     }
 
     private suspend fun simulateRound(): JsonRoundSimulation {
-        val defense = defendInstructions!!.map { JsonTower(attackInstructions!!.size + it.id, it.type, it.position, it.range) }
-        println("Simulating round!!!")
-        val roundSimulation = API.simulate(defense, attackInstructions!!, path)
+        println("Simulating round!")
+//        val mappedDefenseInstructions = defendInstructions!!.mapIndexed { index, tower -> UnitStatsMapper.addStatsToJsonTower(index, tower) }
+//        val mappedAttackInstructions = attackInstructions!!.mapIndexed { index, unit -> UnitStatsMapper.addStatsToJsonUnit(index, unit) }
+        val roundSimulation = API.simulate(defendInstructions!!, attackInstructions!!, path)
         println("Received round simulation")
         return roundSimulation
     }

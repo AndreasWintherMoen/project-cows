@@ -1,10 +1,10 @@
 package com.cows.plugins
 
-import ch.qos.logback.core.net.server.Client
 import com.cows.models.Message
 import com.cows.models.OpCode
 import com.cows.services.ClientConnection
 import com.cows.services.ConnectionMapper
+import com.cows.services.simulation.API
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import io.ktor.server.websocket.*
@@ -12,13 +12,11 @@ import io.ktor.websocket.*
 import java.time.Duration
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
-import io.ktor.utils.io.*
-import kotlinx.coroutines.awaitAll
-import kotlinx.serialization.json.Json
-import projectcows.rawJsonData.JsonRoundSimulation
+import com.cows.services.simulation.models.json.JsonRoundSimulation
 import projectcows.rawJsonData.JsonTower
 import projectcows.rawJsonData.JsonUnit
 import java.util.*
+import kotlin.random.Random
 
 private var connectionMap: MutableMap<ClientConnection, DefaultWebSocketSession> = Collections.synchronizedMap(mutableMapOf())
 private val gson = GsonBuilder().setPrettyPrinting().create()
@@ -44,6 +42,8 @@ fun Application.configureSockets() {
                             OpCode.CONNECTED -> TODO()
                             OpCode.INSTRUCTIONLOG -> handleInstructionLog(message, this)
                             OpCode.EVENTLOG -> TODO()
+                            OpCode.AVAILABLEUNITS -> handleGetAvailableUnits(message, this)
+                            OpCode.AVAILABLETOWERS -> handleGetAvailableTowers(message, this)
                         }
                     }
                     else -> { println("Frame type $frame not found in when statement in /cows/ws endpoint") }
@@ -51,6 +51,44 @@ fun Application.configureSockets() {
             }
         }
     }
+}
+
+suspend fun handleGetAvailableUnits(message: Message, userWebSocketSession: DefaultWebSocketServerSession) {
+    println("handleGetAvailableUnits")
+    val userConnection:ClientConnection? = getClientFromConnectMessage(message)
+    userConnection ?: run {
+        userWebSocketSession.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, "You have not created or joined a game yet!"))
+        return
+    }
+    connectionMap[userConnection] = userWebSocketSession
+    val units = API.getUnitStats((0..2).random(), (0..2).random(), (0..2).random())
+    val message = Message(
+            userUUID = message.userUUID,
+            gameUUID = message.gameUUID,
+            OpCode.AVAILABLEUNITS,
+            gson.toJson(units)
+        )
+    val messageString = gson.toJson(message)
+    userWebSocketSession.outgoing.send(Frame.Text(messageString))
+}
+
+suspend fun handleGetAvailableTowers(message: Message, userWebSocketSession: DefaultWebSocketServerSession) {
+    println("handleGetAvailableTowers")
+    val userConnection:ClientConnection? = getClientFromConnectMessage(message)
+    userConnection ?: run {
+        userWebSocketSession.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, "You have not created or joined a game yet!"))
+        return
+    }
+    connectionMap[userConnection] = userWebSocketSession
+    val towers = API.getTowerStats((0..2).random(), (0..2).random(), (0..2).random())
+    val message = Message(
+        userUUID = message.userUUID,
+        gameUUID = message.gameUUID,
+        OpCode.AVAILABLETOWERS,
+        gson.toJson(towers)
+    )
+    val messageString = gson.toJson(message)
+    userWebSocketSession.outgoing.send(Frame.Text(messageString))
 }
 
 suspend fun handleConnect(message: Message, userWebSocketSession: DefaultWebSocketServerSession){
