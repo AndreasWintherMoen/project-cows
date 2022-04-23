@@ -11,16 +11,16 @@ class RoundSimulator {
     fun simulate(defendInstruction : List<JsonTower>, attackInstruction : List<JsonUnit>, path: List<IntArray>) : JsonRoundSimulation {
         val eventLog = mutableListOf<JsonTick>();
 
-        var ticksBetweenSpawns = 2;
-        val units = attackInstruction.mapIndexed{index, unit ->
-            UnitSimulationModel(unit.id, 1, 1,  index*ticksBetweenSpawns)
-        }
+        val units = attackInstruction.mapIndexed{index, unit -> UnitStatsMapper.jsonUnitToSimulationModel(index, unit) }
+//            UnitSimulationModel(unit.id, 1, 1,  index*ticksBetweenSpawns)
+//        }
         //TODO reconsider how we convert tower range to ints, as it is treaded as ints here.
-        val towers = defendInstruction.mapIndexed{ index, tower ->
-            TowerSimulationModel(tower.id, tower.position, tower.range.roundToInt(), path, 0, 1, )
-        }
+        val towers = defendInstruction.mapIndexed{ index, tower -> UnitStatsMapper.jsonTowerToSimulationModel(index, tower, path) }
+//            TowerSimulationModel(tower.id, tower.position, tower.range.roundToInt(), path, 0, 1, )
+//        }
 
         var gameOver = false
+        var attackerWon = false
         //perform simulation and populate eventlog
 
         while(!gameOver) {
@@ -39,16 +39,16 @@ class RoundSimulator {
             eventLog.add(JsonTick(currentTick.clone() as ArrayList<JsonAction>))
 
             if (unitActions.any { it.type == ActionType.WIN }) {
-                win()
+                attackerWon = true
                 gameOver = true
             }
 
             else if (units.all { it.isDead}) {
-                lose()
+                attackerWon = false
                 gameOver = true
             }
         }
-        return JsonRoundSimulation(defendInstruction, attackInstruction, eventLog)
+        return JsonRoundSimulation(defendInstruction, attackInstruction, eventLog, attackerWon)
     }
 
     private fun win() {
