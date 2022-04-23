@@ -16,6 +16,8 @@ class Button(textureFilePath: String, var position: Vector2, var onClick: () -> 
 
     var texture = Texture(textureFilePath)
 
+    var disabled = false
+
     init {
         subscribeToClickEvents()
     }
@@ -37,7 +39,7 @@ class Button(textureFilePath: String, var position: Vector2, var onClick: () -> 
     }
 
     override fun click(clickPosition: Vector2, tile: TileController?) {
-        if (hide) return
+        if (hide || disabled) return
         if (isWithinBounds(clickPosition)) onClick.invoke()
     }
 
