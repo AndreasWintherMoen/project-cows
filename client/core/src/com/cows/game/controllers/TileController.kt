@@ -8,7 +8,7 @@ import com.cows.game.views.TileView
 
 class TileController(tileType: TileType, coordinate: Coordinate) : Updatable() {
     val tileModel = TileModel(tileType, coordinate)
-    private val tileView = TileView(tileModel)
+    val tileView = TileView(tileModel)
 
     override fun update(deltaTime: Float) {
        // TODO("Not yet implemented")

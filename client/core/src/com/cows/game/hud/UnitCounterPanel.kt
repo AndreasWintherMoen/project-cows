@@ -21,6 +21,8 @@ class UnitCounterPanel(availableUnits:Int):Renderable(){
     var headerFont:BitmapFont
     var font:BitmapFont
 
+    var hideUnits = false
+
     init {
         headerParameter = FreeTypeFontGenerator.FreeTypeFontParameter()
         headerParameter.size = 60
@@ -80,14 +82,16 @@ class UnitCounterPanel(availableUnits:Int):Renderable(){
     }
 
     override fun render(batch: SpriteBatch, deltaTime: Float) {
+        // This could be simplified if we put all UnitCounters in a list, and just loop through them
         val panelStartX =  Application.WIDTH - ActionPanel.WIDTH + ActionPanel.PADDING
         val headerStartY = Application.HEIGHT - ActionPanel.PADDING
         val availableCoinTextX = panelStartX + 60
         val availableCoinTextY = headerStartY - 5
 
-        // This could be simplified if we put all UnitCounters in a list, and just loop through them
-
         headerFont.draw(batch, availableUnitCounter.count.toString(), availableCoinTextX, availableCoinTextY);
+
+        if (hideUnits) return
+
         font.draw(batch, fireUnitCounter.count.toString(), panelStartX + 85f, ActionPanel.ACTION_HEIGHT-109f + 20f);
         font.draw(batch, waterUnitCounter.count.toString(), panelStartX + 85f, ActionPanel.ACTION_HEIGHT-109f*2f - ActionPanel.UNIT_MARGIN*1f + 20f);
         font.draw(batch, grassUnitCounter.count.toString(), panelStartX + 85f, ActionPanel.ACTION_HEIGHT-109f*3f - ActionPanel.UNIT_MARGIN*2f + 20f);

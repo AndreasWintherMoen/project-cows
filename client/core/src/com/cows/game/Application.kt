@@ -38,6 +38,7 @@ class Application : ApplicationAdapter()  {
                 Redux.init()
                 hudManager = HUDManager()
                 GameStateManager.currentGameState = GameState.START_MENU
+                GameStateManager.currentGameState = GameState.PLANNING_DEFENSE
             }
 //            launch {
 //                ServerConnection.createGame()
