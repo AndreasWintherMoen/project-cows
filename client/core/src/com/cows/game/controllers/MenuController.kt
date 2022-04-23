@@ -42,11 +42,18 @@ class MenuController {
         showCreateGameMenu()
         startGameJob?.cancel()
         startGameJob = GlobalScope.launch(Dispatchers.IO) {
+            println("starting coroutine for create game")
             val joinCode = ServerConnection.createGame()
+            println(joinCode)
             createMenu?.setGameCode(joinCode)
+            println("starting to connect active game")
             ServerConnection.connectToActiveGame()
+            println("connected")
             Redux.jsonAvailableUnits = ServerConnection.getAvailableUnits()
+            println("units:::")
+            println(Redux.jsonAvailableUnits)
             GameStateManager.setGameStateAsync(GameState.PLANNING_ATTACK)
+            println("finished coroutine")
         }
         createMenu = CreateGameMenu({showStartMenu()})
     }

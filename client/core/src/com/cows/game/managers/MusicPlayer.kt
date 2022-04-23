@@ -12,6 +12,8 @@ object MusicPlayer: GameStateSubscriber() {
     private var music: Music? = null
 
     fun play() {
+        println("PLASDAYSD")
+        stopMusic()
         music = Gdx.audio.newMusic(Gdx.files.internal("Sound/intro.mp3"))
         music?.play()
         music?.setVolume(0.2f)
@@ -19,6 +21,7 @@ object MusicPlayer: GameStateSubscriber() {
     }
 
     fun changeMusic(filename:String) {
+        stopMusic()
         music = Gdx.audio.newMusic(Gdx.files.internal("Sound/$filename"))
         music?.play()
         music?.setVolume(0.2f)
@@ -32,16 +35,16 @@ object MusicPlayer: GameStateSubscriber() {
     override fun onChangeGameState(oldGameState: GameState, newGameState: GameState) {
         when (newGameState) {
             GameState.ACTIVE_GAME -> {
-                changeMusic("Sounds/battle.mp3")
+                changeMusic("battle.mp3")
             }
             GameState.PLANNING_ATTACK -> {
-                changeMusic("Sounds/planning.mp3")
+                changeMusic("planning.mp3")
             }
             GameState.PLANNING_DEFENSE -> {
-                changeMusic("Sounds/planning.mp3")
+                changeMusic("planning.mp3")
             }
             GameState.START_MENU -> {
-                changeMusic("Sound/intro.mp3")
+                changeMusic("intro.mp3")
             }
         }
     }

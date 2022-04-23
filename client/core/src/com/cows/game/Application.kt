@@ -36,8 +36,8 @@ class Application : ApplicationAdapter()  {
             launch {
                 Redux.init()
                 hudManager = HUDManager()
-                MusicPlayer.play()
                 GameStateManager.currentGameState = GameState.START_MENU
+                MusicPlayer.play()
             }
 //            launch {
 //                ServerConnection.createGame()
@@ -68,7 +68,7 @@ class Application : ApplicationAdapter()  {
     private fun startGame(roundSimulation: JsonRoundSimulation) {
 //        loadRoundSimulation()
         gameTickProcessor = GameTickProcessor(roundSimulation)
-        GameStateManager.currentGameState = GameState.ACTIVE_GAME
+//        GameStateManager.currentGameState = GameState.ACTIVE_GAME
     }
 
     private fun loadRoundSimulation() {
