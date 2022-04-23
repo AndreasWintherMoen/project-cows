@@ -39,6 +39,9 @@ class Application : ApplicationAdapter()  {
                 hudManager = HUDManager()
                 GameStateManager.currentGameState = GameState.START_MENU
             }
+//            launch {
+//                ServerConnection.createGame()
+//            }
         }
     }
 
@@ -55,6 +58,7 @@ class Application : ApplicationAdapter()  {
         Updater.update(tickAdjustedDeltaTime)
         Renderer.render(tickAdjustedDeltaTime)
         FunctionDelayer.invokeRegisteredFunctions()
+        GameStateManager.nextAsyncGameState?.let { GameStateManager.currentGameState = it }
     }
 
     override fun dispose() {

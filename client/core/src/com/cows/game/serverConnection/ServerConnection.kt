@@ -23,8 +23,12 @@ import io.github.cdimascio.dotenv.Dotenv
 import io.github.cdimascio.dotenv.dotenv
 import io.ktor.utils.io.*
 import io.ktor.utils.io.core.internal.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.onClosed
 import kotlinx.coroutines.channels.onFailure
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 
 data class GameSession (
     val userUUID: UUID,
@@ -55,6 +59,7 @@ object ServerConnection {
     var gameSession: GameSession? = null
 
     private suspend fun sendGameCreateRequest(client:HttpClient): GameCreateResponse {
+        println("Sending request to $httpApiBase/game/create")
         return client.request<GameCreateResponse>("$httpApiBase/game/create")
     }
 
@@ -63,14 +68,17 @@ object ServerConnection {
     }
 
     suspend fun createGame(): String {
-        val createGameResponse = sendGameCreateRequest(client)
-        gameSession = GameSession(createGameResponse.userId, createGameResponse.gameCodeUUID)
-        websocketSession = generateWebsocketClient(client)
-        println("created game with game code ${createGameResponse.gameJoinCode}")
-        return createGameResponse.gameJoinCode
+        return withContext(Dispatchers.IO) {
+            val createGameResponse = sendGameCreateRequest(client)
+            gameSession = GameSession(createGameResponse.userId, createGameResponse.gameCodeUUID)
+            websocketSession = generateWebsocketClient(client)
+            println("created game with game code ${createGameResponse.gameJoinCode}")
+            createGameResponse.gameJoinCode
+        }
     }
 
     suspend fun connectToActiveGame() {
+        println("Connect to active game")
         websocketSession?.let {
             websocketSession = establishGameConnection(it)
         } ?: run {
@@ -153,6 +161,7 @@ object ServerConnection {
         while (!isConnected){
             val nullableIncoming = wsSession.incoming.tryReceive()
             if (nullableIncoming.isFailure || nullableIncoming.isClosed) continue
+            println("Received frame ${Frame}")
             when (val incoming = nullableIncoming.getOrThrow()) {
                 is Frame.Text -> {
                     val message = Message.retrieveWSMessage(incoming)
@@ -182,4 +191,24 @@ object ServerConnection {
             throw Exception("No game details set (you must join a game first)")
         }
     }
+
+
+    val mutex = Mutex()
+    val methodsToRun = LinkedList<() -> Unit>()
+
+    fun runAsyncMethod(method: () -> Unit) {
+        println("runAsyncMethod")
+//        mutex.withLock { methodsToRun.add(method) }
+        methodsToRun.add(method)
+        println("done with runAsyncMethod")
+    }
+
+    suspend fun launchInfiniteMethodRunnerLoop() {
+        println("launchInfiniteMethodRunnerLoop")
+        mutex.withLock { methodsToRun.remove().invoke() }
+        println("done with launchInfiniteMethodRunnerLoop")
+    }
+
+
+
 }

@@ -116,6 +116,7 @@ project(":core") {
         api "io.github.libktx:ktx-async:1.10.0-rc1"
         implementation("io.github.cdimascio:dotenv-kotlin:6.2.2")
         implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0-alpha05"
     }
     test {
         useJUnitPlatform()

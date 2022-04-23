@@ -54,6 +54,7 @@ fun Application.configureSockets() {
 }
 
 suspend fun handleConnect(message: Message, userWebSocketSession: DefaultWebSocketServerSession){
+    println("Handle connect")
     val userConnection:ClientConnection? = getClientFromConnectMessage(message)
     userConnection ?: run {
         userWebSocketSession.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, "You have not created or joined a game yet!"))
