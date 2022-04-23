@@ -15,7 +15,7 @@ class PlanningAttackActionPanel() : PlanningActionPanel() {
         waterTowerButton.disabled = true
         grassTowerButton.disabled = true
 //        startGameButton.onClick = { onStartGame.invoke() }
-        startGameButton.onClick = { onStartButtonClicked() }
+        readyButton.onClick = { onStartButtonClicked() }
     }
 
     // FIRE TOWER🔥
@@ -52,5 +52,9 @@ class PlanningAttackActionPanel() : PlanningActionPanel() {
 
         removeGrassTowerButton.die()
         addGrassTowerButton.die()
+    }
+
+    override fun hideUI(hide: Boolean) {
+        TODO("Not yet implemented")
     }
 }

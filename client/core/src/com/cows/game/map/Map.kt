@@ -11,7 +11,7 @@ import java.lang.Exception
 
 object Map {
 
-    const val WIDTH = 16
+    const val WIDTH = 13
     const val HEIGHT = 8
     val PATH = load()
     const val FILE_NAME = "map"

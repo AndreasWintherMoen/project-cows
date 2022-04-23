@@ -11,9 +11,18 @@
       },
       {
           "id": 1,
-          "type": "FIRE",
+          "type": "GRASS",
           "position": {
               "x": 15,
+              "y": 2
+          },
+          "range": 1.0
+      },
+      {
+          "id": 2,
+          "type": "WATER",
+          "position": {
+              "x": 10,
               "y": 2
           },
           "range": 1.0
