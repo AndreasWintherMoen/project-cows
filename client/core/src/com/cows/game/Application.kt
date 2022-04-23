@@ -36,13 +36,13 @@ class Application : ApplicationAdapter()  {
             launch {
                 Redux.init()
                 hudManager = HUDManager()
+                MusicPlayer.play()
                 GameStateManager.currentGameState = GameState.START_MENU
             }
 //            launch {
 //                ServerConnection.createGame()
 //            }
         }
-        MusicPlayer.play()
     }
 
     override fun render() {
