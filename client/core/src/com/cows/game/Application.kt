@@ -36,8 +36,6 @@ class Application : ApplicationAdapter()  {
             launch {
                 hudManager = HUDManager { startGame() }
                 GameStateManager.currentGameState = GameState.START_MENU
-                GameStateManager.currentGameState = GameState.PLANNING_ATTACK
-
             }
         }
     }
