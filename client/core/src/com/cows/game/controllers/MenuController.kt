@@ -1,18 +1,13 @@
 package com.cows.game.controllers
 
-import androidx.lifecycle.Lifecycle
-import com.cows.game.CreateGameScope
 import com.cows.game.Redux
 import com.cows.game.enums.GameState
 import com.cows.game.hud.CreateGameMenu
 import com.cows.game.hud.JoinGameMenu
 import com.cows.game.hud.StartMenu
-import com.cows.game.managers.FunctionDelayer
 import com.cows.game.managers.GameStateManager
 import com.cows.game.serverConnection.ServerConnection
 import kotlinx.coroutines.*
-import ktx.async.newAsyncContext
-import kotlin.coroutines.CoroutineContext
 
 class MenuController {
     private var startMenu:StartMenu? = null
