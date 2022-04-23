@@ -13,7 +13,8 @@ import kotlinx.coroutines.runBlocking
 
 
 class CreateGameMenu(private val onBackButton: () -> Unit): Renderable() {
-    private val goBackBtn = Button("Buttons/enterBtn.png", Vector2(125f, 100f), {onBackButton.invoke()})
+    private val goBackBtn = Button("Buttons/back-btn.png", Vector2(416f, 100f)){onBackButton.invoke()}
+    private val backgroundImg = Sprite(Texture("HUD/StartScreen/startscreen.png"))
     private var numbers: List<Int> = mutableListOf()// = gameCode.map { it.digitToInt() }
     private var gameCodeXPosition = listOf<Float>(5f, 155f, 305f, 455f, 605f, 5f, 155f, 305f, 455f, 605f)
     private var gameCodeYPosition = listOf<Float>(Application.HEIGHT-120f, Application.HEIGHT-300f)
@@ -48,14 +49,16 @@ class CreateGameMenu(private val onBackButton: () -> Unit): Renderable() {
     }
 
     override fun render(batch: SpriteBatch, deltaTime: Float) {
+        backgroundImg.draw(batch)
         if (numbers.isNotEmpty() && joinGameCode.isEmpty()) setNumbersCasedOnCode()
 
-        if (numbers.isEmpty()) batch.draw(loadingText, 0f, 100f)
+        if (numbers.isEmpty()) batch.draw(loadingText, 0f, 184f)
         else joinGameCode.forEach { sprite -> sprite.draw(batch)  }
     }
 
     override fun dispose() {
         joinGameCode.forEach { sprite -> sprite.texture.dispose()}
+        backgroundImg.texture.dispose()
     }
 
     override fun die() {
