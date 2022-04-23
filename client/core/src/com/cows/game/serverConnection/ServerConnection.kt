@@ -125,7 +125,7 @@ object ServerConnection {
                 is Frame.Text -> {
                     val message = Message.retrieveWSMessage(incoming)
                     println(message)
-                    if (message!!.opCode == OpCode.AVAILABLEUNITS){
+                    if (message!!.opCode == OpCode.AVAILABLETOWERS){
                         val towersType = object : TypeToken<JsonAvailableTowers>() {}.type
                         val towers: JsonAvailableTowers = gson.fromJson(message.data!!, towersType)
                         return towers

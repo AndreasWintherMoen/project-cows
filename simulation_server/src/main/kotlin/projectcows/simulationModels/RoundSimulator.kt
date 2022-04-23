@@ -12,6 +12,8 @@ class RoundSimulator {
         val eventLog = mutableListOf<JsonTick>();
 
         val units = attackInstruction.mapIndexed{index, unit -> UnitStatsMapper.jsonUnitToSimulationModel(index, unit) }
+        println("units!!!")
+        println(units)
 //            UnitSimulationModel(unit.id, 1, 1,  index*ticksBetweenSpawns)
 //        }
         //TODO reconsider how we convert tower range to ints, as it is treaded as ints here.
