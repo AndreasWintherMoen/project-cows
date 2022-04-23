@@ -165,4 +165,22 @@ object UnitStatsMapper {
         getUnitHealth(type, level)
     )
 
+    fun appendMissingDataToJsonTower(index: Int, tower: JsonTower) = JsonTower(
+        index,
+        tower.type,
+        tower.level,
+        tower.position,
+        getTowerRange(tower.type, tower.level),
+        getTowerTimeBetweenAttacks(tower.type, tower.level),
+        getTowerDamage(tower.type, tower.level)
+    )
+
+    fun appendMissingDataToJsonUnit(index: Int, unit: JsonUnit) = JsonUnit (
+        index + 100,
+        unit.type,
+        unit.level,
+        getUnitMovementSpeed(unit.type, unit.level),
+        getUnitHealth(unit.type, unit.level)
+    )
+
 }

@@ -11,8 +11,8 @@ class RoundSimulator {
     fun simulate(defendInstruction : List<JsonTower>, attackInstruction : List<JsonUnit>, path: List<IntArray>) : JsonRoundSimulation {
         val eventLog = mutableListOf<JsonTick>();
 
-        val attackInstructionsWithId = attackInstruction.mapIndexed {index, unit -> JsonUnit(index + 100, unit.type, unit.level, unit.movementSpeed, unit.health )}
-        val defendInstructionsWithId = defendInstruction.mapIndexed {index, tower -> JsonTower(index, tower.type, tower.level, tower.position, tower.range, tower.timeBetweenAttacks, tower.damage)}
+        val attackInstructionsWithId = attackInstruction.mapIndexed {index, unit -> UnitStatsMapper.appendMissingDataToJsonUnit(index, unit)}
+        val defendInstructionsWithId = defendInstruction.mapIndexed {index, tower -> UnitStatsMapper.appendMissingDataToJsonTower(index, tower)}
 
         val units = attackInstruction.mapIndexed{index, unit -> UnitStatsMapper.jsonUnitToSimulationModel(index, unit) }
         println("units!!!")
