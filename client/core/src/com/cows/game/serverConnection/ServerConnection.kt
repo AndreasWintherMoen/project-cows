@@ -128,6 +128,8 @@ object ServerConnection {
                     if (message!!.opCode == OpCode.AVAILABLETOWERS){
                         val towersType = object : TypeToken<JsonAvailableTowers>() {}.type
                         val towers: JsonAvailableTowers = gson.fromJson(message.data!!, towersType)
+                        println("parsed towers")
+                        println(towers)
                         return towers
                     }
                 }

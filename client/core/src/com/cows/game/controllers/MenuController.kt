@@ -50,11 +50,7 @@ class MenuController {
             val joinCode = ServerConnection.createGame()
             createMenu?.setGameCode(joinCode)
             ServerConnection.connectToActiveGame()
-            println("getting available units")
             Redux.jsonAvailableUnits = ServerConnection.getAvailableUnits()
-            println("heisann attack")
-            println(Redux.jsonAvailableUnits)
-//                GameStateManager.currentGameState = GameState.PLANNING_ATTACK
             GameStateManager.setGameStateAsync(GameState.PLANNING_ATTACK)
         }
         createMenu = CreateGameMenu({showStartMenu()})
@@ -69,11 +65,8 @@ class MenuController {
     private fun joinGame(joinCode: String) {
         runBlocking {
             ServerConnection.joinGame(joinCode)
-            println("trying to get available towers")
             Redux.jsonAvailableTowers = ServerConnection.getAvailableTowers()
-            println("heisann defense")
-            println(Redux.jsonAvailableUnits)
-            GameStateManager.currentGameState = GameState.PLANNING_DEFENSE
+            GameStateManager.setGameStateAsync(GameState.PLANNING_DEFENSE)
         }
     }
 
