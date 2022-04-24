@@ -46,7 +46,7 @@ class Application : ApplicationAdapter()  {
         Redux.jsonRoundSimulation?.let { println("json round simulation is not null"); startGame(it); Redux.jsonRoundSimulation = null }
 
         val deltaTime = Gdx.graphics.deltaTime
-        val tickAdjustedDeltaTime = deltaTime * tickDuration
+        val tickAdjustedDeltaTime = deltaTime / tickDuration
 
         if (GameStateManager.currentGameState == GameState.ACTIVE_GAME) {
             gameTickProcessor.update(deltaTime, tickDuration)

@@ -18,8 +18,8 @@ class UnitController(val model: UnitModel): Updatable() {
 
         val velocity = model.currentDirection.toVector2()
 
-        val deltaX = model.movementSpeed * velocity.x * deltaTime
-        val deltaY = model.movementSpeed * velocity.y * deltaTime
+        val deltaX = model.movementSpeed * velocity.x * deltaTime / 50f
+        val deltaY = model.movementSpeed * velocity.y * deltaTime / 50f
 
         model.position.x += deltaX
         model.position.y += deltaY
