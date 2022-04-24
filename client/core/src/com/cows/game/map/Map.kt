@@ -10,14 +10,17 @@ object Map {
 
     const val WIDTH = 13
     const val HEIGHT = 8
-    var PATH: ArrayList<Coordinate> = loadDefaultMap()
+    var PATH: List<Coordinate> = loadDefaultMap()
     private var tiles: Array<Array<TileController>>? = null
 
     fun init() {
-        loadMap(Redux.path!!)
+        loadMap(intArrayListToCoordinateList(Redux.gameStatus!!.path))
     }
 
-    fun loadMap(path: ArrayList<Coordinate>){
+    private fun intArrayListToCoordinateList(intArrayList: List<IntArray>): List<Coordinate> =
+        intArrayList.map { Coordinate(it[0], it[1]) }.toList()
+
+    fun loadMap(path: List<Coordinate>){
         tiles = Array(WIDTH) { x -> Array(HEIGHT) { y ->
             TileController(if (path.contains(Coordinate(x, y))) TileType.PATH else TileType.GRASS, Coordinate(x, y))
         } }

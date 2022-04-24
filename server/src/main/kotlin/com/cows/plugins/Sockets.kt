@@ -43,8 +43,7 @@ fun Application.configureSockets() {
                             OpCode.CONNECTED -> TODO()
                             OpCode.INSTRUCTIONLOG -> handleInstructionLog(message, this)
                             OpCode.EVENTLOG -> TODO()
-                            OpCode.AVAILABLEUNITS -> handleGetAvailableUnits(message, this)
-                            OpCode.AVAILABLETOWERS -> handleGetAvailableTowers(message, this)
+                            OpCode.GAMESTATE -> handleGameStateRequest(message, this)
                         }
                     }
                     else -> { println("Frame type $frame not found in when statement in /cows/ws endpoint") }
@@ -57,39 +56,21 @@ fun Application.configureSockets() {
 data class MapData(
     val path: ArrayList<Coordinate>
 )
-suspend fun handleGetAvailableUnits(message: Message, userWebSocketSession: DefaultWebSocketServerSession) {
-    println("handleGetAvailableUnits")
-    val userConnection:ClientConnection? = getClientFromConnectMessage(message)
-    userConnection ?: run {
-        userWebSocketSession.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, "You have not created or joined a game yet!"))
-        return
-    }
-    connectionMap[userConnection] = userWebSocketSession
-    val units = API.getUnitStats((0..2).random(), (0..2).random(), (0..2).random())
-    val message = Message(
-            userUUID = message.userUUID,
-            gameUUID = message.gameUUID,
-            OpCode.AVAILABLEUNITS,
-            gson.toJson(units)
-        )
-    val messageString = gson.toJson(message)
-    userWebSocketSession.outgoing.send(Frame.Text(messageString))
-}
 
-suspend fun handleGetAvailableTowers(message: Message, userWebSocketSession: DefaultWebSocketServerSession) {
-    println("handleGetAvailableTowers")
+suspend fun handleGameStateRequest(message: Message, userWebSocketSession: DefaultWebSocketServerSession) {
+    println("handleGameStateRequest")
     val userConnection:ClientConnection? = getClientFromConnectMessage(message)
     userConnection ?: run {
         userWebSocketSession.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, "You have not created or joined a game yet!"))
         return
     }
     connectionMap[userConnection] = userWebSocketSession
-    val towers = API.getTowerStats((0..2).random(), (0..2).random(), (0..2).random())
+    val game = ConnectionMapper.getGameFromUUID(message.gameUUID)
     val message = Message(
         userUUID = message.userUUID,
         gameUUID = message.gameUUID,
-        OpCode.AVAILABLETOWERS,
-        gson.toJson(towers)
+        OpCode.GAMESTATE,
+        gson.toJson(game!!.gameState)
     )
     val messageString = gson.toJson(message)
     userWebSocketSession.outgoing.send(Frame.Text(messageString))
@@ -107,7 +88,6 @@ suspend fun handleConnect(message: Message, userWebSocketSession: DefaultWebSock
     val responseMessage: Message =
         if (ConnectionMapper.areGameSlotsFilled(gameUUID = message.gameUUID)) {
             val creatorConnection = getCreatorConnection(message.gameUUID, message.userUUID)
-            val pathString = gson.toJson(MapData(Map.PATH))
 
             connectionMap[creatorConnection]!!.outgoing.send(
                 Frame.Text(
@@ -116,7 +96,7 @@ suspend fun handleConnect(message: Message, userWebSocketSession: DefaultWebSock
                             userUUID = creatorConnection.id,
                             gameUUID = message.gameUUID,
                             opCode = OpCode.CONNECTED,
-                            pathString
+                            null
                         )
                     )
                 )
@@ -126,7 +106,7 @@ suspend fun handleConnect(message: Message, userWebSocketSession: DefaultWebSock
                 userUUID = message.userUUID,
                 gameUUID = message.gameUUID,
                 OpCode.CONNECTED,
-                pathString
+                null
             )
 
         } else {

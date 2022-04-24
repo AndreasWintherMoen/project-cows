@@ -63,6 +63,7 @@ class UnitController(val model: UnitModel): Updatable() {
         super.die()
 
         model.isDead = true;
+        view.die()
     }
 
     fun win() {

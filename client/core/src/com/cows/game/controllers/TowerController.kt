@@ -37,4 +37,10 @@ class TowerController(val model: TowerModel): Updatable() {
     fun attack() {
         currentBullet?.attack(currentTarget, model.tileCoordinate.toVector2())
     }
+
+    override fun die() {
+        super.die()
+        currentBullet?.die()
+        renderableView.die()
+    }
 }

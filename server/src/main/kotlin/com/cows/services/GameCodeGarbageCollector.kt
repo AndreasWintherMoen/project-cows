@@ -1,16 +1,19 @@
 package com.cows.services
 
 import io.ktor.util.date.*
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 
 class GameCodeGarbageCollector(private val gameCodeMap:MutableMap<String,GameCode>,private val gameCodeTimeout: Int, private val timeBetweenChecks:Long) {
 
-    var lastTimestampMillis = getTimeMillis()
+    init {
+        cleanGameCodeMap()
+    }
 
-    suspend fun cleanGameCodeMap()  = coroutineScope {
-        launch {
+    fun cleanGameCodeMap() {
+         GlobalScope.launch {
             while(true){
                 delay(timeBetweenChecks)
                 removeOutdatedGameCodes()

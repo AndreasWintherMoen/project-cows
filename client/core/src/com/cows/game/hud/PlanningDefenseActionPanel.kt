@@ -52,7 +52,7 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
         if (coins>0 && lastTile != null ) {
             coinsText.text = (-- coins).toString()
             towerToBeSpawned = type
-            val reduxTowerModel = Redux.jsonAvailableTowers!!.getTower(type)
+            val reduxTowerModel = Redux.gameStatus!!.availableTowers.getTower(type)
             val towerModel = TowerModel(towerToBeSpawned, reduxTowerModel.level, lastTile!!.tileModel.coordinate, reduxTowerModel.range!!, reduxTowerModel.damage!!)
             val towerController = PlanningTowerController(towerModel)
             spawnedTowers.add(towerController)
