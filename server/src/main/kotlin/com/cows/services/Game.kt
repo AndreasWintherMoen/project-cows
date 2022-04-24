@@ -88,6 +88,9 @@ class Game(
         gameState.roundCounter++
 
         gameState.path = Map.getPathCoordinates()
+
+        gameState.attackInstructions = null
+        gameState.defendInstructions = null
     }
 
     suspend fun generateAvailableUnitsAndTowers() {
