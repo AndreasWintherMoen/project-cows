@@ -34,9 +34,9 @@ class UnitCounterPanel(availableUnits:Int):Renderable(){
     }
 
     fun getJsonUnitList(): List<JsonUnit> {
-        val fireUnit = Redux.jsonAvailableUnits!!.fireUnit
-        val waterUnit = Redux.jsonAvailableUnits!!.waterUnit
-        val grassUnit = Redux.jsonAvailableUnits!!.grassUnit
+        val fireUnit = Redux.gameStatus!!.availableUnits.fireUnit
+        val waterUnit = Redux.gameStatus!!.availableUnits.waterUnit
+        val grassUnit = Redux.gameStatus!!.availableUnits.grassUnit
         val units = mutableListOf<JsonUnit>()
         repeat(fireUnitCounter.count) { units.add(JsonUnit(null, UnitType.FIRE, fireUnit.level, fireUnit.movementSpeed, fireUnit.health )) }
         repeat(waterUnitCounter.count) { units.add(JsonUnit(null, UnitType.WATER, waterUnit.level, waterUnit.movementSpeed, waterUnit.health )) }

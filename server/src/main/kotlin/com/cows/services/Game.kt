@@ -1,6 +1,8 @@
 package com.cows.services
 
 import com.cows.services.simulation.API
+import com.cows.services.simulation.models.json.JsonAvailableTowers
+import com.cows.services.simulation.models.json.JsonAvailableUnits
 import com.cows.services.simulation.models.json.JsonRoundSimulation
 import projectcows.rawJsonData.JsonTower
 import projectcows.rawJsonData.JsonUnit
@@ -10,11 +12,10 @@ import java.util.*
 
 class Game(
     val gameConnections: Pair<ClientConnection, ClientConnection>,
-    private val playerStates: Pair<PlayerState, PlayerState>) {
-    private val path: List<IntArray> = _TEMP_generatePath()
-    private var attackInstructions: List<JsonUnit>? = null
-    private var defendInstructions: List<JsonTower>? = null
-    private var roundCounter = 0
+    playerStates: Pair<PlayerState, PlayerState>) {
+    val gameState = GameState(playerStates, _TEMP_generatePath())
+    private val firstPlayerIsAttacker
+        get() = gameState.roundCounter % 2 == 0
 
     companion object {
         // TODO: Implement a UUID-system instead of a counter
@@ -40,24 +41,30 @@ class Game(
 
     fun isPlayerAttacker(userUUID: UUID): Boolean {
         val isPlayerFirst = gameConnections.first.id == userUUID
-        val isFirstPlayerAttacker = roundCounter % 2 == 0
+        val isFirstPlayerAttacker = gameState.roundCounter % 2 == 0
 
         return !isPlayerFirst.xor(isFirstPlayerAttacker)
     }
 
     suspend fun addAttackInstructions(unitList: List<JsonUnit>): JsonRoundSimulation? {
-        attackInstructions = unitList
-        if (defendInstructions != null) {
-            return simulateRound()
+        gameState.attackInstructions = unitList
+        gameState.playerStates.first.coins -= unitList.size
+        if (gameState.defendInstructions != null) {
+            val roundSimulation = simulateRound()
+            nextRound(roundSimulation)
+            return roundSimulation
         } else {
             return null
         }
     }
 
     suspend fun addDefendInstructions(towerList: List<JsonTower>): JsonRoundSimulation? {
-        defendInstructions = towerList
-        if (attackInstructions != null) {
-            return simulateRound()
+        gameState.defendInstructions = towerList
+        gameState.playerStates.first.coins -= towerList.size * 3
+        if (gameState.attackInstructions != null) {
+            val roundSimulation = simulateRound()
+            nextRound(roundSimulation)
+            return roundSimulation
         } else {
             return null
         }
@@ -65,8 +72,25 @@ class Game(
 
     private suspend fun simulateRound(): JsonRoundSimulation {
         println("Simulating round!")
-        val roundSimulation = API.simulate(defendInstructions!!, attackInstructions!!, path)
+        val roundSimulation = API.simulate(gameState.defendInstructions!!, gameState.attackInstructions!!, gameState.path)
         return roundSimulation
+    }
+
+    private suspend fun nextRound(roundSimulation: JsonRoundSimulation) {
+        val firstPlayerWon = !firstPlayerIsAttacker.xor(roundSimulation.attackerWon)
+        if (firstPlayerWon) gameState.playerStates.first.health--
+        else gameState.playerStates.second.health--
+
+        generateAvailableUnitsAndTowers()
+
+        gameState.roundCounter++
+
+        gameState.path = _TEMP_generatePath()
+    }
+
+    suspend fun generateAvailableUnitsAndTowers() {
+        gameState.availableUnits = API.getUnitStats((0..2).random(), (0..2).random(), (0..2).random())
+        gameState.availableTowers = API.getTowerStats((0..2).random(), (0..2).random(), (0..2).random())
     }
 
     private val Id:Int = lastId.getAndIncrement()

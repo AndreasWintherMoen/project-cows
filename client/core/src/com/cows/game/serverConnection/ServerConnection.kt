@@ -1,5 +1,6 @@
 package com.cows.game.serverConnection
 
+import com.cows.game.roundSimulation.GameStatus
 import com.cows.game.roundSimulation.rawJsonData.*
 import com.cows.game.serverConnection.shared.GameCreateResponse
 import com.cows.game.serverConnection.shared.GameJoinResponse
@@ -91,8 +92,8 @@ object ServerConnection {
         connectToActiveGame()
     }
 
-    suspend fun getAvailableUnits(): JsonAvailableUnits {
-        val message = createMessage(OpCode.AVAILABLEUNITS, null)
+    suspend fun getGameStatus(): GameStatus {
+        val message = createMessage(OpCode.EVENTLOG, null)
         websocketSession!!.send(Message.generateWSFrame(message))
         while (true) {
         val nullableIncoming = websocketSession!!.incoming.tryReceive()
@@ -101,34 +102,10 @@ object ServerConnection {
                 is Frame.Text -> {
                     val message = Message.retrieveWSMessage(incoming)
                     println(message)
-                    if (message!!.opCode == OpCode.AVAILABLEUNITS){
-                        val unitsType = object : TypeToken<JsonAvailableUnits>() {}.type
-                        val units: JsonAvailableUnits = gson.fromJson(message.data!!, unitsType)
-                        return units
-                    }
-                }
-                else -> {
-                    println("Not text frame")
-                    println(incoming)
-                }
-            }
-        }
-    }
-
-    suspend fun getAvailableTowers(): JsonAvailableTowers {
-        val message = createMessage(OpCode.AVAILABLETOWERS, null)
-        websocketSession!!.send(Message.generateWSFrame(message))
-        while (true) {
-            val nullableIncoming = websocketSession!!.incoming.tryReceive()
-            if (nullableIncoming.isFailure || nullableIncoming.isClosed) continue
-            when (val incoming = nullableIncoming.getOrThrow()) {
-                is Frame.Text -> {
-                    val message = Message.retrieveWSMessage(incoming)
-                    println(message)
-                    if (message!!.opCode == OpCode.AVAILABLETOWERS){
-                        val towersType = object : TypeToken<JsonAvailableTowers>() {}.type
-                        val towers: JsonAvailableTowers = gson.fromJson(message.data!!, towersType)
-                        return towers
+                    if (message!!.opCode == OpCode.EVENTLOG){
+                        val gameStatusType = object : TypeToken<GameStatus>() {}.type
+                        val gameStatus: GameStatus = gson.fromJson(message.data!!, gameStatusType)
+                        return gameStatus
                     }
                 }
                 else -> {

@@ -49,7 +49,7 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
         if (unitCounterPanel.hasAvailableUnits() && lastTile != null ) {
             unitCounterPanel.addUnit(type)
             towerToBeSpawned = type
-            val reduxTowerModel = Redux.jsonAvailableTowers!!.getTower(type)
+            val reduxTowerModel = Redux.gameStatus!!.availableTowers.getTower(type)
             val towerModel = TowerModel(towerToBeSpawned, reduxTowerModel.level, lastTile!!.tileModel.coordinate, reduxTowerModel.range!!, reduxTowerModel.damage!!)
             val towerController = PlanningTowerController(towerModel)
             spawnedTowers.add(towerController)
