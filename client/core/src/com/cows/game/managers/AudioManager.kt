@@ -9,6 +9,13 @@ import com.cows.game.gameState.GameStateSubscriber
 object AudioManager: GameStateSubscriber() {
     private var backgroundMusic: Music? = null
     private var soundEffect: Sound? = null
+    var mute = false
+        set(value) {
+            if (value) {
+                stopAllSound()
+            }
+            field = value
+        }
 
     fun init() {}
 
@@ -16,7 +23,23 @@ object AudioManager: GameStateSubscriber() {
         playMusic("Sound/intro.mp3")
     }
 
+    private fun stopBackgroundMusic() {
+        backgroundMusic?.stop()
+        backgroundMusic = null
+    }
+
+    private fun stopSoundEffect() {
+        soundEffect?.stop()
+        soundEffect = null
+    }
+
+    private fun stopAllSound() {
+        stopBackgroundMusic()
+        stopSoundEffect()
+    }
+
     private fun playMusic(filePath: String, volume: Float = 1f, isLooping: Boolean = true) {
+        if (mute) return
         backgroundMusic?.stop()
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal(filePath))
         backgroundMusic?.play()
@@ -25,6 +48,7 @@ object AudioManager: GameStateSubscriber() {
     }
 
     fun playSoundEffect(filePath: String, volume: Float = 1f) {
+        if (mute) return
         soundEffect?.stop()
         soundEffect = Gdx.audio.newSound(Gdx.files.internal(filePath))
         val id = soundEffect?.play()
