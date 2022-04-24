@@ -47,7 +47,6 @@ class MenuController {
             val joinCode = ServerConnection.createGame()
             createMenu?.setGameCode(joinCode)
             ServerConnection.connectToActiveGame()
-            println("conncted to active game")
             Redux.gameStatus = ServerConnection.getGameStatus()
             println(Redux.gameStatus)
             GameStateManager.setGameStateAsync(GameState.PLANNING_ATTACK)
@@ -76,6 +75,7 @@ class MenuController {
         }
         catch (error: ClientRequestException) {
             System.err.println("Wrong code")
+            println(error)
             userResponse = FontObject("Wrong code", 64, Color(0.9f, 0.04f, 0f, 1f))
             userResponse!!.position = Vector2((Gdx.graphics.width/2 - userResponse!!.getFontWidth()/2),125f)
         }

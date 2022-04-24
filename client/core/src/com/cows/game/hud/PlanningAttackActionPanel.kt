@@ -3,37 +3,48 @@ package com.cows.game.hud
 import com.badlogic.gdx.math.Vector2
 import com.cows.game.Redux
 import com.cows.game.enums.UnitType
-import com.cows.game.map.Map
 import com.cows.game.serverConnection.ServerConnection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class PlanningAttackActionPanel() : PlanningActionPanel() {
+    val unitCounterPanel = UnitCounterPanel(10)
+
+    // FIRE UNIT🔥
+    private val fireUnitData = Redux.gameStatus!!.availableUnits.fireUnit
+    val fireUnitBackground = SmartObject("Cards/banner-fire-attack.png", Vector2(this.position.x+32f, 323f), 1f)
+    val fireHealthNumber = FontObject(fireUnitData.health.toString(), 25, Vector2(this.position.x + 70f, 439f))
+    val fireMovementSpeedNumber = FontObject(fireUnitData.movementSpeed.toString(), 25, Vector2(this.position.x + 135f, 439f))
+    val removeFireUnitButton = Button("Buttons/remove-button.png", Vector2(this.position.x+ 12f, 361f)) { unitCounterPanel.removeUnit(UnitType.FIRE)}
+    val addFireUnitButton = Button("Buttons/add-button.png", Vector2(this.position.x + 157f, 361f)) { unitCounterPanel.addUnit(UnitType.FIRE)}
+    val fireUnitButton = Button("Cards/"+getUnitName(UnitType.FIRE, fireUnitData.level)+".png", Vector2(this.position.x , 330f))
+
+    // GRASS UNIT🌿
+    private val grassUnitData = Redux.gameStatus!!.availableUnits.grassUnit
+    val grassUnitBackground = SmartObject("Cards/banner-grass-attack.png", Vector2(this.position.x+32f , 199f), 1f)
+    val grassHealthNumber = FontObject(grassUnitData.health.toString(), 25, Vector2(this.position.x + 70f, 315f))
+    val grassMovementSpeedNumber = FontObject(grassUnitData.movementSpeed.toString(), 25, Vector2(this.position.x + 135f, 315f))
+    val removeGrassUnitButton = Button("Buttons/remove-button.png", Vector2(this.position.x+ 12f, 236f)) { unitCounterPanel.removeUnit(UnitType.GRASS)}
+    val addGrassUnitButton = Button("Buttons/add-button.png", Vector2(this.position.x + 157f, 236f)) { unitCounterPanel.addUnit(UnitType.GRASS)}
+    val grassUnitButton = Button("Cards/"+getUnitName(UnitType.GRASS, grassUnitData.level)+".png", Vector2(this.position.x, 206f))
+
+    // WATER UNIT💧
+    private val waterUnitData = Redux.gameStatus!!.availableUnits.waterUnit
+    val waterUnitBackground = SmartObject("Cards/banner-water-attack.png", Vector2(this.position.x+32f, 75f), 1f)
+    val waterHealthNumber = FontObject(waterUnitData.health.toString(), 25, Vector2(this.position.x + 70f, 192f))
+    val waterMovementSpeedNumber = FontObject(waterUnitData.movementSpeed.toString(), 25, Vector2(this.position.x + 135f, 192f))
+    val removeWaterUnitButton = Button("Buttons/remove-button.png", Vector2(this.position.x + 12f, 111f)) { unitCounterPanel.removeUnit(UnitType.WATER)}
+    val addWaterUnitButton = Button("Buttons/add-button.png", Vector2(this.position.x + 157f, 111f)) { unitCounterPanel.addUnit(UnitType.WATER)}
+    val waterUnitButton = Button("Cards/"+getUnitName(UnitType.WATER, waterUnitData.level)+".png", Vector2(this.position.x , 83f))
 
     init {
-        fireTowerButton.disabled = true
-        waterTowerButton.disabled = true
-        grassTowerButton.disabled = true
 //        startGameButton.onClick = { onStartGame.invoke() }
         readyButton.onClick = { onStartButtonClicked() }
-
+        fireUnitButton.position.x += ActionPanel.WIDTH/2 - fireUnitButton.texture.width/2
+        waterUnitButton.position.x += ActionPanel.WIDTH/2 - waterUnitButton.texture.width/2
+        grassUnitButton.position.x += ActionPanel.WIDTH/2 - grassUnitButton.texture.width/2
     }
-
-    // FIRE TOWER🔥
-    val removeFireTowerButton = Button("Buttons/remove-button.png", Vector2(this.position.x+ 15f, 350f)) { unitCounterPanel.removeUnit(UnitType.FIRE)}
-    val addFireTowerButton = Button("Buttons/add-button.png", Vector2(this.position.x + 150f, 350f)) { unitCounterPanel.addUnit(UnitType.FIRE)}
-
-    // WATER TOWER💧
-    val removeWaterTowerButton = Button("Buttons/remove-button.png", Vector2(this.position.x + 15f, 250f)) { unitCounterPanel.removeUnit(UnitType.WATER)}
-    val addWaterTowerButton = Button("Buttons/add-button.png", Vector2(this.position.x + 150f, 250f)) { unitCounterPanel.addUnit(UnitType.WATER)}
-
-    // GRASS TOWER🌿
-    val removeGrassTowerButton = Button("Buttons/remove-button.png", Vector2(this.position.x+ 15f, 150f)) { unitCounterPanel.removeUnit(UnitType.GRASS)}
-    val addGrassTowerButton = Button("Buttons/add-button.png", Vector2(this.position.x + 150f, 150f)) { unitCounterPanel.addUnit(UnitType.GRASS)}
-
-    val unitCounterPanel = com.cows.game.hud.UnitCounterPanel(10)
-
 
     private fun onStartButtonClicked() {
         println("PlanningAttackActionPanel::onStartButtonClicked")
@@ -51,17 +62,38 @@ class PlanningAttackActionPanel() : PlanningActionPanel() {
 
         unitCounterPanel.die()
 
-        removeFireTowerButton.die()
-        addFireTowerButton.die()
+        removeFireUnitButton.die()
+        addFireUnitButton.die()
 
-        removeWaterTowerButton.die()
-        addWaterTowerButton.die()
+        removeWaterUnitButton.die()
+        addWaterUnitButton.die()
 
-        removeGrassTowerButton.die()
-        addGrassTowerButton.die()
+        removeGrassUnitButton.die()
+        addGrassUnitButton.die()
+
+        fireHealthNumber.die()
+        fireMovementSpeedNumber.die()
+        fireUnitBackground.die()
+        fireUnitButton.die()
+        grassHealthNumber.die()
+        grassMovementSpeedNumber.die()
+        grassUnitBackground.die()
+        grassUnitButton.die()
+        waterHealthNumber.die()
+        waterMovementSpeedNumber.die()
+        waterUnitBackground.die()
+        waterUnitButton.die()
+
     }
 
+
+
     override fun hideUI(hide: Boolean) {
-        TODO("Not yet implemented")
+        fireHealthNumber.hide = hide
+        fireMovementSpeedNumber.hide = hide
+        grassHealthNumber.hide = hide
+        grassMovementSpeedNumber.hide = hide
+        waterHealthNumber.hide = hide
+        waterMovementSpeedNumber.hide = hide
     }
 }

@@ -31,7 +31,9 @@ class FontObject(var text:String, fontSize:Int, var position:Vector2):Renderable
     var generator: FreeTypeFontGenerator = FreeTypeFontGenerator(Gdx.files.internal("Fonts/pokemon_pixel_font.ttf"))
     var headerParameter: FreeTypeFontGenerator.FreeTypeFontParameter
     var font: BitmapFont
+
     private var layout: GlyphLayout = GlyphLayout()
+
 
     init {
         headerParameter = FreeTypeFontGenerator.FreeTypeFontParameter()
