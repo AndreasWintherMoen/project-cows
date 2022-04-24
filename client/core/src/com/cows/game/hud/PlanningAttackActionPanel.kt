@@ -30,6 +30,9 @@ class PlanningAttackActionPanel() : PlanningActionPanel() {
     val removeGrassTowerButton = Button("Buttons/remove-button.png", Vector2(this.position.x+ 15f, 150f)) { unitCounterPanel.removeUnit(UnitType.GRASS)}
     val addGrassTowerButton = Button("Buttons/add-button.png", Vector2(this.position.x + 150f, 150f)) { unitCounterPanel.addUnit(UnitType.GRASS)}
 
+    val unitCounterPanel = com.cows.game.hud.UnitCounterPanel(10)
+
+
     private fun onStartButtonClicked() {
         println("PlanningAttackActionPanel::onStartButtonClicked")
         val units = unitCounterPanel.getJsonUnitList()
@@ -43,6 +46,8 @@ class PlanningAttackActionPanel() : PlanningActionPanel() {
 
     override fun die() {
         super.die()
+
+        unitCounterPanel.die()
 
         removeFireTowerButton.die()
         addFireTowerButton.die()
