@@ -2,14 +2,13 @@ package com.cows.game
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.audio.Music
+import com.badlogic.gdx.audio.Sound
 import com.cows.game.enums.GameState
 import com.cows.game.hud.ActionPanel
 import com.cows.game.hud.HUDManager
 import com.cows.game.hud.PlanningAttackActionPanel
-import com.cows.game.managers.FunctionDelayer
-import com.cows.game.managers.GameStateManager
-import com.cows.game.managers.Renderer
-import com.cows.game.managers.Updater
+import com.cows.game.managers.*
 import com.cows.game.map.Map
 import com.cows.game.models.TileModel
 import com.cows.game.roundSimulation.GameTickProcessor
@@ -25,7 +24,7 @@ class Application : ApplicationAdapter()  {
         const val WIDTH = Map.WIDTH * TileModel.WIDTH + ActionPanel.WIDTH
         const val HEIGHT = Map.HEIGHT * TileModel.HEIGHT
     }
-    val tickDuration = 1f // in seconds
+    val tickDuration = 0.2f // in seconds
     private lateinit var gameTickProcessor: GameTickProcessor
     private lateinit var hudManager: HUDManager
 
@@ -38,15 +37,13 @@ class Application : ApplicationAdapter()  {
                 Redux.init()
                 hudManager = HUDManager()
                 GameStateManager.currentGameState = GameState.START_MENU
+                MusicPlayer.play()
             }
-//            launch {
-//                ServerConnection.createGame()
-//            }
         }
     }
 
     override fun render() {
-        Redux.jsonRoundSimulation?.let { startGame(it); Redux.jsonRoundSimulation = null }
+        Redux.jsonRoundSimulation?.let { println("json round simulation is not null"); startGame(it); Redux.jsonRoundSimulation = null }
 
         val deltaTime = Gdx.graphics.deltaTime
         val tickAdjustedDeltaTime = deltaTime / tickDuration
@@ -58,7 +55,7 @@ class Application : ApplicationAdapter()  {
         Updater.update(tickAdjustedDeltaTime)
         Renderer.render(tickAdjustedDeltaTime)
         FunctionDelayer.invokeRegisteredFunctions()
-        GameStateManager.nextAsyncGameState?.let { GameStateManager.currentGameState = it }
+        GameStateManager.nextAsyncGameState?.let { GameStateManager.currentGameState = it; GameStateManager.nextAsyncGameState = null }
     }
 
     override fun dispose() {
@@ -66,9 +63,10 @@ class Application : ApplicationAdapter()  {
     }
 
     private fun startGame(roundSimulation: JsonRoundSimulation) {
-//        loadRoundSimulation()
-        gameTickProcessor = GameTickProcessor(roundSimulation)
+        if (GameStateManager.currentGameState == GameState.ACTIVE_GAME) return
+        println("startGame")
         GameStateManager.currentGameState = GameState.ACTIVE_GAME
+        gameTickProcessor = GameTickProcessor(roundSimulation)
     }
 
     private fun loadRoundSimulation() {

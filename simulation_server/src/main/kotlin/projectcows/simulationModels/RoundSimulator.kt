@@ -11,16 +11,15 @@ class RoundSimulator {
     fun simulate(defendInstruction : List<JsonTower>, attackInstruction : List<JsonUnit>, path: List<IntArray>) : JsonRoundSimulation {
         val eventLog = mutableListOf<JsonTick>();
 
-        var ticksBetweenSpawns = 2;
-        val units = attackInstruction.mapIndexed{index, unit ->
-            UnitSimulationModel(unit.id, 1, 1,  index*ticksBetweenSpawns)
-        }
+        val attackInstructionsWithId = attackInstruction.mapIndexed {index, unit -> UnitStatsMapper.appendMissingDataToJsonUnit(index, unit)}
+        val defendInstructionsWithId = defendInstruction.mapIndexed {index, tower -> UnitStatsMapper.appendMissingDataToJsonTower(index, tower)}
+
+        val units = attackInstruction.mapIndexed{index, unit -> UnitStatsMapper.jsonUnitToSimulationModel(index, unit) }
         //TODO reconsider how we convert tower range to ints, as it is treaded as ints here.
-        val towers = defendInstruction.mapIndexed{ index, tower ->
-            TowerSimulationModel(tower.id, tower.position, tower.range.roundToInt(), path, 0, 1, )
-        }
+        val towers = defendInstruction.mapIndexed{ index, tower -> UnitStatsMapper.jsonTowerToSimulationModel(index, tower, path) }
 
         var gameOver = false
+        var attackerWon = false
         //perform simulation and populate eventlog
 
         while(!gameOver) {
@@ -39,28 +38,16 @@ class RoundSimulator {
             eventLog.add(JsonTick(currentTick.clone() as ArrayList<JsonAction>))
 
             if (unitActions.any { it.type == ActionType.WIN }) {
-                win()
+                attackerWon = true
                 gameOver = true
             }
 
             else if (units.all { it.isDead}) {
-                lose()
+                attackerWon = false
                 gameOver = true
             }
         }
-        return JsonRoundSimulation(defendInstruction, attackInstruction, eventLog)
-    }
-
-    private fun win() {
-        println("attacker won")
-        //gameOver = true
-        //TODO return who won in gamestate
-    }
-
-    private fun lose() {
-        //gameOver = true
-        println("defender won")
-        // return defender as winner
+        return JsonRoundSimulation(defendInstructionsWithId, attackInstructionsWithId, eventLog, attackerWon)
     }
 
     private fun calculateUnit(unit : UnitSimulationModel, pathSize: Int): SimulationAction? {
@@ -72,7 +59,7 @@ class RoundSimulator {
         unit.incrementMovementProgress()
         if (unit.health <= 0) return DieSimulationAction (unit)
         if (unit.pathIndex == pathSize-1) return WinSimulationAction(unit)
-        if (unit.movementProgress >= unit.movementSpeed){
+        if (unit.movementProgress >= 50){
             unit.resetMovementProgress()
             return MoveSimulationAction(unit, unit.pathIndex+1)
         }

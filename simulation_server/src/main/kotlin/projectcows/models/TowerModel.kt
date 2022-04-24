@@ -4,10 +4,8 @@ import projectcows.enums.UnitType
 
 data class TowerModel (
     val type: UnitType,
+    val level: Int,
     val tileCoordinate: Coordinate,
     var rotation: Float,
     var hasTarget: Boolean
-
-) {
-    constructor(type: UnitType, tileCoordinate: Coordinate) : this(type, tileCoordinate, 0f, false)
-}
+)

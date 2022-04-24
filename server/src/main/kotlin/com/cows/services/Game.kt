@@ -2,6 +2,7 @@ package com.cows.services
 
 import com.cows.map.Coordinate
 import com.cows.services.simulation.API
+import com.cows.services.simulation.models.json.JsonRoundSimulation
 import projectcows.rawJsonData.JsonTower
 import com.cows.map.Map
 import projectcows.rawJsonData.JsonRoundSimulation
@@ -74,6 +75,8 @@ class Game(
         println("Simulating round!!!")
         val roundSimulation = API.simulate(defense, attackInstructions!!, Map.getPathCoordinates())
         println("Received round simulation")
+        println("Simulating round!")
+        val roundSimulation = API.simulate(defendInstructions!!, attackInstructions!!, path)
         return roundSimulation
     }
 

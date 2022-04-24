@@ -1,17 +1,13 @@
 package com.cows.game.controllers
 
-import androidx.lifecycle.Lifecycle
-import com.cows.game.CreateGameScope
+import com.cows.game.Redux
 import com.cows.game.enums.GameState
 import com.cows.game.hud.CreateGameMenu
 import com.cows.game.hud.JoinGameMenu
 import com.cows.game.hud.StartMenu
-import com.cows.game.managers.FunctionDelayer
 import com.cows.game.managers.GameStateManager
 import com.cows.game.serverConnection.ServerConnection
 import kotlinx.coroutines.*
-import ktx.async.newAsyncContext
-import kotlin.coroutines.CoroutineContext
 
 class MenuController {
     private var startMenu:StartMenu? = null
@@ -49,7 +45,7 @@ class MenuController {
             val joinCode = ServerConnection.createGame()
             createMenu?.setGameCode(joinCode)
             ServerConnection.connectToActiveGame()
-//                GameStateManager.currentGameState = GameState.PLANNING_ATTACK
+            Redux.jsonAvailableUnits = ServerConnection.getAvailableUnits()
             GameStateManager.setGameStateAsync(GameState.PLANNING_ATTACK)
         }
         createMenu = CreateGameMenu({showStartMenu()})
@@ -64,8 +60,8 @@ class MenuController {
     private fun joinGame(joinCode: String) {
         runBlocking {
             ServerConnection.joinGame(joinCode)
-
-            GameStateManager.currentGameState = GameState.PLANNING_DEFENSE
+            Redux.jsonAvailableTowers = ServerConnection.getAvailableTowers()
+            GameStateManager.setGameStateAsync(GameState.PLANNING_DEFENSE)
         }
     }
 

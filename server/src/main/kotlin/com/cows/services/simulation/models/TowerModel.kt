@@ -8,6 +8,4 @@ data class TowerModel (
     var rotation: Float,
     var hasTarget: Boolean
 
-) {
-    constructor(type: UnitType, tileCoordinate: Coordinate) : this(type, tileCoordinate, 0f, false)
-}
+)

@@ -15,7 +15,7 @@ abstract class PlanningActionPanel(): ActionPanel() {
             return screenLength/(percentage/100)
         }
     }
-    val startGameButton = Button("Buttons/start-button.png", Vector2(this.position.x + 50f, 0f))
+    val readyButton = Button("Buttons/ready-btn.png", Vector2(this.position.x, 0f))
 
     // FIRE TOWER🔥
     val fireTowerButton = Button("Towers/charizard-panel.png", Vector2(this.position.x, ACTION_HEIGHT - 109f- UNIT_MARGIN*0))
@@ -34,13 +34,16 @@ abstract class PlanningActionPanel(): ActionPanel() {
         grassTowerButton.position.x += ActionPanel.WIDTH/2 - grassTowerButton.texture.width/2
     }
 
+
     override fun die() {
         super.die()
         unitCounterPanel.die()
-        startGameButton.die()
+        readyButton.die()
         fireTowerButton.die()
         grassTowerButton.die()
         waterTowerButton.die()
     }
+
+    abstract protected fun hideUI(hide: Boolean)
 
 }

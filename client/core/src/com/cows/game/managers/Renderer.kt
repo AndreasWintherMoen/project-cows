@@ -32,7 +32,7 @@ object Renderer {
         stage.viewport.apply(true)
 
         stage.batch.begin()
-        renderables.forEach { if (!it.hide) it.render(batch, deltaTime) }
+        renderables.forEach { if (!it.hide)  it.render(batch, deltaTime) }
         stage.batch.end()
 
         renderablesToBeAdded.forEach { renderables.add(it) }

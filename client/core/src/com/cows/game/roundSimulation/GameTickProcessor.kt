@@ -16,8 +16,8 @@ class GameTickProcessor (private val roundSimulation: JsonRoundSimulation) {
     private val eventLog: Queue<Tick> = LinkedList()
 
     init {
-        roundSimulation.towerList.forEach { towerList[it.id] = TowerController(it.toTowerModel()) }
-        roundSimulation.unitList.forEach { unitList[it.id] = UnitController(it.toUnitModel()) }
+        roundSimulation.towerList.forEach { towerList[it.id!!] = TowerController(it.toTowerModel()) }
+        roundSimulation.unitList.forEach { unitList[it.id!!] = UnitController(it.toUnitModel()) }
         roundSimulation.eventLog.map { concretizeTick(it) }.forEach { eventLog.add(it) }
     }
 

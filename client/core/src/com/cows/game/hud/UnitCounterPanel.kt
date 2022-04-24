@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.cows.game.Application
+import com.cows.game.Redux
 import com.cows.game.enums.UnitType
 import com.cows.game.managers.FunctionDelayer
 import com.cows.game.roundSimulation.rawJsonData.JsonUnit
@@ -21,6 +22,8 @@ class UnitCounterPanel(availableUnits:Int):Renderable(){
     var headerFont:BitmapFont
     var font:BitmapFont
 
+    var hideUnits = false
+
     init {
         headerParameter = FreeTypeFontGenerator.FreeTypeFontParameter()
         headerParameter.size = 60
@@ -30,12 +33,14 @@ class UnitCounterPanel(availableUnits:Int):Renderable(){
 
     }
 
-    // this is (hopefully) temporary, since it doesn't set the order based on when they were clicked
     fun getJsonUnitList(): List<JsonUnit> {
+        val fireUnit = Redux.jsonAvailableUnits!!.fireUnit
+        val waterUnit = Redux.jsonAvailableUnits!!.waterUnit
+        val grassUnit = Redux.jsonAvailableUnits!!.grassUnit
         val units = mutableListOf<JsonUnit>()
-        repeat(fireUnitCounter.count, { units.add(JsonUnit(units.size, UnitType.FIRE, 1f)) })
-        repeat(waterUnitCounter.count, { units.add(JsonUnit(units.size, UnitType.WATER, 1f)) })
-        repeat(grassUnitCounter.count, { units.add(JsonUnit(units.size, UnitType.GRASS, 1f)) })
+        repeat(fireUnitCounter.count) { units.add(JsonUnit(null, UnitType.FIRE, fireUnit.level, fireUnit.movementSpeed, fireUnit.health )) }
+        repeat(waterUnitCounter.count) { units.add(JsonUnit(null, UnitType.WATER, waterUnit.level, waterUnit.movementSpeed, waterUnit.health )) }
+        repeat(grassUnitCounter.count) { units.add(JsonUnit(null, UnitType.GRASS, grassUnit.level, grassUnit.movementSpeed, grassUnit.health)) }
         return units
     }
 
@@ -80,14 +85,16 @@ class UnitCounterPanel(availableUnits:Int):Renderable(){
     }
 
     override fun render(batch: SpriteBatch, deltaTime: Float) {
+        // This could be simplified if we put all UnitCounters in a list, and just loop through them
         val panelStartX =  Application.WIDTH - ActionPanel.WIDTH + ActionPanel.PADDING
         val headerStartY = Application.HEIGHT - ActionPanel.PADDING
         val availableCoinTextX = panelStartX + 60
         val availableCoinTextY = headerStartY - 5
 
-        // This could be simplified if we put all UnitCounters in a list, and just loop through them
-
         headerFont.draw(batch, availableUnitCounter.count.toString(), availableCoinTextX, availableCoinTextY);
+
+        if (hideUnits) return
+
         font.draw(batch, fireUnitCounter.count.toString(), panelStartX + 85f, ActionPanel.ACTION_HEIGHT-109f + 20f);
         font.draw(batch, waterUnitCounter.count.toString(), panelStartX + 85f, ActionPanel.ACTION_HEIGHT-109f*2f - ActionPanel.UNIT_MARGIN*1f + 20f);
         font.draw(batch, grassUnitCounter.count.toString(), panelStartX + 85f, ActionPanel.ACTION_HEIGHT-109f*3f - ActionPanel.UNIT_MARGIN*2f + 20f);

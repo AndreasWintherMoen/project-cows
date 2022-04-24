@@ -16,10 +16,13 @@ class TileView(private val model: TileModel) : Renderable() {
    }
 
    private val texture = tileTypeToTexture(model.type)
+   private val highlightTexture = Texture("Tiles/grass-selected.png")
+   var showHighlight = false
 
    override fun render(batch: SpriteBatch, deltaTime: Float) {
       val pixel = model.coordinate.toVector2()
       batch.draw(texture, pixel.x, pixel.y)
+      if (showHighlight) batch.draw(highlightTexture, pixel.x, pixel.y)
    }
 
    override fun dispose() {
