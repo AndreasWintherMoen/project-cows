@@ -72,7 +72,7 @@ class MenuController {
               println(Redux.gameStatus)
               GameStateManager.setGameStateAsync(GameState.PLANNING_DEFENSE)
             }
-            userResponse!!.dispose()
+            userResponse?.dispose()
         }
         catch (error: ClientRequestException) {
             System.err.println("Wrong code")
