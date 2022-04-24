@@ -68,7 +68,9 @@ class MenuController {
         try {
             runBlocking {
               ServerConnection.joinGame(joinCode)
+                println("joined game")
               Redux.gameStatus = ServerConnection.getGameStatus()
+                println("fetched game status")
               println(Redux.gameStatus)
               GameStateManager.setGameStateAsync(GameState.PLANNING_DEFENSE)
             }
@@ -76,6 +78,7 @@ class MenuController {
         }
         catch (error: ClientRequestException) {
             System.err.println("Wrong code")
+            println(error)
             userResponse = FontObject("Wrong code", 64, Color(0.9f, 0.04f, 0f, 1f))
             userResponse!!.position = Vector2((Gdx.graphics.width/2 - userResponse!!.getFontWidth()/2),125f)
         }
