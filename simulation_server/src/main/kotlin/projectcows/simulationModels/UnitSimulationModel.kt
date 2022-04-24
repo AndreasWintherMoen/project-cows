@@ -19,10 +19,12 @@ class UnitSimulationModel(
                 health -=damage
         }
         fun resetMovementProgress(){
-                movementProgress -= movementSpeed;
+//                movementProgress -= movementSpeed;
+                movementProgress -= 50;
         }
         fun incrementMovementProgress() {
-                movementProgress++
+//                movementProgress++
+            movementProgress += movementSpeed
         }
 
         fun move(){

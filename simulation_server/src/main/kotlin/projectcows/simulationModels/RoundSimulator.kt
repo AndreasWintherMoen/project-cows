@@ -59,7 +59,7 @@ class RoundSimulator {
         unit.incrementMovementProgress()
         if (unit.health <= 0) return DieSimulationAction (unit)
         if (unit.pathIndex == pathSize-1) return WinSimulationAction(unit)
-        if (unit.movementProgress >= unit.movementSpeed){
+        if (unit.movementProgress >= 50){
             unit.resetMovementProgress()
             return MoveSimulationAction(unit, unit.pathIndex+1)
         }
