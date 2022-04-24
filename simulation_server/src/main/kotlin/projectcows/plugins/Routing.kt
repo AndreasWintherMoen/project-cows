@@ -6,9 +6,13 @@ import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.request.*
+import projectcows.enums.UnitType
+import projectcows.rawJsonData.JsonAvailableTowers
+import projectcows.rawJsonData.JsonAvailableUnits
 import projectcows.rawJsonData.JsonTower
 import projectcows.rawJsonData.JsonUnit
 import projectcows.simulationModels.RoundSimulator
+import projectcows.simulationModels.UnitStatsMapper
 
 data class SimulationBody (
     val defendInstructions: List<JsonTower>,
@@ -27,4 +31,47 @@ fun Application.configureRouting() {
             call.respondText(gson.toJson(roundSimulation), ContentType.Application.Json, HttpStatusCode.OK)
         }
     }
+
+    routing {
+        get("ss-cows/stats/units/{fireLevel}/{waterLevel}/{grassLevel}") {
+            val fireLevel = call.parameters["fireLevel"]
+            val waterLevel = call.parameters["waterLevel"]
+            val grassLevel = call.parameters["grassLevel"]
+            fireLevel ?: call.respondText( "fireLevel URL parameter not set", status = HttpStatusCode.BadRequest) {}
+            waterLevel ?: call.respondText( "waterLevel URL parameter not set", status = HttpStatusCode.BadRequest) {}
+            grassLevel ?: call.respondText( "grassLevel URL parameter not set", status = HttpStatusCode.BadRequest) {}
+            val intFireLevel = fireLevel!!.toIntOrNull()
+            val intWaterLevel = waterLevel!!.toIntOrNull()
+            val intGrassLevel = grassLevel!!.toIntOrNull()
+            intFireLevel ?: call.respondText( "fireLevel URL parameter not set", status = HttpStatusCode.BadRequest) {}
+            intWaterLevel ?: call.respondText( "waterLevel URL parameter not set", status = HttpStatusCode.BadRequest) {}
+            intGrassLevel ?: call.respondText( "grassLevel URL parameter not set", status = HttpStatusCode.BadRequest) {}
+            val fireUnit = UnitStatsMapper.createJsonUnitWithStats(UnitType.FIRE, intFireLevel!!)
+            val waterUnit = UnitStatsMapper.createJsonUnitWithStats(UnitType.WATER, intWaterLevel!!)
+            val grassUnit = UnitStatsMapper.createJsonUnitWithStats(UnitType.GRASS, intGrassLevel!!)
+            call.respondText(gson.toJson(JsonAvailableUnits(fireUnit, waterUnit, grassUnit)), ContentType.Application.Json, HttpStatusCode.OK)
+        }
+    }
+
+    routing {
+        get("ss-cows/stats/towers/{fireLevel}/{waterLevel}/{grassLevel}") {
+            val fireLevel = call.parameters["fireLevel"]
+            val waterLevel = call.parameters["waterLevel"]
+            val grassLevel = call.parameters["grassLevel"]
+            fireLevel ?: call.respondText( "fireLevel URL parameter not set", status = HttpStatusCode.BadRequest) {}
+            waterLevel ?: call.respondText( "waterLevel URL parameter not set", status = HttpStatusCode.BadRequest) {}
+            grassLevel ?: call.respondText( "grassLevel URL parameter not set", status = HttpStatusCode.BadRequest) {}
+            val intFireLevel = fireLevel!!.toIntOrNull()
+            val intWaterLevel = waterLevel!!.toIntOrNull()
+            val intGrassLevel = grassLevel!!.toIntOrNull()
+            intFireLevel ?: call.respondText( "fireLevel URL parameter not set", status = HttpStatusCode.BadRequest) {}
+            intWaterLevel ?: call.respondText( "waterLevel URL parameter not set", status = HttpStatusCode.BadRequest) {}
+            intGrassLevel ?: call.respondText( "grassLevel URL parameter not set", status = HttpStatusCode.BadRequest) {}
+            val fireUnit = UnitStatsMapper.createJsonTowerWithStats(UnitType.FIRE, intFireLevel!!)
+            val waterUnit = UnitStatsMapper.createJsonTowerWithStats(UnitType.WATER, intWaterLevel!!)
+            val grassUnit = UnitStatsMapper.createJsonTowerWithStats(UnitType.GRASS, intGrassLevel!!)
+            call.respondText(gson.toJson(JsonAvailableTowers(fireUnit, waterUnit, grassUnit)), ContentType.Application.Json, HttpStatusCode.OK)
+        }
+    }
+
 }

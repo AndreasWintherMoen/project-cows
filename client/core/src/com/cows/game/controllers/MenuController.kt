@@ -1,5 +1,6 @@
 package com.cows.game.controllers
 
+import com.cows.game.Redux
 import com.cows.game.enums.GameState
 import com.cows.game.hud.CreateGameMenu
 import com.cows.game.hud.JoinGameMenu
@@ -44,7 +45,7 @@ class MenuController {
             val joinCode = ServerConnection.createGame()
             createMenu?.setGameCode(joinCode)
             ServerConnection.connectToActiveGame()
-//                GameStateManager.currentGameState = GameState.PLANNING_ATTACK
+            Redux.jsonAvailableUnits = ServerConnection.getAvailableUnits()
             GameStateManager.setGameStateAsync(GameState.PLANNING_ATTACK)
         }
         createMenu = CreateGameMenu({showStartMenu()})
@@ -59,8 +60,8 @@ class MenuController {
     private fun joinGame(joinCode: String) {
         runBlocking {
             ServerConnection.joinGame(joinCode)
-
-            GameStateManager.currentGameState = GameState.PLANNING_DEFENSE
+            Redux.jsonAvailableTowers = ServerConnection.getAvailableTowers()
+            GameStateManager.setGameStateAsync(GameState.PLANNING_DEFENSE)
         }
     }
 

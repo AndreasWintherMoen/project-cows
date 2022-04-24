@@ -32,7 +32,6 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
         fireTowerButton.onClick =  { spawnTower(UnitType.FIRE)}
         waterTowerButton.onClick = { spawnTower(UnitType.WATER) }
         grassTowerButton.onClick = { spawnTower(UnitType.GRASS) }
-//        startGameButton.onClick = { onStartGame.invoke() }
         readyButton.onClick = { onStartButtonClicked() }
         subscribeToClickEvents()
         hideUI(true)
@@ -40,7 +39,7 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
 
     private fun removeTower() {
         removeSelectedTower.hide = true
-        var tower = spawnedTowers.first { tower -> tower.model.tileCoordinate == lastTile!!.tileModel.coordinate }
+        val tower = spawnedTowers.first { tower -> tower.model.tileCoordinate == lastTile!!.tileModel.coordinate }
         spawnedTowers.remove(tower)
         tower.view.die()
         unitCounterPanel.removeUnit(tower.model.type)
@@ -50,7 +49,8 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
         if (unitCounterPanel.hasAvailableUnits() && lastTile != null ) {
             unitCounterPanel.addUnit(type)
             towerToBeSpawned = type
-            val towerModel = TowerModel(towerToBeSpawned, lastTile!!.tileModel.coordinate)
+            val reduxTowerModel = Redux.jsonAvailableTowers!!.getTower(type)
+            val towerModel = TowerModel(towerToBeSpawned, reduxTowerModel.level, lastTile!!.tileModel.coordinate, reduxTowerModel.range!!, reduxTowerModel.damage!!)
             val towerController = PlanningTowerController(towerModel)
             spawnedTowers.add(towerController)
             onSpawnTower?.invoke()
@@ -61,10 +61,9 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
     }
 
     private fun onStartButtonClicked() {
-        println("PlanningDefenseActionPanel::onStartButtonClicked")
         val towers = spawnedTowers
             .map { it.model }
-            .mapIndexed { index, tower -> JsonTower(index, tower.type, tower.tileCoordinate, 3f)}
+            .map { JsonTower(null, it.type, it.level, it.tileCoordinate, null, null, null)}
         GlobalScope.launch(Dispatchers.IO) {
             val roundSimulation = ServerConnection.sendDefendInstructions(towers)
             println("Received sound simulation $roundSimulation")

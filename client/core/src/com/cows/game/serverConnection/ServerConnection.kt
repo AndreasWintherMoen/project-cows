@@ -1,8 +1,6 @@
 package com.cows.game.serverConnection
 
-import com.cows.game.roundSimulation.rawJsonData.JsonRoundSimulation
-import com.cows.game.roundSimulation.rawJsonData.JsonTower
-import com.cows.game.roundSimulation.rawJsonData.JsonUnit
+import com.cows.game.roundSimulation.rawJsonData.*
 import com.cows.game.serverConnection.shared.GameCreateResponse
 import com.cows.game.serverConnection.shared.GameJoinResponse
 import io.ktor.client.*
@@ -34,14 +32,14 @@ data class GameSession (
     val userUUID: UUID,
     val gameUUID: UUID)
 
-val dotenv:Dotenv = dotenv {
-    filename = "./assets/env"
-}
-
-val httpApiBase: String = dotenv["HTTP_API_BASE"] ?: "http://127.0.0.1:8080/cows"
-val wsApiBase: String = dotenv["WS_API_BASE"] ?: "ws://127.0.0.1:8080/ws-cows"
-
 object ServerConnection {
+
+    val dotenv:Dotenv = dotenv {
+        filename = "./assets/env"
+    }
+
+    val httpApiBase: String = dotenv["HTTP_API_BASE"] ?: "http://127.0.0.1:8080/cows"
+    val wsApiBase: String = dotenv["WS_API_BASE"] ?: "ws://127.0.0.1:8080/ws-cows"
 
 
     val client = HttpClient(CIO) {
@@ -93,8 +91,55 @@ object ServerConnection {
         connectToActiveGame()
     }
 
+    suspend fun getAvailableUnits(): JsonAvailableUnits {
+        val message = createMessage(OpCode.AVAILABLEUNITS, null)
+        websocketSession!!.send(Message.generateWSFrame(message))
+        while (true) {
+        val nullableIncoming = websocketSession!!.incoming.tryReceive()
+        if (nullableIncoming.isFailure || nullableIncoming.isClosed) continue
+            when (val incoming = nullableIncoming.getOrThrow()) {
+                is Frame.Text -> {
+                    val message = Message.retrieveWSMessage(incoming)
+                    println(message)
+                    if (message!!.opCode == OpCode.AVAILABLEUNITS){
+                        val unitsType = object : TypeToken<JsonAvailableUnits>() {}.type
+                        val units: JsonAvailableUnits = gson.fromJson(message.data!!, unitsType)
+                        return units
+                    }
+                }
+                else -> {
+                    println("Not text frame")
+                    println(incoming)
+                }
+            }
+        }
+    }
+
+    suspend fun getAvailableTowers(): JsonAvailableTowers {
+        val message = createMessage(OpCode.AVAILABLETOWERS, null)
+        websocketSession!!.send(Message.generateWSFrame(message))
+        while (true) {
+            val nullableIncoming = websocketSession!!.incoming.tryReceive()
+            if (nullableIncoming.isFailure || nullableIncoming.isClosed) continue
+            when (val incoming = nullableIncoming.getOrThrow()) {
+                is Frame.Text -> {
+                    val message = Message.retrieveWSMessage(incoming)
+                    println(message)
+                    if (message!!.opCode == OpCode.AVAILABLETOWERS){
+                        val towersType = object : TypeToken<JsonAvailableTowers>() {}.type
+                        val towers: JsonAvailableTowers = gson.fromJson(message.data!!, towersType)
+                        return towers
+                    }
+                }
+                else -> {
+                    println("Not text frame")
+                    println(incoming)
+                }
+            }
+        }
+    }
+
     suspend fun sendAttackInstructions(unitList: List<JsonUnit>): JsonRoundSimulation {
-        println("Send attack instructions")
         val data = gson.toJson(unitList)
         val message = createMessage(OpCode.INSTRUCTIONLOG, data)
         websocketSession!!.send(Message.generateWSFrame(message))
@@ -122,7 +167,6 @@ object ServerConnection {
     }
 
     suspend fun sendDefendInstructions(towerList: List<JsonTower>): JsonRoundSimulation {
-        println("Send defend instructions")
         val data = gson.toJson(towerList)
         println(data)
         val message = createMessage(OpCode.INSTRUCTIONLOG, data)
@@ -191,24 +235,4 @@ object ServerConnection {
             throw Exception("No game details set (you must join a game first)")
         }
     }
-
-
-    val mutex = Mutex()
-    val methodsToRun = LinkedList<() -> Unit>()
-
-    fun runAsyncMethod(method: () -> Unit) {
-        println("runAsyncMethod")
-//        mutex.withLock { methodsToRun.add(method) }
-        methodsToRun.add(method)
-        println("done with runAsyncMethod")
-    }
-
-    suspend fun launchInfiniteMethodRunnerLoop() {
-        println("launchInfiniteMethodRunnerLoop")
-        mutex.withLock { methodsToRun.remove().invoke() }
-        println("done with launchInfiniteMethodRunnerLoop")
-    }
-
-
-
 }

@@ -2,13 +2,14 @@ package projectcows.rawJsonData
 
 import projectcows.enums.UnitType
 import projectcows.models.Coordinate
-import projectcows.models.TowerModel
+import projectcows.simulationModels.TowerSimulationModel
 
 data class JsonTower (
-    val id: Int,
+    val id: Int?,
     val type: UnitType,
+    val level: Int,
     val position: Coordinate,
-    val range: Float
- ) {
-    fun toTowerModel() = TowerModel(type, position, range, false)
-}
+    val range: Int?,
+    val timeBetweenAttacks: Int?,
+    val damage: Int?
+ )

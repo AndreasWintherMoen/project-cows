@@ -5,10 +5,13 @@ import com.cows.game.enums.UnitType
 
 data class TowerModel (
     val type: UnitType,
+    val level: Int,
     val tileCoordinate: Coordinate,
     var rotation: Float,
-    var hasTarget: Boolean
+    var hasTarget: Boolean,
+    val range: Int,
+    val damage: Int
 
 ) {
-    constructor(type: UnitType, tileCoordinate: Coordinate) : this(type, tileCoordinate, 0f, false)
+    constructor(type: UnitType, level: Int, tileCoordinate: Coordinate, range: Int, damage: Int) : this(type, level, tileCoordinate, 0f, false, range, damage)
 }

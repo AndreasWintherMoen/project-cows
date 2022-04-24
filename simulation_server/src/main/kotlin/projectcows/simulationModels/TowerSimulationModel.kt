@@ -1,9 +1,11 @@
 package projectcows.simulationModels
 
 
+import projectcows.enums.UnitType
 import projectcows.models.Coordinate
+import kotlin.math.roundToInt
 
-class TowerSimulationModel(val id: Int, val position: Coordinate, range: Int, unitPath: List<IntArray>, private val timeBetweenAttacks: Int, private val damage: Int) {
+class TowerSimulationModel(val id: Int, val position: Coordinate, range: Int, unitPath: List<IntArray>, private val timeBetweenAttacks: Int, private val damage: Int, private val type: UnitType) {
     var target: UnitSimulationModel? = null
     var cooldown: Int = 0
     var pathIndicesInRange = findPathIndicesInRange(range, unitPath)
@@ -21,7 +23,8 @@ class TowerSimulationModel(val id: Int, val position: Coordinate, range: Int, un
 
     fun attack() {
         target?.let {
-            it.damage(damage)
+            val damageMultiplier = UnitStatsMapper.getDamageMultiplier(type, it.type)
+            it.damage((damage * damageMultiplier).roundToInt())
             setCooldown()
         }
     }

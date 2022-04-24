@@ -5,10 +5,13 @@ import com.cows.game.enums.UnitType
 import com.cows.game.models.TowerModel
 
 data class JsonTower (
-    val id: Int,
+    val id: Int?,
     val type: UnitType,
+    val level: Int,
     val position: Coordinate,
-    val range: Float
+    val range: Int?,
+    val timeBetweenAttacks: Int?,
+    val damage: Int?
  ) {
-    fun toTowerModel() = TowerModel(type, position, range, false)
+    fun toTowerModel() = TowerModel(type, level, position, range!!, damage!!)
 }
