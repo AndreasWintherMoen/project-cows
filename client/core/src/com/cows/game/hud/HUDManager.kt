@@ -21,7 +21,7 @@ class HUDManager(): GameStateSubscriber() {
             // the map, since we're going to get it from the API somehow, so let's just keep it here for now
             menuController?.die()
             menuController = null
-            Map.init()
+
         }
         when (newGameState) {
             GameState.ACTIVE_GAME -> actionPanel = ActiveGameActionPanel()

@@ -3,6 +3,7 @@ package com.cows.game.hud
 import com.badlogic.gdx.math.Vector2
 import com.cows.game.Redux
 import com.cows.game.enums.UnitType
+import com.cows.game.map.Map
 import com.cows.game.serverConnection.ServerConnection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -16,6 +17,7 @@ class PlanningAttackActionPanel() : PlanningActionPanel() {
         grassTowerButton.disabled = true
 //        startGameButton.onClick = { onStartGame.invoke() }
         readyButton.onClick = { onStartButtonClicked() }
+
     }
 
     // FIRE TOWER🔥

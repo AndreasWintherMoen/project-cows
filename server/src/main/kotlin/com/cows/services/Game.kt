@@ -5,7 +5,6 @@ import com.cows.services.simulation.API
 import com.cows.services.simulation.models.json.JsonRoundSimulation
 import projectcows.rawJsonData.JsonTower
 import com.cows.map.Map
-import projectcows.rawJsonData.JsonRoundSimulation
 import projectcows.rawJsonData.JsonUnit
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.*
@@ -14,7 +13,6 @@ import kotlin.collections.ArrayList
 class Game(
     val gameConnections: Pair<ClientConnection, ClientConnection>,
     private val playerStates: Pair<PlayerState, PlayerState>) {
-    private val path: ArrayList<Coordinate> = Map.PATH
     private var attackInstructions: List<JsonUnit>? = null
     private var defendInstructions: List<JsonTower>? = null
     private var roundCounter = 0
@@ -35,10 +33,6 @@ class Game(
 
     fun getClientConnection(userUUID:UUID) : ClientConnection {
         return if (gameConnections.first.id == userUUID) gameConnections.first else gameConnections.second
-    }
-
-    fun getPath(): ArrayList<Coordinate> {
-        return path
     }
 
     fun getOtherClientConnection(userUUID: UUID) : ClientConnection {
@@ -71,13 +65,8 @@ class Game(
     }
 
     private suspend fun simulateRound(): JsonRoundSimulation {
-        val defense = defendInstructions!!.map { JsonTower(attackInstructions!!.size + it.id, it.type, it.position, it.range) }
-        println("Simulating round!!!")
-        val roundSimulation = API.simulate(defense, attackInstructions!!, Map.getPathCoordinates())
-        println("Received round simulation")
         println("Simulating round!")
-        val roundSimulation = API.simulate(defendInstructions!!, attackInstructions!!, path)
-        return roundSimulation
+        return API.simulate(defendInstructions!!, attackInstructions!!, Map.getPathCoordinates())
     }
 
     private val Id:Int = lastId.getAndIncrement()

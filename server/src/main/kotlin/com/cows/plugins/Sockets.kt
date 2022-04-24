@@ -1,6 +1,5 @@
 package com.cows.plugins
 
-import ch.qos.logback.core.net.server.Client
 import com.cows.map.Coordinate
 import com.cows.models.Message
 import com.cows.models.OpCode
@@ -18,7 +17,7 @@ import com.cows.services.simulation.models.json.JsonRoundSimulation
 import projectcows.rawJsonData.JsonTower
 import projectcows.rawJsonData.JsonUnit
 import java.util.*
-import kotlin.random.Random
+import com.cows.map.Map
 
 private var connectionMap: MutableMap<ClientConnection, DefaultWebSocketSession> = Collections.synchronizedMap(mutableMapOf())
 private val gson = GsonBuilder().setPrettyPrinting().create()
@@ -108,7 +107,7 @@ suspend fun handleConnect(message: Message, userWebSocketSession: DefaultWebSock
     val responseMessage: Message =
         if (ConnectionMapper.areGameSlotsFilled(gameUUID = message.gameUUID)) {
             val creatorConnection = getCreatorConnection(message.gameUUID, message.userUUID)
-            val pathString = gson.toJson(MapData(ConnectionMapper.getGameFromUUID(message.gameUUID)!!.getPath()))
+            val pathString = gson.toJson(MapData(Map.PATH))
 
             connectionMap[creatorConnection]!!.outgoing.send(
                 Frame.Text(

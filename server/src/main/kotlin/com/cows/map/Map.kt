@@ -1,6 +1,5 @@
 package com.cows.map
 
-import projectcows.enums.TileType
 import java.io.File
 import java.lang.Exception
 
