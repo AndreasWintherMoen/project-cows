@@ -12,20 +12,14 @@ import io.ktor.client.request.*
 import io.ktor.http.cio.websocket.*
 import java.util.*
 import io.ktor.client.features.logging.Logger
-import java.time.Duration
 import com.cows.game.serverConnection.shared.Message
 import com.cows.game.serverConnection.shared.OpCode
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.github.cdimascio.dotenv.Dotenv
 import io.github.cdimascio.dotenv.dotenv
-import io.ktor.utils.io.*
-import io.ktor.utils.io.core.internal.*
+import io.ktor.client.features.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.onClosed
-import kotlinx.coroutines.channels.onFailure
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 data class GameSession (
@@ -58,7 +52,7 @@ object ServerConnection {
 
     private suspend fun sendGameCreateRequest(client:HttpClient): GameCreateResponse {
         println("Sending request to $httpApiBase/game/create")
-        return client.request<GameCreateResponse>("$httpApiBase/game/create")
+        return client.request("$httpApiBase/game/create")
     }
 
     private suspend fun generateWebsocketClient(client: HttpClient): DefaultWebSocketSession{
@@ -224,8 +218,7 @@ object ServerConnection {
     }
 
     suspend fun sendGameJoinRequest(client: HttpClient,gameJoinCode: String): GameJoinResponse {
-        val response: GameJoinResponse = client.request("$httpApiBase/game/join/${gameJoinCode}")
-        return response
+        return client.request("$httpApiBase/game/join/${gameJoinCode}")
     }
 
     private fun createMessage(opCode: OpCode, data: String?): Message {
