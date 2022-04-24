@@ -8,10 +8,6 @@ import kotlinx.coroutines.delay
 
 class GameCodeGarbageCollector(private val gameCodeMap:MutableMap<String,GameCode>,private val gameCodeTimeout: Int, private val timeBetweenChecks:Long) {
 
-    init {
-        cleanGameCodeMap()
-    }
-
     fun cleanGameCodeMap() {
          GlobalScope.launch {
             while(true){
