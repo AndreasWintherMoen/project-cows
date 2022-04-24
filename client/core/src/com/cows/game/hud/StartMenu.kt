@@ -20,8 +20,8 @@ import kotlinx.coroutines.runBlocking
 class StartMenu(private val onJoinGameButton: () -> Unit, private val onCreateGameButton: () -> Unit): Renderable() {
     //Start menu
     private val backgroundImg = Sprite(Texture("HUD/StartScreen/startscreen.png"))
-    private val joinGameBtn = Button("Buttons/join-btn.png", Vector2(555f, 233f)){showJoinGameMenu()}
-    private val createGameBtn = Button("Buttons/create-btn.png", Vector2(280f, 233f), {showCreateGameMenu()}, "select-action.wav")
+    private var joinGameBtn: Button? = Button("Buttons/join-btn.png", Vector2(555f, 233f)){showJoinGameMenu()}
+    private var createGameBtn: Button? = Button("Buttons/create-btn.png", Vector2(280f, 233f), {showCreateGameMenu()}, "Sound/select-action.wav")
 
     init {
         backgroundImg.setSize(Application.WIDTH, Application.HEIGHT)
@@ -37,21 +37,23 @@ class StartMenu(private val onJoinGameButton: () -> Unit, private val onCreateGa
 
     override fun die() {
         super.die()
-        joinGameBtn.die()
-        createGameBtn.die()
+        joinGameBtn?.die()
+        joinGameBtn = null
+        createGameBtn?.die()
+        createGameBtn = null
     }
 
     private fun showCreateGameMenu(){
         this.hide = true
-        joinGameBtn.hide = true
-        createGameBtn.hide = true
+        joinGameBtn?.hide = true
+        createGameBtn?.hide = true
         onCreateGameButton.invoke()
     }
 
     private fun showJoinGameMenu(){
         this.hide = true
-        joinGameBtn.hide = true
-        createGameBtn.hide = true
+        joinGameBtn?.hide = true
+        createGameBtn?.hide = true
         onJoinGameButton.invoke()
     }
 

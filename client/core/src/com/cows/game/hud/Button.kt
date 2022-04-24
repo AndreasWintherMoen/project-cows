@@ -1,14 +1,12 @@
 package com.cows.game.hud
 
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.cows.game.ClickSubscriber
 import com.cows.game.controllers.TileController
+import com.cows.game.managers.AudioManager
 import com.cows.game.managers.FunctionDelayer
-import com.cows.game.managers.SoundPlayer
 import com.cows.game.views.Renderable
 
 class Button(textureFilePath: String, var position: Vector2, var onClick: () -> Unit, soundName:String): Renderable(), ClickSubscriber {
@@ -21,7 +19,7 @@ class Button(textureFilePath: String, var position: Vector2, var onClick: () -> 
 
     var disabled = false
 
-    var sound: String = "defualt-button.wav"
+    var sound: String = "Sound/defualt-button.wav"
 
     init {
         subscribeToClickEvents()
@@ -44,6 +42,7 @@ class Button(textureFilePath: String, var position: Vector2, var onClick: () -> 
 
     override fun die() {
         super.die()
+        unsubscribeToClickEvents()
     }
 
     override fun dispose() {
@@ -53,7 +52,7 @@ class Button(textureFilePath: String, var position: Vector2, var onClick: () -> 
     override fun click(clickPosition: Vector2, tile: TileController?) {
         if (hide || disabled) return
         if (isWithinBounds(clickPosition)){
-            sound?.let { SoundPlayer.play(it) }
+            sound?.let { AudioManager.playSoundEffect(it) }
             FunctionDelayer.invokeFunctionAtEndOfNextFrame(onClick)
         }
     }

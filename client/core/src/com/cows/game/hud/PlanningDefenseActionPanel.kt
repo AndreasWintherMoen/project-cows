@@ -1,6 +1,7 @@
 package com.cows.game.hud
 
 import com.badlogic.gdx.math.Vector2
+import com.cows.game.Application
 import com.cows.game.ClickSubscriber
 import com.cows.game.Redux
 import com.cows.game.controllers.PlanningTowerController
@@ -25,6 +26,8 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
     private var lastTile: TileController? = null
     private var selectedTowerRadius: SmartObject? = null
     private var lastOccupiedTile: TileController? = null;
+    private var coins = 10
+    private var coinsText = FontObject(coins.toString(), 60, Vector2(this.position.x+68f, 500f))
 
     init {
         selectTileText.hide = false
@@ -42,12 +45,12 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
         val tower = spawnedTowers.first { tower -> tower.model.tileCoordinate == lastTile!!.tileModel.coordinate }
         spawnedTowers.remove(tower)
         tower.view.die()
-        unitCounterPanel.removeUnit(tower.model.type)
+        coinsText.text = (++ coins).toString()
     }
 
     fun spawnTower(type: UnitType) {
-        if (unitCounterPanel.hasAvailableUnits() && lastTile != null ) {
-            unitCounterPanel.addUnit(type)
+        if (coins>0 && lastTile != null ) {
+            coinsText.text = (-- coins).toString()
             towerToBeSpawned = type
             val reduxTowerModel = Redux.jsonAvailableTowers!!.getTower(type)
             val towerModel = TowerModel(towerToBeSpawned, reduxTowerModel.level, lastTile!!.tileModel.coordinate, reduxTowerModel.range!!, reduxTowerModel.damage!!)
@@ -95,9 +98,8 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
         lastTile?.let { it.tileView.showHighlight = false }
         lastOccupiedTile?.let { it.tileView.showHighlight = false }
         selectedTowerRadius?.let { it.die() }
-        if(!unitCounterPanel.hasAvailableUnits()){
+        if(coins <= 0){
             hideUI(true)
-            return
         }
         if (tile == null){
             hideUI(true)
@@ -130,6 +132,14 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
         fireTowerButton.hide = hide
         waterTowerButton.hide = hide
         grassTowerButton.hide = hide
-        unitCounterPanel.hideUnits = hide
+        fireTowerBackground.hide = hide
+        grassTowerBackground.hide = hide
+        waterTowerBackground.hide = hide
+        fireDamageNumber.hide = hide
+        fireRangeNumber.hide = hide
+        grassDamageNumber.hide = hide
+        grassRangeNumber.hide = hide
+        waterDamageNumber.hide = hide
+        waterRangeNumber.hide = hide
     }
 }
