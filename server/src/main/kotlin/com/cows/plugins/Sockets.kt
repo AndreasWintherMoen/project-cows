@@ -1,5 +1,6 @@
 package com.cows.plugins
 
+import com.cows.map.Coordinate
 import com.cows.models.Message
 import com.cows.models.OpCode
 import com.cows.services.ClientConnection
@@ -16,7 +17,7 @@ import com.cows.services.simulation.models.json.JsonRoundSimulation
 import projectcows.rawJsonData.JsonTower
 import projectcows.rawJsonData.JsonUnit
 import java.util.*
-import kotlin.random.Random
+import com.cows.map.Map
 
 private var connectionMap: MutableMap<ClientConnection, DefaultWebSocketSession> = Collections.synchronizedMap(mutableMapOf())
 private val gson = GsonBuilder().setPrettyPrinting().create()
@@ -53,6 +54,9 @@ fun Application.configureSockets() {
     }
 }
 
+data class MapData(
+    val path: ArrayList<Coordinate>
+)
 suspend fun handleGetAvailableUnits(message: Message, userWebSocketSession: DefaultWebSocketServerSession) {
     println("handleGetAvailableUnits")
     val userConnection:ClientConnection? = getClientFromConnectMessage(message)
@@ -103,6 +107,7 @@ suspend fun handleConnect(message: Message, userWebSocketSession: DefaultWebSock
     val responseMessage: Message =
         if (ConnectionMapper.areGameSlotsFilled(gameUUID = message.gameUUID)) {
             val creatorConnection = getCreatorConnection(message.gameUUID, message.userUUID)
+            val pathString = gson.toJson(MapData(Map.PATH))
 
             connectionMap[creatorConnection]!!.outgoing.send(
                 Frame.Text(
@@ -111,7 +116,7 @@ suspend fun handleConnect(message: Message, userWebSocketSession: DefaultWebSock
                             userUUID = creatorConnection.id,
                             gameUUID = message.gameUUID,
                             opCode = OpCode.CONNECTED,
-                            null
+                            pathString
                         )
                     )
                 )
@@ -121,7 +126,7 @@ suspend fun handleConnect(message: Message, userWebSocketSession: DefaultWebSock
                 userUUID = message.userUUID,
                 gameUUID = message.gameUUID,
                 OpCode.CONNECTED,
-                null
+                pathString
             )
 
         } else {

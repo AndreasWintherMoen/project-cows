@@ -1,17 +1,18 @@
 package com.cows.services
 
+import com.cows.map.Coordinate
 import com.cows.services.simulation.API
 import com.cows.services.simulation.models.json.JsonRoundSimulation
 import projectcows.rawJsonData.JsonTower
+import com.cows.map.Map
 import projectcows.rawJsonData.JsonUnit
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.*
-
+import kotlin.collections.ArrayList
 
 class Game(
     val gameConnections: Pair<ClientConnection, ClientConnection>,
     private val playerStates: Pair<PlayerState, PlayerState>) {
-    private val path: List<IntArray> = _TEMP_generatePath()
     private var attackInstructions: List<JsonUnit>? = null
     private var defendInstructions: List<JsonTower>? = null
     private var roundCounter = 0
@@ -65,35 +66,8 @@ class Game(
 
     private suspend fun simulateRound(): JsonRoundSimulation {
         println("Simulating round!")
-        val roundSimulation = API.simulate(defendInstructions!!, attackInstructions!!, path)
-        return roundSimulation
+        return API.simulate(defendInstructions!!, attackInstructions!!, Map.getPathCoordinates())
     }
 
     private val Id:Int = lastId.getAndIncrement()
-
-
-
-
-
-    private fun _TEMP_generatePath() = arrayListOf(
-        intArrayOf(0, 5),
-        intArrayOf(1, 5),
-        intArrayOf(2, 5),
-        intArrayOf(3, 5),
-        intArrayOf(4, 5),
-        intArrayOf(4, 6),
-        intArrayOf(4, 7),
-        intArrayOf(4, 8),
-        intArrayOf(5, 8),
-        intArrayOf(6, 8),
-        intArrayOf(7, 8),
-        intArrayOf(7, 7),
-        intArrayOf(7, 6),
-        intArrayOf(7, 5),
-        intArrayOf(8, 5),
-        intArrayOf(9, 5),
-        intArrayOf(10, 5),
-        intArrayOf(11, 5),
-        intArrayOf(12, 5),
-    )
 }
