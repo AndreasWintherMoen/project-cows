@@ -5,11 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.cows.game.Application
-import com.cows.game.enums.GameState
-import com.cows.game.managers.GameStateManager
-import com.cows.game.serverConnection.ServerConnection
+import com.cows.game.managers.AudioManager
 import com.cows.game.views.Renderable
-import kotlinx.coroutines.runBlocking
 
 
 class CreateGameMenu(private val onBackButton: () -> Unit): Renderable() {
@@ -31,7 +28,7 @@ class CreateGameMenu(private val onBackButton: () -> Unit): Renderable() {
         numbers = code.map { it.digitToInt() }
     }
 
-    fun setNumbersCasedOnCode() {
+    fun setNumbersBasedOnCode() {
         joinGameCode = mutableListOf<Sprite>(
             Sprite(Texture("HUD/StartScreen/number"+ numbers[0] +".png")),
             Sprite(Texture("HUD/StartScreen/number"+ numbers[1] +".png")),
@@ -44,7 +41,9 @@ class CreateGameMenu(private val onBackButton: () -> Unit): Renderable() {
 
     override fun render(batch: SpriteBatch, deltaTime: Float) {
         backgroundImg.draw(batch)
-        if (numbers.isNotEmpty() && joinGameCode.isEmpty()) setNumbersCasedOnCode()
+        if (numbers.isNotEmpty() && joinGameCode.isEmpty()) {
+            setNumbersBasedOnCode()
+        }
 
         if (numbers.isEmpty()) batch.draw(loadingText, 0f, 184f)
         else joinGameCode.forEach { sprite -> sprite.draw(batch)  }
