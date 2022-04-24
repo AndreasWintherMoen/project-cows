@@ -137,14 +137,16 @@ object UnitStatsMapper {
         getTowerRange(jsonTower.type, jsonTower.level),
         unitPath,
         getTowerTimeBetweenAttacks(jsonTower.type, jsonTower.level),
-        getTowerDamage(jsonTower.type, jsonTower.level)
+        getTowerDamage(jsonTower.type, jsonTower.level),
+        jsonTower.type
     )
 
     fun jsonUnitToSimulationModel(index: Int, jsonUnit: JsonUnit): UnitSimulationModel = UnitSimulationModel(
         index + 100,
         getUnitHealth(jsonUnit.type, jsonUnit.level),
         getUnitMovementSpeed(jsonUnit.type, jsonUnit.level),
-        index * 5
+        index * 5,
+        jsonUnit.type
     )
 
     fun createJsonTowerWithStats(type: UnitType, level: Int) = JsonTower(
@@ -182,5 +184,17 @@ object UnitStatsMapper {
         getUnitMovementSpeed(unit.type, unit.level),
         getUnitHealth(unit.type, unit.level)
     )
+
+    fun getDamageMultiplier(attackType: UnitType, defendType: UnitType): Float {
+        if (attackType == defendType) return 1f
+        if (attackType == UnitType.FIRE  && defendType == UnitType.WATER) return 0.5f
+        if (attackType == UnitType.FIRE  && defendType == UnitType.GRASS) return 2f
+        if (attackType == UnitType.WATER && defendType == UnitType.FIRE)  return 2f
+        if (attackType == UnitType.WATER && defendType == UnitType.GRASS) return 0.5f
+        if (attackType == UnitType.GRASS && defendType == UnitType.FIRE)  return 0.5f
+        if (attackType == UnitType.GRASS && defendType == UnitType.WATER) return 2f
+        println("Could not find unitType in UnitStatsMapper::getDamageMultiplier")
+        return 1f
+    }
 
 }
