@@ -52,9 +52,13 @@ class MenuController {
     }
 
     fun die() {
+        println("menu controller die")
         joinMenu?.die()
+        joinMenu = null
         createMenu?.die()
+        createMenu = null
         startMenu?.die()
+        startMenu = null
     }
 
     private fun joinGame(joinCode: String) {
