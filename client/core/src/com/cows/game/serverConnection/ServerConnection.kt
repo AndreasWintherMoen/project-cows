@@ -32,14 +32,14 @@ data class GameSession (
     val userUUID: UUID,
     val gameUUID: UUID)
 
-val dotenv:Dotenv = dotenv {
-    filename = "./assets/env"
-}
-
-val httpApiBase: String = dotenv["HTTP_API_BASE"] ?: "http://127.0.0.1:8080/cows"
-val wsApiBase: String = dotenv["WS_API_BASE"] ?: "ws://127.0.0.1:8080/ws-cows"
-
 object ServerConnection {
+
+    val dotenv:Dotenv = dotenv {
+        filename = "./assets/env"
+    }
+
+    val httpApiBase: String = dotenv["HTTP_API_BASE"] ?: "http://127.0.0.1:8080/cows"
+    val wsApiBase: String = dotenv["WS_API_BASE"] ?: "ws://127.0.0.1:8080/ws-cows"
 
 
     val client = HttpClient(CIO) {
