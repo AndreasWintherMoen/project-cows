@@ -12,6 +12,7 @@ class HUDManager(): GameStateSubscriber() {
     private var menuController: MenuController? = null
     private val winText = SmartObject("HUD/start-button.png", Vector2(200f, 300f), 1f)
     private val loseText = SmartObject("HUD/cancel-button.png", Vector2(200f, 300f), 1f)
+    private var healthIndicator: HealthIndicator? = null
 
     init {
         hideTexts()
@@ -31,10 +32,9 @@ class HUDManager(): GameStateSubscriber() {
             it.die()
         }
         if (oldGameState == GameState.START_MENU) {
-            // Initializing map here in HUDManager seems like a bad choice, but we'll have to change how we load
-            // the map, since we're going to get it from the API somehow, so let's just keep it here for now
             menuController?.die()
             menuController = null
+            healthIndicator = HealthIndicator()
         }
         when (newGameState) {
             GameState.ACTIVE_GAME -> actionPanel = ActiveGameActionPanel()
