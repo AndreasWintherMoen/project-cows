@@ -12,11 +12,11 @@ import com.cows.game.views.Renderable
 import kotlinx.coroutines.runBlocking
 
 class JoinGameMenu(private val onJoinGame: (code: String) -> Unit, private val onBackButton: () -> Unit): Renderable(){
-    private val backgroundImg = Sprite(Texture("HUD/StartScreen/startscreen.png"))
-    private val submitGameCodeBtn = Button("Buttons/enter-btn.png", Vector2(813f, 209f)){joinGame()}
-    private val goBackBtn = Button("Buttons/back-btn.png", Vector2(17f, 209f)){onBackButton.invoke()}
-    private var gameCodeXPosition = listOf<Float>(5f, 155f, 305f, 455f, 605f, 5f, 155f, 305f, 455f, 605f)
-    private var gameCodeYPosition = listOf<Float>(Application.HEIGHT-120f, Application.HEIGHT-300f)
+    private val backgroundImg = Sprite(Texture("HUD/StartScreen/background-clean.png"))
+    private var submitGameCodeBtn: Button? = Button("Buttons/enter-btn.png", Vector2(813f, 221f)){joinGame()}
+    private var goBackBtn: Button? = Button("Buttons/back-btn.png", Vector2(17f, 221f)){onBackButton.invoke()}
+    private var gameCodeXPosition = listOf<Float>(313f, 403f, 493f,  583f, 673f, 763f , 583f, 943f, 1033f, 1123f)
+    private var gameCodeYPosition = listOf<Float>(Application.HEIGHT-159f, 133f)
     val numbers = mutableListOf<Int>(0,0,0,0,0)
     private val joinGameCode = mutableListOf<Sprite>(
         Sprite(Texture("HUD/StartScreen/number"+ numbers[0] +".png")),
@@ -26,16 +26,16 @@ class JoinGameMenu(private val onJoinGame: (code: String) -> Unit, private val o
         Sprite(Texture("HUD/StartScreen/number"+ numbers[4] +".png"))
     )
     private val buttons = listOf<Button>(
-        Button("HUD/StartScreen/arrowUp.png", Vector2(gameCodeXPosition[0], gameCodeYPosition[0])){ increment(0) },
-        Button("HUD/StartScreen/arrowUp.png", Vector2(gameCodeXPosition[1], gameCodeYPosition[0])){ increment(1) },
-        Button("HUD/StartScreen/arrowUp.png", Vector2(gameCodeXPosition[2], gameCodeYPosition[0])){ increment(2) },
-        Button("HUD/StartScreen/arrowUp.png", Vector2(gameCodeXPosition[3], gameCodeYPosition[0])){ increment(3) },
-        Button("HUD/StartScreen/arrowUp.png", Vector2(gameCodeXPosition[4], gameCodeYPosition[0])){ increment(4) },
-        Button("HUD/StartScreen/arrowDown.png", Vector2(gameCodeXPosition[5], gameCodeYPosition[1])){ decrement(0) },
-        Button("HUD/StartScreen/arrowDown.png", Vector2(gameCodeXPosition[6], gameCodeYPosition[1])){ decrement(1) },
-        Button("HUD/StartScreen/arrowDown.png", Vector2(gameCodeXPosition[7], gameCodeYPosition[1])){ decrement(2) },
-        Button("HUD/StartScreen/arrowDown.png", Vector2(gameCodeXPosition[8], gameCodeYPosition[1])){ decrement(3) },
-        Button("HUD/StartScreen/arrowDown.png", Vector2(gameCodeXPosition[9], gameCodeYPosition[1])){ decrement(4) }
+        Button("HUD/StartScreen/arrow-up.png", Vector2(gameCodeXPosition[0], gameCodeYPosition[0])){ increment(0) },
+        Button("HUD/StartScreen/arrow-up.png", Vector2(gameCodeXPosition[1], gameCodeYPosition[0])){ increment(1) },
+        Button("HUD/StartScreen/arrow-up.png", Vector2(gameCodeXPosition[2], gameCodeYPosition[0])){ increment(2) },
+        Button("HUD/StartScreen/arrow-up.png", Vector2(gameCodeXPosition[3], gameCodeYPosition[0])){ increment(3) },
+        Button("HUD/StartScreen/arrow-up.png", Vector2(gameCodeXPosition[4], gameCodeYPosition[0])){ increment(4) },
+        Button("HUD/StartScreen/arrow-down.png", Vector2(gameCodeXPosition[0], gameCodeYPosition[1])){ decrement(0) },
+        Button("HUD/StartScreen/arrow-down.png", Vector2(gameCodeXPosition[1], gameCodeYPosition[1])){ decrement(1) },
+        Button("HUD/StartScreen/arrow-down.png", Vector2(gameCodeXPosition[2], gameCodeYPosition[1])){ decrement(2) },
+        Button("HUD/StartScreen/arrow-down.png", Vector2(gameCodeXPosition[3], gameCodeYPosition[1])){ decrement(3) },
+        Button("HUD/StartScreen/arrow-down.png", Vector2(gameCodeXPosition[4], gameCodeYPosition[1])){ decrement(4) }
     )
 
     fun increment(index:Int){
@@ -66,8 +66,10 @@ class JoinGameMenu(private val onJoinGame: (code: String) -> Unit, private val o
 
     override fun die() {
         super.die()
-        submitGameCodeBtn.die()
-        goBackBtn.die()
+        submitGameCodeBtn?.die()
+        submitGameCodeBtn = null
+        goBackBtn?.die()
+        goBackBtn = null
         buttons.forEach { it.die() }
     }
 

@@ -29,7 +29,33 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
     private var coins = 10
     private var coinsText = FontObject(coins.toString(), 60, Vector2(this.position.x+68f, 500f))
 
+
+    // FIRE TOWER🔥
+    private val fireTowerData = Redux.gameStatus!!.availableTowers.fireTower
+    val fireTowerBackground = SmartObject("Cards/banner-fire-defence.png", Vector2(this.position.x+32f, 323f), 1f)
+    val fireDamageNumber = FontObject(fireTowerData.damage.toString(), 25, Vector2(this.position.x + 70f, 439f))
+    val fireRangeNumber = FontObject(fireTowerData.damage.toString(), 25, Vector2(this.position.x + 135f, 439f))
+    val fireTowerButton = Button("Cards/"+getUnitName(UnitType.FIRE, fireTowerData.level)+".png", Vector2(this.position.x, 330f))
+
+    // GRASS TOWER🌿
+    private val grassTowerData = Redux.gameStatus!!.availableTowers.grassTower
+    val grassTowerBackground = SmartObject("Cards/banner-grass-defence.png", Vector2(this.position.x+32f , 199f), 1f)
+    val grassDamageNumber = FontObject(grassTowerData.damage.toString(), 25, Vector2(this.position.x + 70f, 315f))
+    val grassRangeNumber = FontObject(grassTowerData.damage.toString(), 25, Vector2(this.position.x + 135f, 315f))
+    val grassTowerButton = Button("Cards/"+getUnitName(UnitType.GRASS, grassTowerData.level)+".png", Vector2(this.position.x, 206f))
+
+    // WATER TOWER💧
+    private val waterTowerData = Redux.gameStatus!!.availableTowers.waterTower
+    val waterTowerBackground = SmartObject("Cards/banner-water-defence.png", Vector2(this.position.x+32f, 75f), 1f)
+    val waterDamageNumber = FontObject(waterTowerData.damage.toString(), 25, Vector2(this.position.x + 70f, 192f))
+    val waterRangeNumber = FontObject(waterTowerData.damage.toString(), 25, Vector2(this.position.x + 135f, 192f))
+    val waterTowerButton = Button("Cards/"+getUnitName(UnitType.WATER, waterTowerData.level)+".png", Vector2(this.position.x , 83f))
+
+
     init {
+        fireTowerButton.position.x += ActionPanel.WIDTH/2 - fireTowerButton.texture.width/2
+        waterTowerButton.position.x += ActionPanel.WIDTH/2 - waterTowerButton.texture.width/2
+        grassTowerButton.position.x += ActionPanel.WIDTH/2 - grassTowerButton.texture.width/2
         selectTileText.hide = false
         removeSelectedTower.hide = true
         fireTowerButton.onClick =  { spawnTower(UnitType.FIRE)}
@@ -52,7 +78,7 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
         if (coins>0 && lastTile != null ) {
             coinsText.text = (-- coins).toString()
             towerToBeSpawned = type
-            val reduxTowerModel = Redux.jsonAvailableTowers!!.getTower(type)
+            val reduxTowerModel = Redux.gameStatus!!.availableTowers.getTower(type)
             val towerModel = TowerModel(towerToBeSpawned, reduxTowerModel.level, lastTile!!.tileModel.coordinate, reduxTowerModel.range!!, reduxTowerModel.damage!!)
             val towerController = PlanningTowerController(towerModel)
             spawnedTowers.add(towerController)
@@ -126,20 +152,29 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
         spawnedTowers.forEach { it.view.die() }
         spawnedTowers.clear()
         towerToBeSpawned = UnitType.NONE
+        fireDamageNumber.die()
+        fireRangeNumber.die()
+        fireTowerBackground.die()
+        grassDamageNumber.die()
+        grassRangeNumber.die()
+        grassTowerBackground.die()
+        waterDamageNumber.die()
+        waterRangeNumber.die()
+        waterTowerBackground.die()
     }
 
     override fun hideUI(hide: Boolean) {
-        fireTowerButton.hide = hide
-        waterTowerButton.hide = hide
-        grassTowerButton.hide = hide
-        fireTowerBackground.hide = hide
-        grassTowerBackground.hide = hide
-        waterTowerBackground.hide = hide
         fireDamageNumber.hide = hide
         fireRangeNumber.hide = hide
+        fireTowerBackground.hide = hide
+        fireTowerButton.hide = hide
         grassDamageNumber.hide = hide
         grassRangeNumber.hide = hide
+        grassTowerBackground.hide = hide
+        grassTowerButton.hide = hide
         waterDamageNumber.hide = hide
         waterRangeNumber.hide = hide
+        waterTowerBackground.hide = hide
+        waterTowerButton.hide = hide
     }
 }
