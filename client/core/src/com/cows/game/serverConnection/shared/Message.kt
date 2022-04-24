@@ -10,6 +10,7 @@ enum class OpCode{
     CONNECTED,
     INSTRUCTIONLOG,
     EVENTLOG,
+    GAMESTATE,
 }
 
 data class Message(val userUUID: UUID, val gameUUID: UUID, val opCode:OpCode, val data:String?){

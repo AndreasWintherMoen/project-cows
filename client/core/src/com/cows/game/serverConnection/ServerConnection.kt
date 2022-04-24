@@ -93,7 +93,8 @@ object ServerConnection {
     }
 
     suspend fun getGameStatus(): GameStatus {
-        val message = createMessage(OpCode.EVENTLOG, null)
+        println("getGameStatus")
+        val message = createMessage(OpCode.GAMESTATE, null)
         websocketSession!!.send(Message.generateWSFrame(message))
         while (true) {
         val nullableIncoming = websocketSession!!.incoming.tryReceive()
@@ -102,7 +103,7 @@ object ServerConnection {
                 is Frame.Text -> {
                     val message = Message.retrieveWSMessage(incoming)
                     println(message)
-                    if (message!!.opCode == OpCode.EVENTLOG){
+                    if (message!!.opCode == OpCode.GAMESTATE){
                         val gameStatusType = object : TypeToken<GameStatus>() {}.type
                         val gameStatus: GameStatus = gson.fromJson(message.data!!, gameStatusType)
                         return gameStatus
