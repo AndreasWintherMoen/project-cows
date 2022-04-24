@@ -10,7 +10,7 @@ import com.cows.game.views.Renderable
 
 
 class CreateGameMenu(private val onBackButton: () -> Unit): Renderable() {
-    private val goBackBtn = Button("Buttons/back-btn.png", Vector2(416f, 100f)){onBackButton.invoke()}
+    private var goBackBtn: Button? = Button("Buttons/back-btn.png", Vector2(416f, 100f)){onBackButton.invoke()}
     private val backgroundImg = Sprite(Texture("HUD/StartScreen/startscreen.png"))
     private var numbers: List<Int> = mutableListOf()// = gameCode.map { it.digitToInt() }
     private var gameCodeXPosition = listOf<Float>(5f, 155f, 305f, 455f, 605f, 5f, 155f, 305f, 455f, 605f)
@@ -56,7 +56,8 @@ class CreateGameMenu(private val onBackButton: () -> Unit): Renderable() {
 
     override fun die() {
         super.die()
-        goBackBtn.die()
+        goBackBtn?.die()
+        goBackBtn = null
     }
 
 
