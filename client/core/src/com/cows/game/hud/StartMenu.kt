@@ -21,7 +21,7 @@ class StartMenu(private val onJoinGameButton: () -> Unit, private val onCreateGa
     //Start menu
     private val backgroundImg = Sprite(Texture("HUD/StartScreen/startscreen.png"))
     private val joinGameBtn = Button("Buttons/join-btn.png", Vector2(555f, 233f)){showJoinGameMenu()}
-    private val createGameBtn = Button("Buttons/create-btn.png", Vector2(280f, 233f), {showCreateGameMenu()}, "select-action.wav")
+    private val createGameBtn = Button("Buttons/create-btn.png", Vector2(280f, 233f), {showCreateGameMenu()}, "Sound/select-action.wav")
 
     init {
         backgroundImg.setSize(Application.WIDTH, Application.HEIGHT)

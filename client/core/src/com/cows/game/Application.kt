@@ -35,9 +35,9 @@ class Application : ApplicationAdapter()  {
 
             launch {
                 Redux.init()
+                AudioManager.init()
                 hudManager = HUDManager()
                 GameStateManager.currentGameState = GameState.START_MENU
-                MusicPlayer.play()
             }
         }
     }
