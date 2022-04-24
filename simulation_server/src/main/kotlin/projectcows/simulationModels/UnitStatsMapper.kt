@@ -145,7 +145,7 @@ object UnitStatsMapper {
         index + 100,
         getUnitHealth(jsonUnit.type, jsonUnit.level),
         getUnitMovementSpeed(jsonUnit.type, jsonUnit.level),
-        index * 5,
+        index * 10,
         jsonUnit.type
     )
 
