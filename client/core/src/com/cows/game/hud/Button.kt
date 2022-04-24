@@ -44,6 +44,7 @@ class Button(textureFilePath: String, var position: Vector2, var onClick: () -> 
 
     override fun die() {
         super.die()
+        unsubscribeToClickEvents()
     }
 
     override fun dispose() {

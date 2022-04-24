@@ -13,8 +13,8 @@ import kotlinx.coroutines.runBlocking
 
 class JoinGameMenu(private val onJoinGame: (code: String) -> Unit, private val onBackButton: () -> Unit): Renderable(){
     private val backgroundImg = Sprite(Texture("HUD/StartScreen/startscreen.png"))
-    private val submitGameCodeBtn = Button("Buttons/enter-btn.png", Vector2(813f, 209f)){joinGame()}
-    private val goBackBtn = Button("Buttons/back-btn.png", Vector2(17f, 209f)){onBackButton.invoke()}
+    private var submitGameCodeBtn: Button? = Button("Buttons/enter-btn.png", Vector2(813f, 209f)){joinGame()}
+    private var goBackBtn: Button? = Button("Buttons/back-btn.png", Vector2(17f, 209f)){onBackButton.invoke()}
     private var gameCodeXPosition = listOf<Float>(5f, 155f, 305f, 455f, 605f, 5f, 155f, 305f, 455f, 605f)
     private var gameCodeYPosition = listOf<Float>(Application.HEIGHT-120f, Application.HEIGHT-300f)
     val numbers = mutableListOf<Int>(0,0,0,0,0)
@@ -66,8 +66,10 @@ class JoinGameMenu(private val onJoinGame: (code: String) -> Unit, private val o
 
     override fun die() {
         super.die()
-        submitGameCodeBtn.die()
-        goBackBtn.die()
+        submitGameCodeBtn?.die()
+        submitGameCodeBtn = null
+        goBackBtn?.die()
+        goBackBtn = null
         buttons.forEach { it.die() }
     }
 
