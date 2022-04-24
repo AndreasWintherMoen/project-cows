@@ -11,7 +11,7 @@ import com.cows.game.views.Renderable
 
 class CreateGameMenu(private val onBackButton: () -> Unit): Renderable() {
     private var goBackBtn: Button? = Button("Buttons/back-btn.png", Vector2(416f, 100f)){onBackButton.invoke()}
-    private val backgroundImg = Sprite(Texture("HUD/StartScreen/startscreen.png"))
+    private val backgroundImg = Sprite(Texture("HUD/StartScreen/background-2.png"))
     private var numbers: List<Int> = mutableListOf()// = gameCode.map { it.digitToInt() }
     private var gameCodeXPosition = listOf<Float>(5f, 155f, 305f, 455f, 605f, 5f, 155f, 305f, 455f, 605f)
     private var gameCodeYPosition = listOf<Float>(Application.HEIGHT-120f, Application.HEIGHT-300f)
@@ -36,7 +36,7 @@ class CreateGameMenu(private val onBackButton: () -> Unit): Renderable() {
             Sprite(Texture("HUD/StartScreen/number"+ numbers[3] +".png")),
             Sprite(Texture("HUD/StartScreen/number"+ numbers[4] +".png"))
         )
-        joinGameCode.forEachIndexed { index, gameCode ->  gameCode.setPosition(gameCodeXPosition[index], gameCodeYPosition[0]-120)}
+        joinGameCode.forEachIndexed { index, gameCode ->  gameCode.setPosition(200 + gameCodeXPosition[index], gameCodeYPosition[0]-120)}
     }
 
     override fun render(batch: SpriteBatch, deltaTime: Float) {

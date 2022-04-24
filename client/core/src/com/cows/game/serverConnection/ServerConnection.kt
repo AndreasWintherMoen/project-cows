@@ -1,6 +1,8 @@
 package com.cows.game.serverConnection
 
 import com.cows.game.roundSimulation.GameStatus
+import com.cows.game.Redux
+import com.cows.game.map.Coordinate
 import com.cows.game.roundSimulation.rawJsonData.*
 import com.cows.game.serverConnection.shared.GameCreateResponse
 import com.cows.game.serverConnection.shared.GameJoinResponse
@@ -13,7 +15,6 @@ import io.ktor.client.request.*
 import io.ktor.http.cio.websocket.*
 import java.util.*
 import io.ktor.client.features.logging.Logger
-import java.time.Duration
 import com.cows.game.serverConnection.shared.Message
 import com.cows.game.serverConnection.shared.OpCode
 import com.google.gson.Gson
@@ -23,11 +24,9 @@ import io.github.cdimascio.dotenv.dotenv
 import io.ktor.utils.io.*
 import io.ktor.utils.io.core.internal.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.onClosed
-import kotlinx.coroutines.channels.onFailure
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import kotlin.collections.ArrayList
+import com.cows.game.map.Map
 
 data class GameSession (
     val userUUID: UUID,
@@ -172,6 +171,10 @@ object ServerConnection {
         }
     }
 
+    data class MapData(
+        val path: ArrayList<Coordinate>
+    )
+
     suspend fun establishGameConnection(wsSession:DefaultWebSocketSession): DefaultWebSocketSession{
         var isConnected = false
         val connectMessage = createMessage(OpCode.CONNECT, null)
@@ -190,6 +193,7 @@ object ServerConnection {
                     println(message)
                     if (message!!.opCode == OpCode.CONNECTED){
                         isConnected = true
+//                        Redux.gameStatus?.path = gson.fromJson(message.data, MapData::class.java).path
                     }
                 }
                 else -> {

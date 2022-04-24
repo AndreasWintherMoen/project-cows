@@ -1,5 +1,6 @@
 package com.cows.plugins
 
+import com.cows.map.Coordinate
 import com.cows.models.Message
 import com.cows.models.OpCode
 import com.cows.services.ClientConnection
@@ -16,7 +17,7 @@ import com.cows.services.simulation.models.json.JsonRoundSimulation
 import projectcows.rawJsonData.JsonTower
 import projectcows.rawJsonData.JsonUnit
 import java.util.*
-import kotlin.random.Random
+import com.cows.map.Map
 
 private var connectionMap: MutableMap<ClientConnection, DefaultWebSocketSession> = Collections.synchronizedMap(mutableMapOf())
 private val gson = GsonBuilder().setPrettyPrinting().create()
@@ -51,6 +52,10 @@ fun Application.configureSockets() {
         }
     }
 }
+
+data class MapData(
+    val path: ArrayList<Coordinate>
+)
 
 suspend fun handleGameStateRequest(message: Message, userWebSocketSession: DefaultWebSocketServerSession) {
     println("handleGameStateRequest")
