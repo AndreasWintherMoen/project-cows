@@ -55,7 +55,7 @@ class Application : ApplicationAdapter()  {
         Updater.update(tickAdjustedDeltaTime)
         Renderer.render(tickAdjustedDeltaTime)
         FunctionDelayer.invokeRegisteredFunctions()
-        GameStateManager.nextAsyncGameState?.let { GameStateManager.currentGameState = it; GameStateManager.nextAsyncGameState = null }
+        GameStateManager.nextAsyncGameState?.let { println(Redux.jsonAvailableTowers); GameStateManager.currentGameState = it; GameStateManager.nextAsyncGameState = null }
     }
 
     override fun dispose() {

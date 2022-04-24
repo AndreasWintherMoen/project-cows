@@ -18,7 +18,6 @@ class CreateGameMenu(private val onBackButton: () -> Unit): Renderable() {
     private var joinGameCode = mutableListOf<Sprite>()
     private val loadingText = Texture("HUD/StartScreen/loadingText.png")
 
-
     init {
         println(numbers)
         joinGameCode.forEachIndexed { index, gameCode ->  gameCode.setPosition(gameCodeXPosition[index], gameCodeYPosition[0]-120)}
