@@ -1,18 +1,14 @@
 package com.cows.game.managers
 
-import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.audio.Music
-import com.badlogic.gdx.graphics.Texture
 import com.cows.game.enums.GameState
-import com.cows.game.enums.UnitType
 import com.cows.game.gameState.GameStateSubscriber
 
 object MusicPlayer: GameStateSubscriber() {
     private var music: Music? = null
 
     fun play() {
-        println("PLASDAYSD")
         stopMusic()
         music = Gdx.audio.newMusic(Gdx.files.internal("Sound/intro.mp3"))
         music?.play()
@@ -46,6 +42,7 @@ object MusicPlayer: GameStateSubscriber() {
             GameState.START_MENU -> {
                 changeMusic("intro.mp3")
             }
+            else -> { println("Could not find game state $newGameState in MusicPlayer::onChangeGameState") }
         }
     }
 }

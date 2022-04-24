@@ -15,14 +15,8 @@ class RoundSimulator {
         val defendInstructionsWithId = defendInstruction.mapIndexed {index, tower -> UnitStatsMapper.appendMissingDataToJsonTower(index, tower)}
 
         val units = attackInstruction.mapIndexed{index, unit -> UnitStatsMapper.jsonUnitToSimulationModel(index, unit) }
-        println("units!!!")
-        println(units)
-//            UnitSimulationModel(unit.id, 1, 1,  index*ticksBetweenSpawns)
-//        }
         //TODO reconsider how we convert tower range to ints, as it is treaded as ints here.
         val towers = defendInstruction.mapIndexed{ index, tower -> UnitStatsMapper.jsonTowerToSimulationModel(index, tower, path) }
-//            TowerSimulationModel(tower.id, tower.position, tower.range.roundToInt(), path, 0, 1, )
-//        }
 
         var gameOver = false
         var attackerWon = false
@@ -54,18 +48,6 @@ class RoundSimulator {
             }
         }
         return JsonRoundSimulation(defendInstructionsWithId, attackInstructionsWithId, eventLog, attackerWon)
-    }
-
-    private fun win() {
-        println("attacker won")
-        //gameOver = true
-        //TODO return who won in gamestate
-    }
-
-    private fun lose() {
-        //gameOver = true
-        println("defender won")
-        // return defender as winner
     }
 
     private fun calculateUnit(unit : UnitSimulationModel, pathSize: Int): SimulationAction? {

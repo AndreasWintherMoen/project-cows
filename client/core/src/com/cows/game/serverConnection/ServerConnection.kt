@@ -128,8 +128,6 @@ object ServerConnection {
                     if (message!!.opCode == OpCode.AVAILABLETOWERS){
                         val towersType = object : TypeToken<JsonAvailableTowers>() {}.type
                         val towers: JsonAvailableTowers = gson.fromJson(message.data!!, towersType)
-                        println("parsed towers")
-                        println(towers)
                         return towers
                     }
                 }
@@ -142,7 +140,6 @@ object ServerConnection {
     }
 
     suspend fun sendAttackInstructions(unitList: List<JsonUnit>): JsonRoundSimulation {
-        println("Send attack instructions")
         val data = gson.toJson(unitList)
         val message = createMessage(OpCode.INSTRUCTIONLOG, data)
         websocketSession!!.send(Message.generateWSFrame(message))
@@ -170,7 +167,6 @@ object ServerConnection {
     }
 
     suspend fun sendDefendInstructions(towerList: List<JsonTower>): JsonRoundSimulation {
-        println("Send defend instructions")
         val data = gson.toJson(towerList)
         println(data)
         val message = createMessage(OpCode.INSTRUCTIONLOG, data)
@@ -239,24 +235,4 @@ object ServerConnection {
             throw Exception("No game details set (you must join a game first)")
         }
     }
-
-
-    val mutex = Mutex()
-    val methodsToRun = LinkedList<() -> Unit>()
-
-    fun runAsyncMethod(method: () -> Unit) {
-        println("runAsyncMethod")
-//        mutex.withLock { methodsToRun.add(method) }
-        methodsToRun.add(method)
-        println("done with runAsyncMethod")
-    }
-
-    suspend fun launchInfiniteMethodRunnerLoop() {
-        println("launchInfiniteMethodRunnerLoop")
-        mutex.withLock { methodsToRun.remove().invoke() }
-        println("done with launchInfiniteMethodRunnerLoop")
-    }
-
-
-
 }

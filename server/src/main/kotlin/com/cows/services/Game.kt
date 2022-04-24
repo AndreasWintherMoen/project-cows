@@ -65,10 +65,7 @@ class Game(
 
     private suspend fun simulateRound(): JsonRoundSimulation {
         println("Simulating round!")
-//        val mappedDefenseInstructions = defendInstructions!!.mapIndexed { index, tower -> UnitStatsMapper.addStatsToJsonTower(index, tower) }
-//        val mappedAttackInstructions = attackInstructions!!.mapIndexed { index, unit -> UnitStatsMapper.addStatsToJsonUnit(index, unit) }
         val roundSimulation = API.simulate(defendInstructions!!, attackInstructions!!, path)
-        println("Received round simulation")
         return roundSimulation
     }
 
