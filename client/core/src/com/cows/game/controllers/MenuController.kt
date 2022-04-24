@@ -52,7 +52,6 @@ class MenuController {
     }
 
     fun die() {
-        println("menu controller die")
         joinMenu?.die()
         joinMenu = null
         createMenu?.die()
