@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Vector2
 import com.cows.game.Application
 import com.cows.game.Redux
 import com.cows.game.enums.UnitType
+import com.cows.game.map.Map
+import com.cows.game.roundSimulation.rawJsonData.JsonUnit
 
 abstract class PlanningActionPanel(): ActionPanel() {
     companion object {
@@ -14,9 +16,12 @@ abstract class PlanningActionPanel(): ActionPanel() {
             return screenLength/(percentage/100)
         }
     }
+
     val readyButton = Button("Buttons/ready-btn.png", Vector2(this.position.x, 0f))
 
+
     init {
+        Map.init()
     }
 
     override fun die() {

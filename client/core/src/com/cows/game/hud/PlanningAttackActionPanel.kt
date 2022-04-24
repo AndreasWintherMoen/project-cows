@@ -3,6 +3,7 @@ package com.cows.game.hud
 import com.badlogic.gdx.math.Vector2
 import com.cows.game.Redux
 import com.cows.game.enums.UnitType
+import com.cows.game.map.Map
 import com.cows.game.serverConnection.ServerConnection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -10,21 +11,21 @@ import kotlinx.coroutines.launch
 
 class PlanningAttackActionPanel() : PlanningActionPanel() {
     // FIRE TOWER🔥
-    private val fireTowerData = Redux.jsonAvailableTowers!!.getTower(UnitType.FIRE)
+    private val fireTowerData = Redux.gameStatus!!.availableTowers.fireTower
     val fireTowerBackground = SmartObject("HUD/banner-fire.png", Vector2(this.position.x+32f, 323f), 1f)
     val fireDamageNumber = FontObject(fireTowerData.damage.toString(), 25, Vector2(this.position.x + 70f, 439f))
     val fireRangeNumber = FontObject(fireTowerData.damage.toString(), 25, Vector2(this.position.x + 135f, 439f))
     val fireTowerButton = Button("Cards/"+getUnitName(UnitType.FIRE, fireTowerData.level)+".png", Vector2(this.position.x, 330f))
 
     // GRASS TOWER🌿
-    private val grassTowerData = Redux.jsonAvailableTowers!!.getTower(UnitType.GRASS)
+    private val grassTowerData = Redux.gameStatus!!.availableTowers.grassTower
     val grassTowerBackground = SmartObject("HUD/banner-grass.png", Vector2(this.position.x+32f , 199f), 1f)
     val grassDamageNumber = FontObject(grassTowerData.damage.toString(), 25, Vector2(this.position.x + 70f, 315f))
     val grassRangeNumber = FontObject(grassTowerData.damage.toString(), 25, Vector2(this.position.x + 135f, 315f))
     val waterTowerButton = Button("Cards/"+getUnitName(UnitType.GRASS, grassTowerData.level)+".png", Vector2(this.position.x , 206f))
 
     // WATER TOWER💧
-    private val waterTowerData = Redux.jsonAvailableTowers!!.getTower(UnitType.WATER)
+    private val waterTowerData = Redux.gameStatus!!.availableTowers.waterTower
     val waterTowerBackground = SmartObject("HUD/banner-water.png", Vector2(this.position.x+32f, 75f), 1f)
     val waterDamageNumber = FontObject(waterTowerData.damage.toString(), 25, Vector2(this.position.x + 70f, 192f))
     val waterRangeNumber = FontObject(waterTowerData.damage.toString(), 25, Vector2(this.position.x + 135f, 192f))
@@ -37,6 +38,7 @@ class PlanningAttackActionPanel() : PlanningActionPanel() {
         grassTowerButton.disabled = true
 //        startGameButton.onClick = { onStartGame.invoke() }
         readyButton.onClick = { onStartButtonClicked() }
+
     }
 
     // FIRE TOWER🔥

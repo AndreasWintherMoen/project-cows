@@ -30,21 +30,21 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
     private var coinsText = FontObject(coins.toString(), 60, Vector2(this.position.x+68f, 500f))
 
     // FIRE TOWER🔥
-    private val fireTowerData = Redux.jsonAvailableUnits!!.fireUnit
+    private val fireTowerData = Redux.gameStatus!!.availableUnits.fireUnit
     val fireTowerBackground = SmartObject("HUD/banner-fire.png", Vector2(this.position.x+32f, 323f), 1f)
     val fireHealthNumber = FontObject(fireTowerData.health.toString(), 25, Vector2(this.position.x + 70f, 439f))
     val fireMovementSpeedNumber = FontObject(fireTowerData.movementSpeed.toString(), 25, Vector2(this.position.x + 135f, 439f))
     val fireTowerButton = Button("Cards/"+getUnitName(UnitType.FIRE, fireTowerData.level)+".png", Vector2(this.position.x, 330f))
 
     // GRASS TOWER🌿
-    private val grassTowerData = Redux.jsonAvailableUnits!!.grassUnit
+    private val grassTowerData = Redux.gameStatus!!.availableUnits.grassUnit
     val grassTowerBackground = SmartObject("HUD/banner-grass.png", Vector2(this.position.x+32f , 199f), 1f)
     val grassHealthNumber = FontObject(grassTowerData.health.toString(), 25, Vector2(this.position.x + 70f, 315f))
     val grassMovementSpeedNumber = FontObject(grassTowerData.movementSpeed.toString(), 25, Vector2(this.position.x + 135f, 315f))
     val waterTowerButton = Button("Cards/"+getUnitName(UnitType.GRASS, grassTowerData.level)+".png", Vector2(this.position.x , 206f))
 
     // WATER TOWER💧
-    private val waterTowerData = Redux.jsonAvailableUnits!!.waterUnit
+    private val waterTowerData = Redux.gameStatus!!.availableUnits.waterUnit
     val waterTowerBackground = SmartObject("HUD/banner-water.png", Vector2(this.position.x+32f, 75f), 1f)
     val waterHealthNumber = FontObject(waterTowerData.health.toString(), 25, Vector2(this.position.x + 70f, 192f))
     val waterMovementSpeedNumber = FontObject(waterTowerData.movementSpeed.toString(), 25, Vector2(this.position.x + 135f, 192f))
@@ -77,7 +77,7 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
         if (coins>0 && lastTile != null ) {
             coinsText.text = (-- coins).toString()
             towerToBeSpawned = type
-            val reduxTowerModel = Redux.jsonAvailableTowers!!.getTower(type)
+            val reduxTowerModel = Redux.gameStatus!!.availableTowers.getTower(type)
             val towerModel = TowerModel(towerToBeSpawned, reduxTowerModel.level, lastTile!!.tileModel.coordinate, reduxTowerModel.range!!, reduxTowerModel.damage!!)
             val towerController = PlanningTowerController(towerModel)
             spawnedTowers.add(towerController)

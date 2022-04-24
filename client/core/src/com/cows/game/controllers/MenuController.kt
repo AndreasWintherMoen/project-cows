@@ -1,12 +1,13 @@
 package com.cows.game.controllers
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.math.Vector2
 import com.cows.game.Redux
 import com.cows.game.enums.GameState
-import com.cows.game.hud.CreateGameMenu
-import com.cows.game.hud.JoinGameMenu
-import com.cows.game.hud.StartMenu
+import com.cows.game.hud.*
 import com.cows.game.managers.GameStateManager
 import com.cows.game.serverConnection.ServerConnection
+import io.ktor.client.features.*
 import kotlinx.coroutines.*
 
 class MenuController {
@@ -14,6 +15,7 @@ class MenuController {
     private var joinMenu:JoinGameMenu? = null
     private var createMenu:CreateGameMenu? = null
     private var startGameJob: Job? = null
+    private var userResponse: FontObject? = null
 
     init {
         showStartMenu()
@@ -45,7 +47,9 @@ class MenuController {
             val joinCode = ServerConnection.createGame()
             createMenu?.setGameCode(joinCode)
             ServerConnection.connectToActiveGame()
-            Redux.jsonAvailableUnits = ServerConnection.getAvailableUnits()
+            println("conncted to active game")
+            Redux.gameStatus = ServerConnection.getGameStatus()
+            println(Redux.gameStatus)
             GameStateManager.setGameStateAsync(GameState.PLANNING_ATTACK)
         }
         createMenu = CreateGameMenu({showStartMenu()})
@@ -61,10 +65,19 @@ class MenuController {
     }
 
     private fun joinGame(joinCode: String) {
-        runBlocking {
-            ServerConnection.joinGame(joinCode)
-            Redux.jsonAvailableTowers = ServerConnection.getAvailableTowers()
-            GameStateManager.setGameStateAsync(GameState.PLANNING_DEFENSE)
+        try {
+            runBlocking {
+              ServerConnection.joinGame(joinCode)
+              Redux.gameStatus = ServerConnection.getGameStatus()
+              println(Redux.gameStatus)
+              GameStateManager.setGameStateAsync(GameState.PLANNING_DEFENSE)
+            }
+            userResponse!!.dispose()
+        }
+        catch (error: ClientRequestException) {
+            System.err.println("Wrong code")
+            userResponse = FontObject("Wrong code", 64, Color(0.9f, 0.04f, 0f, 1f))
+            userResponse!!.position = Vector2((Gdx.graphics.width/2 - userResponse!!.getFontWidth()/2),125f)
         }
     }
 

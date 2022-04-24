@@ -25,8 +25,15 @@ fun Application.configureRouting() {
             if(call.parameters["gameJoinCode"].isNullOrEmpty()) call.respond(HttpStatusCode.NotFound, "gameJoinCode not given")
             val user = ClientConnection()
             val gameCodeUUID = ConnectionMapper.createGame(user, call.parameters["gameJoinCode"]!!)
-            if(gameCodeUUID == null) call.respond(HttpStatusCode.NotFound, "Game code not valid")
-            call.respondText(gson.toJson(GameJoinResponse(user.id, gameCodeUUID!!)), ContentType.Application.Json, HttpStatusCode.OK);
+
+            gameCodeUUID?.let {
+                // not ideal to do this here, but generate method is suspend and must be called from another suspend function, and I don't feel comfortable enough with using GlobalScope...
+                val game = ConnectionMapper.getGameFromUUID(it)
+                game!!.generateAvailableUnitsAndTowers()
+                call.respondText(gson.toJson(GameJoinResponse(user.id, gameCodeUUID)), ContentType.Application.Json, HttpStatusCode.OK);
+            } ?: run {
+                call.respond(HttpStatusCode.NotFound, "Game code not valid")
+            }
         }
     }
 }

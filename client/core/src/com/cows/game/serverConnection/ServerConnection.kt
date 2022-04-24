@@ -1,5 +1,8 @@
 package com.cows.game.serverConnection
 
+import com.cows.game.roundSimulation.GameStatus
+import com.cows.game.Redux
+import com.cows.game.map.Coordinate
 import com.cows.game.roundSimulation.rawJsonData.*
 import com.cows.game.serverConnection.shared.GameCreateResponse
 import com.cows.game.serverConnection.shared.GameJoinResponse
@@ -12,21 +15,17 @@ import io.ktor.client.request.*
 import io.ktor.http.cio.websocket.*
 import java.util.*
 import io.ktor.client.features.logging.Logger
-import java.time.Duration
 import com.cows.game.serverConnection.shared.Message
 import com.cows.game.serverConnection.shared.OpCode
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.github.cdimascio.dotenv.Dotenv
 import io.github.cdimascio.dotenv.dotenv
-import io.ktor.utils.io.*
-import io.ktor.utils.io.core.internal.*
+import io.ktor.client.features.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.onClosed
-import kotlinx.coroutines.channels.onFailure
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import kotlin.collections.ArrayList
+import com.cows.game.map.Map
 
 data class GameSession (
     val userUUID: UUID,
@@ -58,7 +57,7 @@ object ServerConnection {
 
     private suspend fun sendGameCreateRequest(client:HttpClient): GameCreateResponse {
         println("Sending request to $httpApiBase/game/create")
-        return client.request<GameCreateResponse>("$httpApiBase/game/create")
+        return client.request("$httpApiBase/game/create")
     }
 
     private suspend fun generateWebsocketClient(client: HttpClient): DefaultWebSocketSession{
@@ -91,8 +90,9 @@ object ServerConnection {
         connectToActiveGame()
     }
 
-    suspend fun getAvailableUnits(): JsonAvailableUnits {
-        val message = createMessage(OpCode.AVAILABLEUNITS, null)
+    suspend fun getGameStatus(): GameStatus {
+        println("getGameStatus")
+        val message = createMessage(OpCode.GAMESTATE, null)
         websocketSession!!.send(Message.generateWSFrame(message))
         while (true) {
         val nullableIncoming = websocketSession!!.incoming.tryReceive()
@@ -101,34 +101,10 @@ object ServerConnection {
                 is Frame.Text -> {
                     val message = Message.retrieveWSMessage(incoming)
                     println(message)
-                    if (message!!.opCode == OpCode.AVAILABLEUNITS){
-                        val unitsType = object : TypeToken<JsonAvailableUnits>() {}.type
-                        val units: JsonAvailableUnits = gson.fromJson(message.data!!, unitsType)
-                        return units
-                    }
-                }
-                else -> {
-                    println("Not text frame")
-                    println(incoming)
-                }
-            }
-        }
-    }
-
-    suspend fun getAvailableTowers(): JsonAvailableTowers {
-        val message = createMessage(OpCode.AVAILABLETOWERS, null)
-        websocketSession!!.send(Message.generateWSFrame(message))
-        while (true) {
-            val nullableIncoming = websocketSession!!.incoming.tryReceive()
-            if (nullableIncoming.isFailure || nullableIncoming.isClosed) continue
-            when (val incoming = nullableIncoming.getOrThrow()) {
-                is Frame.Text -> {
-                    val message = Message.retrieveWSMessage(incoming)
-                    println(message)
-                    if (message!!.opCode == OpCode.AVAILABLETOWERS){
-                        val towersType = object : TypeToken<JsonAvailableTowers>() {}.type
-                        val towers: JsonAvailableTowers = gson.fromJson(message.data!!, towersType)
-                        return towers
+                    if (message!!.opCode == OpCode.GAMESTATE){
+                        val gameStatusType = object : TypeToken<GameStatus>() {}.type
+                        val gameStatus: GameStatus = gson.fromJson(message.data!!, gameStatusType)
+                        return gameStatus
                     }
                 }
                 else -> {
@@ -194,6 +170,10 @@ object ServerConnection {
         }
     }
 
+    data class MapData(
+        val path: ArrayList<Coordinate>
+    )
+
     suspend fun establishGameConnection(wsSession:DefaultWebSocketSession): DefaultWebSocketSession{
         var isConnected = false
         val connectMessage = createMessage(OpCode.CONNECT, null)
@@ -212,6 +192,7 @@ object ServerConnection {
                     println(message)
                     if (message!!.opCode == OpCode.CONNECTED){
                         isConnected = true
+//                        Redux.gameStatus?.path = gson.fromJson(message.data, MapData::class.java).path
                     }
                 }
                 else -> {
@@ -224,8 +205,7 @@ object ServerConnection {
     }
 
     suspend fun sendGameJoinRequest(client: HttpClient,gameJoinCode: String): GameJoinResponse {
-        val response: GameJoinResponse = client.request("$httpApiBase/game/join/${gameJoinCode}")
-        return response
+        return client.request("$httpApiBase/game/join/${gameJoinCode}")
     }
 
     private fun createMessage(opCode: OpCode, data: String?): Message {
