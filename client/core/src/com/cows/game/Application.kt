@@ -24,7 +24,7 @@ class Application : ApplicationAdapter()  {
         const val WIDTH = Map.WIDTH * TileModel.WIDTH + ActionPanel.WIDTH
         const val HEIGHT = Map.HEIGHT * TileModel.HEIGHT
     }
-    val tickDuration = 1f // in seconds
+    val tickDuration = 0.2f // in seconds
     private lateinit var gameTickProcessor: GameTickProcessor
     private lateinit var hudManager: HUDManager
 
@@ -43,10 +43,10 @@ class Application : ApplicationAdapter()  {
     }
 
     override fun render() {
-        Redux.jsonRoundSimulation?.let { startGame(it); Redux.jsonRoundSimulation = null }
+        Redux.jsonRoundSimulation?.let { println("json round simulation is not null"); startGame(it); Redux.jsonRoundSimulation = null }
 
         val deltaTime = Gdx.graphics.deltaTime
-        val tickAdjustedDeltaTime = deltaTime / tickDuration
+        val tickAdjustedDeltaTime = deltaTime * tickDuration
 
         if (GameStateManager.currentGameState == GameState.ACTIVE_GAME) {
             gameTickProcessor.update(deltaTime, tickDuration)
@@ -55,7 +55,7 @@ class Application : ApplicationAdapter()  {
         Updater.update(tickAdjustedDeltaTime)
         Renderer.render(tickAdjustedDeltaTime)
         FunctionDelayer.invokeRegisteredFunctions()
-        GameStateManager.nextAsyncGameState?.let { GameStateManager.currentGameState = it }
+        GameStateManager.nextAsyncGameState?.let { GameStateManager.currentGameState = it; GameStateManager.nextAsyncGameState = null }
     }
 
     override fun dispose() {
@@ -63,6 +63,9 @@ class Application : ApplicationAdapter()  {
     }
 
     private fun startGame(roundSimulation: JsonRoundSimulation) {
+        if (GameStateManager.currentGameState == GameState.ACTIVE_GAME) return
+        println("startGame")
+        GameStateManager.currentGameState = GameState.ACTIVE_GAME
         gameTickProcessor = GameTickProcessor(roundSimulation)
     }
 

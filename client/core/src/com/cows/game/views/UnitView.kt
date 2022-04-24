@@ -28,7 +28,7 @@ class UnitView (val model: UnitModel): Renderable() {
     }
 
     private var walkState = 0;
-    private var stepsPerSecond = 5f;
+    private var stepsPerSecond = 5f * model.movementSpeed;
     private var elapsedTime = 0f;
     private var sprite = modelToSprite(model)
 

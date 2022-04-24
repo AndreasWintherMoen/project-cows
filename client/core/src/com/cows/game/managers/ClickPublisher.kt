@@ -26,7 +26,15 @@ object ClickPublisher: Updatable() {
 
         if (!Gdx.input.justTouched()) return
 
-        val clickedPosition = Vector2(Gdx.input.x.toFloat() - Renderer.viewport.leftGutterWidth, Gdx.graphics.height - Gdx.input.y.toFloat() - Renderer.viewport.topGutterHeight)
+        println(Gdx.graphics.height)
+        println(Renderer.viewport.screenHeight)
+        println(Renderer.viewport.screenY)
+        println(Gdx.input.y.toFloat())
+        val scaleFactor = Vector2(Application.WIDTH / Renderer.viewport.screenWidth, Application.HEIGHT / Renderer.viewport.screenHeight)
+        val clickedPosition = Vector2(
+            Gdx.input.x.toFloat() * scaleFactor.x - Renderer.viewport.leftGutterWidth,
+            (Renderer.viewport.screenHeight - Gdx.input.y.toFloat()) * scaleFactor.y - Renderer.viewport.topGutterHeight)
+        println("clickedPosition: $clickedPosition")
 
         try {
             val clickedTile = if (GameStateManager.currentGameState == GameState.START_MENU) null else Map.getTileAtPixel(clickedPosition)
