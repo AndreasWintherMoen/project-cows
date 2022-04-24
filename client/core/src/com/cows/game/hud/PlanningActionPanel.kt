@@ -24,21 +24,21 @@ abstract class PlanningActionPanel(): ActionPanel() {
     val readyButton = Button("Buttons/ready-btn.png", Vector2(this.position.x, 0f))
 
     // FIRE TOWER🔥
-    private val fireTowerData = Redux.jsonAvailableTowers!!.getTower(UnitType.FIRE)
+    private val fireTowerData = Redux.gameStatus!!.availableTowers.getTower(UnitType.FIRE)
     val fireTowerBackground = SmartObject("HUD/banner-fire.png", Vector2(this.position.x+32f, 323f), 1f)
     val fireTowerButton = Button("Cards/"+getUnitName(UnitType.FIRE, fireTowerData.level)+".png", Vector2(this.position.x, 330f))
     val fireDamageNumber = FontObject(fireTowerData.damage.toString(), 25, Vector2(this.position.x + 70f, 439f))
     val fireRangeNumber = FontObject(fireTowerData.damage.toString(), 25, Vector2(this.position.x + 135f, 439f))
 
     // GRASS TOWER🌿
-    private val grassTowerData = Redux.jsonAvailableTowers!!.getTower(UnitType.GRASS)
+    private val grassTowerData = Redux.gameStatus!!.availableTowers.getTower(UnitType.GRASS)
     val grassTowerBackground = SmartObject("HUD/banner-grass.png", Vector2(this.position.x+32f , 199f), 1f)
     val waterTowerButton = Button("Cards/"+getUnitName(UnitType.GRASS, grassTowerData.level)+".png", Vector2(this.position.x , 206f))
     val grassDamageNumber = FontObject(fireTowerData.damage.toString(), 25, Vector2(this.position.x + 70f, 315f))
     val grassRangeNumber = FontObject(fireTowerData.damage.toString(), 25, Vector2(this.position.x + 135f, 315f))
 
     // WATER TOWER💧
-    private val waterTowerData = Redux.jsonAvailableTowers!!.getTower(UnitType.WATER)
+    private val waterTowerData = Redux.gameStatus!!.availableTowers.getTower(UnitType.WATER)
     val waterTowerBackground = SmartObject("HUD/banner-water.png", Vector2(this.position.x+32f, 75f), 1f)
     val grassTowerButton = Button("Cards/"+getUnitName(UnitType.WATER, waterTowerData.level)+".png", Vector2(this.position.x, 83f))
     val waterDamageNumber = FontObject(fireTowerData.damage.toString(), 25, Vector2(this.position.x + 70f, 192f))
