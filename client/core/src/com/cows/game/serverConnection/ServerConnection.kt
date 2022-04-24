@@ -21,8 +21,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.github.cdimascio.dotenv.Dotenv
 import io.github.cdimascio.dotenv.dotenv
-import io.ktor.utils.io.*
-import io.ktor.utils.io.core.internal.*
+import io.ktor.client.features.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.collections.ArrayList
@@ -58,7 +57,7 @@ object ServerConnection {
 
     private suspend fun sendGameCreateRequest(client:HttpClient): GameCreateResponse {
         println("Sending request to $httpApiBase/game/create")
-        return client.request<GameCreateResponse>("$httpApiBase/game/create")
+        return client.request("$httpApiBase/game/create")
     }
 
     private suspend fun generateWebsocketClient(client: HttpClient): DefaultWebSocketSession{
@@ -206,8 +205,7 @@ object ServerConnection {
     }
 
     suspend fun sendGameJoinRequest(client: HttpClient,gameJoinCode: String): GameJoinResponse {
-        val response: GameJoinResponse = client.request("$httpApiBase/game/join/${gameJoinCode}")
-        return response
+        return client.request("$httpApiBase/game/join/${gameJoinCode}")
     }
 
     private fun createMessage(opCode: OpCode, data: String?): Message {
