@@ -12,7 +12,9 @@ object AudioManager: GameStateSubscriber() {
     var mute = false
         set(value) {
             if (value) {
-                stopAllSound()
+                muteAllSound()
+            } else {
+                unmuteAllSound()
             }
             field = value
         }
@@ -36,6 +38,15 @@ object AudioManager: GameStateSubscriber() {
     private fun stopAllSound() {
         stopBackgroundMusic()
         stopSoundEffect()
+    }
+
+    private fun muteAllSound() {
+        soundEffect?.stop()
+        backgroundMusic?.volume = 0f
+    }
+
+    private fun unmuteAllSound() {
+        backgroundMusic?.volume = 0.5f
     }
 
     fun playMusic(filePath: String, volume: Float = 1f, isLooping: Boolean = true) {
