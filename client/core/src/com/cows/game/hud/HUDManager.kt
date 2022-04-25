@@ -47,6 +47,7 @@ class HUDManager(): GameStateSubscriber() {
 
         actionPanel?.let {
             it.die()
+            actionPanel = null
         }
         if (oldGameState == GameState.START_MENU) {
             menuController?.die()
