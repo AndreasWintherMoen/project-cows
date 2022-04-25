@@ -101,12 +101,14 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
             coins -= costPerDefenseTower
             coinsText.text = coins.toString()
             towerToBeSpawned = type
-            val reduxTowerModel = RoundManager.gameStatus!!.availableTowers.getTower(type)
-            val towerModel = TowerModel(towerToBeSpawned, reduxTowerModel.level, lastTile!!.tileModel.coordinate, reduxTowerModel.range!!, reduxTowerModel.damage!!)
-            val towerController = PlanningTowerController(towerModel)
-            spawnedTowers.add(towerController)
             onSpawnTower?.invoke()
             hideUI(true)
+            val reduxTowerModel = RoundManager.gameStatus?.availableTowers?.getTower(type)
+            reduxTowerModel?.let {
+                val towerModel = TowerModel(towerToBeSpawned, it.level, lastTile!!.tileModel.coordinate, it.range!!, it.damage!!)
+                val towerController = PlanningTowerController(towerModel)
+                spawnedTowers.add(towerController)
+            }
         } else {
             //TODO: Give the user some feedback that they don't have any units left
         }
@@ -165,6 +167,11 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
         if (checkIfTileIsOccupied(tile.tileModel.coordinate)){
             clickOccupiedTile(tile)
             return
+        } else {
+            selectedTowerRadius?.die()
+            selectedTowerRadius = null
+            removeSelectedTower.hide = true
+            readyButton.hide = false
         }
         clickTile(tile)
     }
