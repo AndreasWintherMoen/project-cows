@@ -1,17 +1,16 @@
 package com.cows.map
 
 import java.io.File
-import java.lang.Exception
 
-object Map {
-    const val WIDTH = 13
-    const val HEIGHT = 8
+class Map {
+    val WIDTH = 13
+    val HEIGHT = 8
     val PATH = load()
-    const val FILE_NAME = "map"
 
     private fun load(): ArrayList<Coordinate> {
         return try {
-            val charMap = File("maps/$FILE_NAME.map").readText().lines().map { it.toCharArray() }
+            val fileNames = getMapFiles()
+            val charMap = File("maps/${fileNames.random()}").readText().lines().map { it.toCharArray() }
             val map = charMap.map { charArrayToIntArray(it) }
             generatePath(map)
         }
@@ -54,5 +53,11 @@ object Map {
 
     fun getPathCoordinates(): List<IntArray> {
         return PATH.map { c -> intArrayOf(c.x, c.y) }
+    }
+
+    fun getMapFiles(): ArrayList<String> {
+        val fileNames = arrayListOf<String>()
+        File("maps/").walkBottomUp().forEach { if(it.name.endsWith(".map", true)) fileNames.add(it.name) }
+        return fileNames
     }
 }

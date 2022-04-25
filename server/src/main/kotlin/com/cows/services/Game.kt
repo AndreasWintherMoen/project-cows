@@ -1,21 +1,18 @@
 package com.cows.services
 
-import com.cows.map.Coordinate
 import com.cows.services.simulation.API
-import com.cows.services.simulation.models.json.JsonAvailableTowers
-import com.cows.services.simulation.models.json.JsonAvailableUnits
 import com.cows.services.simulation.models.json.JsonRoundSimulation
 import projectcows.rawJsonData.JsonTower
 import com.cows.map.Map
 import projectcows.rawJsonData.JsonUnit
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.*
-import kotlin.collections.ArrayList
 
 class Game(
     val gameConnections: Pair<ClientConnection, ClientConnection>,
     playerStates: Pair<PlayerState, PlayerState>) {
-    val gameState = GameState(playerStates, Map.getPathCoordinates())
+    private val map = Map()
+    val gameState = GameState(playerStates, map.getPathCoordinates())
     private val firstPlayerIsAttacker
         get() = gameState.roundCounter % 2 == 0
 
@@ -87,7 +84,7 @@ class Game(
 
         gameState.roundCounter++
 
-        gameState.path = Map.getPathCoordinates()
+        gameState.path = map.getPathCoordinates()
     }
 
     suspend fun generateAvailableUnitsAndTowers() {
