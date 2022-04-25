@@ -1,8 +1,10 @@
 package com.cows.game.hud
 import com.badlogic.gdx.math.Vector2
+import com.cows.game.Application
 import com.cows.game.controllers.MenuController
 import com.cows.game.enums.GameState
 import com.cows.game.gameState.GameStateSubscriber
+import com.cows.game.managers.AudioManager
 import com.cows.game.map.Map
 
 
@@ -14,10 +16,17 @@ class HUDManager(): GameStateSubscriber() {
     private val loseText = SmartObject("HUD/lose.png", Vector2(200f, 0f), 1f)
     private var healthIndicator: HealthIndicator? = null
 
+    private val muteButton = Button("Buttons/mute-button.png", Vector2(Application.WIDTH - 50f, Application.HEIGHT - 50f)) { onMuteButtonClicked() }
+    private val unmuteButton = Button("Buttons/unmute-button.png", Vector2(Application.WIDTH - 50f, Application.HEIGHT - 50f)) { onUnmuteButtonClicked() }
+
     init {
         hideTexts()
         winText.zIndex = 10
         loseText.zIndex = 10
+
+        unmuteButton.hide = true
+        muteButton.zIndex = 5
+        unmuteButton.zIndex = 5
     }
 
     private fun hideTexts() {
@@ -57,4 +66,17 @@ class HUDManager(): GameStateSubscriber() {
         loseText.hide = false
         healthIndicator?.let { it.health -= 1 }
     }
+
+    private fun onMuteButtonClicked() {
+        AudioManager.mute = true
+        muteButton.hide = true
+        unmuteButton.hide = false
+    }
+
+    private fun onUnmuteButtonClicked() {
+        AudioManager.mute = false
+        muteButton.hide = false
+        unmuteButton.hide = true
+    }
+
 }
