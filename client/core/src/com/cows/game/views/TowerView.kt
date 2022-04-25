@@ -15,23 +15,23 @@ class TowerView(private val model: TowerModel): Renderable() {
             when (model.type) {
                 UnitType.FIRE ->
                     when (model.level) {
-                        0 -> Texture("Units/Units/fire-0-back-0.png")
-                        1 -> Texture("Units/Units/fire-1-back-0.png")
+                        0 -> Texture("Towers/fire-0-back-0.png")
+                        1 -> Texture("Towers/fire-1-back-0.png")
                         2 -> Texture("Towers/fire-2-back-0.png")
                         else -> throw Error("Could not find level ${model.level}")
                     }
 
                 UnitType.GRASS ->
                     when (model.level) {
-                        0 -> Texture("Units/Units/grass-0-back-0.png")
-                        1 -> Texture("Units/Units/grass-1-back-0.png")
+                        0 -> Texture("Towers/grass-0-back-0.png")
+                        1 -> Texture("Towers/grass-1-back-0.png")
                         2 -> Texture("Towers/grass-2-back-0.png")
                         else -> throw Error("Could not find level ${model.level}")
                     }
                 UnitType.WATER ->
                     when (model.level) {
-                        0 -> Texture("Units/Units/water-0-back-0.png")
-                        1 -> Texture("Units/Units/water-1-back-0.png")
+                        0 -> Texture("Towers/water-0-back-0.png")
+                        1 -> Texture("Towers/water-1-back-0.png")
                         2 -> Texture("Towers/water-2-back-0.png")
                         else -> throw Error("Could not find level ${model.level}")
                     }
