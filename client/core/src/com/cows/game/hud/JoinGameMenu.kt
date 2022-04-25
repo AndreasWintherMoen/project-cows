@@ -12,7 +12,7 @@ import com.cows.game.views.Renderable
 import kotlinx.coroutines.runBlocking
 
 class JoinGameMenu(private val onJoinGame: (code: String) -> Unit, private val onBackButton: () -> Unit): Renderable(){
-    private val backgroundImg = Sprite(Texture("HUD/StartScreen/background-clean.png"))
+    private val backgroundImg = Sprite(Texture("HUD/StartScreen/background-clean2.png"))
     private var submitGameCodeBtn: Button? = Button("Buttons/enter-btn.png", Vector2(813f, 221f)){joinGame()}
     private var waitingeBtn: Button = Button("Buttons/waiting-button.png", Vector2(813f, 221f))
     private var goBackBtn: Button? = Button("Buttons/back-btn.png", Vector2(17f, 221f)){onBackButton.invoke()}
