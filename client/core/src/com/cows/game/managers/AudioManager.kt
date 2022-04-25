@@ -22,7 +22,7 @@ object AudioManager: GameStateSubscriber() {
     fun init() {}
 
     init {
-        playMusic("Sound/intro.mp3")
+        playMusic("Sound/intro-2.mp3")
     }
 
     private fun stopBackgroundMusic() {
@@ -80,7 +80,7 @@ object AudioManager: GameStateSubscriber() {
                 playMusic("Sound/planning.mp3", 0.5f)
             }
             GameState.START_MENU -> {
-                playMusic("Sound/intro.mp3", 0.5f)
+                playMusic("Sound/intro-2.mp3", 0.5f)
             }
             else -> { println("Could not find game state $newGameState in AudioManager::onChangeGameState") }
         }
