@@ -1,1 +1,1 @@
-rootProject.name = "simulationserver"
+rootProject.name = "project-cows"

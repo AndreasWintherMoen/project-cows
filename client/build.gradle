@@ -42,84 +42,85 @@ allprojects {
     }
 }
 
-project(":desktop") {
-    apply plugin: "kotlin"
+
+subprojects {
+    project(":desktop") {
+        apply plugin: "kotlin"
 
 
-    dependencies {
-        implementation project(":core")
-        api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
-        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-        implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+        dependencies {
+            implementation project(":core")
+            api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+            api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+            api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+            implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+        }
+    }
+
+    project(":android") {
+        apply plugin: "android"
+
+        configurations { natives }
+
+        dependencies {
+            implementation project(":core")
+            api "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+            natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
+            natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
+            natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
+            natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
+            api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+
+            implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+            natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
+            natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a"
+            natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
+            natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
+
+        }
+    }
+
+    project(":ios") {
+        apply plugin: "kotlin"
+        apply plugin: "robovm"
+
+
+        dependencies {
+            implementation project(":core")
+            api "com.mobidevelop.robovm:robovm-rt:$roboVMVersion"
+            api "com.mobidevelop.robovm:robovm-cocoatouch:$roboVMVersion"
+            api "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
+            api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
+            api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+            implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
+        }
+    }
+
+    project(":core") {
+        apply plugin: "kotlin"
+
+
+        dependencies {
+            api "com.badlogicgames.gdx:gdx:$gdxVersion"
+            api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+            implementation 'com.google.code.gson:gson:2.9.0'
+            implementation("io.ktor:ktor-client-core:1.6.8")
+            implementation("io.ktor:ktor-client-cio:1.6.8")
+            implementation("io.ktor:ktor-client-auth:$ktor_version")
+            implementation("io.ktor:ktor-client-gson:$ktor_version")
+            implementation("io.ktor:ktor-gson:$ktor_version")
+            implementation("io.ktor:ktor-websockets:$ktor_version")
+            implementation("io.ktor:ktor-client-core:$ktor_version")
+            implementation("io.ktor:ktor-client-cio:$ktor_version")
+            implementation("io.ktor:ktor-client-logging:$ktor_version")
+            testImplementation('org.jetbrains.kotlin:kotlin-test')
+            api "io.github.libktx:ktx-async:1.10.0-rc1"
+            implementation("io.github.cdimascio:dotenv-kotlin:6.2.2")
+            implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+            implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0-alpha05"
+        }
+        test {
+            useJUnitPlatform()
+        }
     }
 }
-
-project(":android") {
-    apply plugin: "android"
-    apply plugin: "kotlin-android"
-
-    configurations { natives }
-
-    dependencies {
-        implementation project(":core")
-        api "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
-        api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-
-        implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
-        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a"
-        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
-        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
-
-    }
-}
-
-project(":ios") {
-    apply plugin: "kotlin"
-    apply plugin: "robovm"
-
-
-    dependencies {
-        implementation project(":core")
-        api "com.mobidevelop.robovm:robovm-rt:$roboVMVersion"
-        api "com.mobidevelop.robovm:robovm-cocoatouch:$roboVMVersion"
-        api "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
-        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
-        api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-        implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
-    }
-}
-
-project(":core") {
-    apply plugin: "kotlin"
-
-
-    dependencies {
-        api "com.badlogicgames.gdx:gdx:$gdxVersion"
-        api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-        implementation 'com.google.code.gson:gson:2.9.0'
-        implementation("io.ktor:ktor-client-core:1.6.8")
-        implementation("io.ktor:ktor-client-cio:1.6.8")
-        implementation("io.ktor:ktor-client-auth:$ktor_version")
-        implementation("io.ktor:ktor-client-gson:$ktor_version")
-        implementation("io.ktor:ktor-gson:$ktor_version")
-        implementation("io.ktor:ktor-websockets:$ktor_version")
-        implementation("io.ktor:ktor-client-core:$ktor_version")
-        implementation("io.ktor:ktor-client-cio:$ktor_version")
-        implementation("io.ktor:ktor-client-logging:$ktor_version")
-        testImplementation('org.jetbrains.kotlin:kotlin-test')
-        api "io.github.libktx:ktx-async:1.10.0-rc1"
-        implementation("io.github.cdimascio:dotenv-kotlin:6.2.2")
-        implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-        implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0-alpha05"
-    }
-    test {
-        useJUnitPlatform()
-    }
-}
-

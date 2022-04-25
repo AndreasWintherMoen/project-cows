@@ -1,6 +1,7 @@
-package projectcows.rawJsonData
+package models.simulation.json
 
-import com.cows.services.simulation.enums.UnitType
+import models.enums.UnitType
+
 
 data class JsonUnit(
     val id: Int?,

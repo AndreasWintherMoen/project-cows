@@ -1,0 +1,3 @@
+/home/pa10/Documents/skole/TDT4240/project-cows/shared/src/main/kotlin/com/cows/shared/Message.kt
+/home/pa10/Documents/skole/TDT4240/project-cows/shared/src/main/kotlin/com/cows/shared/ConnectionUtils.kt
+/home/pa10/Documents/skole/TDT4240/project-cows/shared/src/main/kotlin/Main.kt

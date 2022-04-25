@@ -1,1 +1,3 @@
+rootProject.name = "project-cows"
+
 include 'desktop', 'android', 'ios', 'core'

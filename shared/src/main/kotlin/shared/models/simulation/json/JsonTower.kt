@@ -1,7 +1,7 @@
-package projectcows.rawJsonData
+package models.simulation.json
 
-import com.cows.services.simulation.enums.UnitType
-import projectcows.models.Coordinate
+import models.generation.Coordinate
+import models.enums.UnitType
 
 data class JsonTower (
     val id: Int?,

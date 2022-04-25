@@ -4,12 +4,12 @@ val logback_version: String by project
 
 plugins {
     application
-    kotlin("jvm") version "1.6.20"
-    id("com.github.johnrengelman.shadow") version "7.0.0"
+    kotlin("jvm")
+    id("com.github.johnrengelman.shadow")
 }
 
-group = "projectcows"
-version = "0.0.1"
+group = "com.cows"
+version = "1.0"
 application {
     mainClass.set("projectcows.ApplicationKt")
 
@@ -39,5 +39,13 @@ tasks {
         manifest {
             attributes(Pair("Main-Class", "projectcows.ApplicationKt"))
         }
+    }
+}
+
+evaluationDependsOn(":shared")
+
+kotlin{
+    sourceSets["main"].apply {
+        kotlin.srcDir("../shared/src/main/kotlin/shared")
     }
 }

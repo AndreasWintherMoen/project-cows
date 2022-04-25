@@ -4,13 +4,13 @@ val logback_version: String by project
 
 plugins {
     application
-    kotlin("jvm") version "1.6.10"
-    id("com.github.johnrengelman.shadow") version "7.0.0"
+    kotlin("jvm")
+    id("com.github.johnrengelman.shadow")
     kotlin("plugin.serialization") version "1.4.32"
 }
 
 group = "com.cows"
-version = "0.0.1"
+version = "1.0"
 application {
     mainClass.set("com.cows.ApplicationKt")
 
@@ -47,7 +47,7 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
     implementation("io.ktor:ktor-client-serialization:$ktor_version")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    testImplementation(kotlin("test-junit", kotlin_version))
     implementation("io.github.cdimascio:dotenv-kotlin:6.2.2")
 }
 
@@ -57,5 +57,13 @@ tasks {
         manifest {
             attributes(Pair("Main-Class", "com.cows.ApplicationKt"))
         }
+    }
+}
+
+evaluationDependsOn(":shared")
+
+kotlin{
+    sourceSets["main"].apply {
+        kotlin.srcDir("../shared/src/main/kotlin/shared")
     }
 }
