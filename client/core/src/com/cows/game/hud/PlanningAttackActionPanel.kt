@@ -73,6 +73,8 @@ class PlanningAttackActionPanel() : PlanningActionPanel() {
 
     private fun onStartButtonClicked() {
         println("PlanningAttackActionPanel::onStartButtonClicked")
+        readyButton.hide = true
+        waitingButton.hide = false
         val units = unitCounterPanel.getJsonUnitList()
         GlobalScope.launch(Dispatchers.IO) {
             val roundSimulation = ServerConnection.sendAttackInstructions(units)

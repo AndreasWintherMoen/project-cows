@@ -113,6 +113,8 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
     }
 
     private fun onStartButtonClicked() {
+        readyButton.hide = true
+        waitingButton.hide = false
         val towers = spawnedTowers
             .map { it.model }
             .map { JsonTower(null, it.type, it.level, it.tileCoordinate, null, null, null)}
