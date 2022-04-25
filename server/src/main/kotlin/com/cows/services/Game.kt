@@ -93,6 +93,9 @@ class Game(
 
         gameState.path = Map.getPathCoordinates()
 
+        gameState.playerStates.first.coins += 5
+        gameState.playerStates.second.coins += 5
+
         gameState.attackInstructions = null
         gameState.defendInstructions = null
     }
