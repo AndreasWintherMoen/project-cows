@@ -13,6 +13,9 @@ object ConnectionMapper {
     // 900 000 seconds is 15 minutes
     private val gameCodeTimeoutMillis = 900000
 
+    // we have a 5 digit code, which makes 100 000 games. this is 95% full
+    private val maxActiveGames = 95000
+
     private var gameMap: MutableMap<UUID, Game> = Collections.synchronizedMap(mutableMapOf())
 
     fun createGame(clientConnection: ClientConnection, gameJoinCode: String): UUID? {
@@ -25,6 +28,10 @@ object ConnectionMapper {
 
     private var gameCodeMap: MutableMap<String, GameCode> =
         Collections.synchronizedMap(mutableMapOf())
+
+    fun isServerOverloaded(): Boolean {
+        return gameMap.size >= maxActiveGames
+    }
 
     fun createGameCode(clientConnection: ClientConnection): GameCode {
         val gameCodeUUID = UUID.randomUUID()
