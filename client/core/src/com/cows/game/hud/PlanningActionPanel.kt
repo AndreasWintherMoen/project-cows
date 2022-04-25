@@ -16,15 +16,19 @@ abstract class PlanningActionPanel(): ActionPanel() {
         }
     }
     val readyButton = Button("Buttons/ready-btn.png", Vector2(this.position.x, 0f))
+    val waitingButton = Button("Buttons/waiting-button.png", Vector2(this.position.x, 0f))
 
     init {
         Map.init()
         readyButton.zIndex = 3
+        waitingButton.zIndex = 3
+        waitingButton.hide = true
     }
 
     override fun die() {
         super.die()
         readyButton.die()
+        waitingButton.die()
     }
 
     fun getUnitName(type: UnitType, level: Int): String {

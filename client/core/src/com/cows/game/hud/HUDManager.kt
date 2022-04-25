@@ -16,8 +16,14 @@ class HUDManager(): GameStateSubscriber() {
     private val loseText = SmartObject("HUD/lose.png", Vector2(200f, 0f), 1f)
     private var healthIndicator: HealthIndicator? = null
 
-    private val muteButton = Button("Buttons/mute-button.png", Vector2(Application.WIDTH - 50f, Application.HEIGHT - 50f)) { onMuteButtonClicked() }
-    private val unmuteButton = Button("Buttons/unmute-button.png", Vector2(Application.WIDTH - 50f, Application.HEIGHT - 50f)) { onUnmuteButtonClicked() }
+    private val muteButton = Button(
+        "Buttons/mute-button.png",
+        Vector2(Application.WIDTH - 50f, Application.HEIGHT - 50f)
+    ) { onMuteButtonClicked() }
+    private val unmuteButton = Button(
+        "Buttons/unmute-button.png",
+        Vector2(Application.WIDTH - 50f, Application.HEIGHT - 50f)
+    ) { onUnmuteButtonClicked() }
 
     init {
         hideTexts()
@@ -77,6 +83,10 @@ class HUDManager(): GameStateSubscriber() {
         AudioManager.mute = false
         muteButton.hide = false
         unmuteButton.hide = true
+    }
+
+    fun onError(message: String) {
+        menuController?.showError(message)
     }
 
 }

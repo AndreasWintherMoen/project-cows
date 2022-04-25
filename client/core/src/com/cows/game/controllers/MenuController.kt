@@ -57,22 +57,28 @@ class MenuController {
     }
 
     private fun joinGame(joinCode: String) {
-        try {
-            GlobalScope.launch(Dispatchers.IO) {
-              ServerConnection.joinGame(joinCode)
-              RoundManager.gameStatus = ServerConnection.getGameStatus()
-              println(RoundManager.gameStatus)
-              GameStateManager.setGameStateAsync(GameState.PLANNING_DEFENSE)
-              Redux.playerCreatedGame = false
-            }
-            userResponse?.dispose()
+        GlobalScope.launch(Dispatchers.IO) {
+              try {
+                  userResponse?.die()
+                  userResponse = null
+                  ServerConnection.joinGame(joinCode)
+                  RoundManager.gameStatus = ServerConnection.getGameStatus()
+                  println(RoundManager.gameStatus)
+                  GameStateManager.setGameStateAsync(GameState.PLANNING_DEFENSE)
+                  Redux.playerCreatedGame = false
+              } catch (error: ClientRequestException) {
+                  System.err.println("Wrong code")
+                  println(error)
+                  Redux.errorMessage = "Wrong code"
+              }
         }
-        catch (error: ClientRequestException) {
-            System.err.println("Wrong code")
-            println(error)
-            userResponse = FontObject("Wrong code", 64, Color(0.9f, 0.04f, 0f, 1f))
-            userResponse!!.position = Vector2((Gdx.graphics.width/2 - userResponse!!.getFontWidth()/2),125f)
-        }
+        userResponse?.dispose()
+    }
+
+    fun showError(message: String) {
+        userResponse = FontObject(message, 64, Color(0.9f, 0.04f, 0f, 1f))
+        userResponse!!.position = Vector2((Gdx.graphics.width/2 - userResponse!!.getFontWidth()/2),125f)
+        joinMenu?.onWrongCode()
     }
 
     fun die() {
