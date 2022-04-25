@@ -36,6 +36,7 @@ class PeekPanel {
     }
 
     private val coins = if (RoundManager.playerCreatedGame!!) RoundManager.gameStatus!!.playerStates.second.coins else RoundManager.gameStatus!!.playerStates.first.coins
+//    private val coins = RoundManager.playerCreatedGame?.let { if (it) RoundManager.gameStatus!!.playerStates.second.coins else RoundManager.gameStatus!!.playerStates.first.coins } if (RoundManager.playerCreatedGame?) RoundManager.gameStatus!!.playerStates.second.coins else RoundManager.gameStatus!!.playerStates.first.coins
     private val coinsText = FontObject(coins.toString(), 60, Vector2(defaultPosition.x - 150f, Application.HEIGHT - 135f))
 
     private val enemyFireTower = RoundManager.gameStatus!!.availableTowers.fireTower

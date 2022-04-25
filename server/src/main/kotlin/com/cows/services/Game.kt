@@ -80,9 +80,10 @@ class Game(
     }
 
     private suspend fun nextRound(roundSimulation: JsonRoundSimulation) {
-        val firstPlayerWon = !firstPlayerIsAttacker.xor(roundSimulation.attackerWon)
-        if (firstPlayerWon) gameState.playerStates.first.health--
-        else gameState.playerStates.second.health--
+        if (roundSimulation.attackerWon) {
+            if (firstPlayerIsAttacker) gameState.playerStates.first.health--
+            else gameState.playerStates.second.health--
+        }
 
         generateAvailableUnitsAndTowers()
 
