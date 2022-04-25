@@ -12,8 +12,8 @@ import com.cows.game.map.Map
 class HUDManager(): GameStateSubscriber() {
     private var actionPanel: ActionPanel? = null
     private var menuController: MenuController? = null
-    private val winText = SmartObject("HUD/win.png", Vector2(200f, 0f), 1f)
-    private val loseText = SmartObject("HUD/lose.png", Vector2(200f, 0f), 1f)
+    private val winText = SmartObject("HUD/win.png", Vector2(0f, 0f), 1f)
+    private val loseText = SmartObject("HUD/lose.png", Vector2(0f, 0f), 1f)
     private var healthIndicator: HealthIndicator? = null
 
     private val muteButton = Button(
