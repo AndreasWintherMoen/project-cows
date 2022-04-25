@@ -2,23 +2,18 @@ package com.cows.game
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.audio.Music
-import com.badlogic.gdx.audio.Sound
 import com.cows.game.enums.GameState
 import com.cows.game.hud.ActionPanel
 import com.cows.game.hud.HUDManager
-import com.cows.game.hud.PlanningAttackActionPanel
 import com.cows.game.managers.*
 import com.cows.game.map.Map
 import com.cows.game.models.TileModel
 import com.cows.game.roundSimulation.GameTickProcessor
-import com.cows.game.roundSimulation.RoundSimulationDeserializer
 import com.cows.game.roundSimulation.rawJsonData.JsonRoundSimulation
 import com.cows.game.serverConnection.ServerConnection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.io.File
 import ktx.async.KtxAsync
 
 class Application : ApplicationAdapter()  {
@@ -47,7 +42,11 @@ class Application : ApplicationAdapter()  {
     }
 
     override fun render() {
-        Redux.jsonRoundSimulation?.let { println("json round simulation is not null"); startGame(it); Redux.jsonRoundSimulation = null }
+        Redux.jsonRoundSimulation?.let {
+            startGame(it);
+            RoundManager.reloadReduxValues()
+            Redux.jsonRoundSimulation = null
+        }
 
         val deltaTime = Gdx.graphics.deltaTime
         val tickAdjustedDeltaTime = deltaTime / tickDuration
@@ -76,16 +75,15 @@ class Application : ApplicationAdapter()  {
     private fun finishGame() {
         println("Application::finishGame")
         gameTickProcessor?.killAllUnits()
-        Redux.jsonRoundSimulation?.let {
+        RoundManager.roundSimulation?.let {
             val playerWon = !it.attackerWon.xor(RoundManager.playerIsAttacker)
-            if (playerWon) hudManager.showWinText()
-            else hudManager.showLoseText()
+            if (playerWon) hudManager.showWinUI()
+            else hudManager.showLoseUI()
         }
         println("Hei")
         GlobalScope.launch(Dispatchers.IO) {
             println("Starting coroutine context")
-            Redux.gameStatus = ServerConnection.getGameStatus()
-            println(Redux.gameStatus)
+            RoundManager.gameStatus = ServerConnection.getGameStatus()
             gameTickProcessor = null
             if (RoundManager.playerIsAttacker) {
                 GameStateManager.setGameStateAsync(GameState.PLANNING_DEFENSE)

@@ -4,9 +4,9 @@ import com.badlogic.gdx.math.Vector2
 import com.cows.game.Application
 
 class HealthIndicator() {
-    private var firstHeart = SmartObject("HUD/heart-full.png", Vector2(20f, Application.HEIGHT - 50f), 1f)
-    private var secondHeart = SmartObject("HUD/heart-full.png", Vector2(70f, Application.HEIGHT - 50f), 1f)
-    private var thirdHeart = SmartObject("HUD/heart-full.png", Vector2(120f, Application.HEIGHT - 50f), 1f)
+    private var firstHeart = SmartObject("HUD/heart-full.png", Vector2(10f, Application.HEIGHT - 50f), 1f)
+    private var secondHeart = SmartObject("HUD/heart-full.png", Vector2(60f, Application.HEIGHT - 50f), 1f)
+    private var thirdHeart = SmartObject("HUD/heart-full.png", Vector2(110f, Application.HEIGHT - 50f), 1f)
     var health = 3
         set(value) {
             field = value

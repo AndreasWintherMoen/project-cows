@@ -2,10 +2,10 @@ package com.cows.game.controllers
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Vector2
-import com.cows.game.Redux
 import com.cows.game.enums.GameState
 import com.cows.game.hud.*
 import com.cows.game.managers.GameStateManager
+import com.cows.game.managers.RoundManager
 import com.cows.game.serverConnection.ServerConnection
 import io.ktor.client.features.*
 import kotlinx.coroutines.*
@@ -47,8 +47,8 @@ class MenuController {
             val joinCode = ServerConnection.createGame()
             createMenu?.setGameCode(joinCode)
             ServerConnection.connectToActiveGame()
-            Redux.gameStatus = ServerConnection.getGameStatus()
-            println(Redux.gameStatus)
+            RoundManager.gameStatus = ServerConnection.getGameStatus()
+            println(RoundManager.gameStatus)
             GameStateManager.setGameStateAsync(GameState.PLANNING_ATTACK)
         }
         createMenu = CreateGameMenu({showStartMenu()})
@@ -67,8 +67,8 @@ class MenuController {
         try {
             runBlocking {
               ServerConnection.joinGame(joinCode)
-              Redux.gameStatus = ServerConnection.getGameStatus()
-              println(Redux.gameStatus)
+              RoundManager.gameStatus = ServerConnection.getGameStatus()
+              println(RoundManager.gameStatus)
               GameStateManager.setGameStateAsync(GameState.PLANNING_DEFENSE)
             }
             userResponse?.dispose()

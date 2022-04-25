@@ -8,6 +8,7 @@ import com.cows.game.controllers.PlanningTowerController
 import com.cows.game.controllers.TileController
 import com.cows.game.enums.TileType
 import com.cows.game.enums.UnitType
+import com.cows.game.managers.RoundManager
 import com.cows.game.map.Coordinate
 import com.cows.game.models.TileModel
 import com.cows.game.models.TowerModel
@@ -31,21 +32,21 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
 
 
     // FIRE TOWER🔥
-    private val fireTowerData = Redux.gameStatus!!.availableTowers.fireTower
+    private val fireTowerData = RoundManager.gameStatus!!.availableTowers.fireTower
     val fireTowerBackground = SmartObject("Cards/banner-fire-defence.png", Vector2(this.position.x+32f, 323f), 1f)
     val fireDamageNumber = FontObject(fireTowerData.damage.toString(), 25, Vector2(this.position.x + 70f, 439f))
     val fireRangeNumber = FontObject(fireTowerData.damage.toString(), 25, Vector2(this.position.x + 135f, 439f))
     val fireTowerButton = Button("Cards/"+getUnitName(UnitType.FIRE, fireTowerData.level)+".png", Vector2(this.position.x, 330f))
 
     // GRASS TOWER🌿
-    private val grassTowerData = Redux.gameStatus!!.availableTowers.grassTower
+    private val grassTowerData = RoundManager.gameStatus!!.availableTowers.grassTower
     val grassTowerBackground = SmartObject("Cards/banner-grass-defence.png", Vector2(this.position.x+32f , 199f), 1f)
     val grassDamageNumber = FontObject(grassTowerData.damage.toString(), 25, Vector2(this.position.x + 70f, 315f))
     val grassRangeNumber = FontObject(grassTowerData.damage.toString(), 25, Vector2(this.position.x + 135f, 315f))
     val grassTowerButton = Button("Cards/"+getUnitName(UnitType.GRASS, grassTowerData.level)+".png", Vector2(this.position.x, 206f))
 
     // WATER TOWER💧
-    private val waterTowerData = Redux.gameStatus!!.availableTowers.waterTower
+    private val waterTowerData = RoundManager.gameStatus!!.availableTowers.waterTower
     val waterTowerBackground = SmartObject("Cards/banner-water-defence.png", Vector2(this.position.x+32f, 75f), 1f)
     val waterDamageNumber = FontObject(waterTowerData.damage.toString(), 25, Vector2(this.position.x + 70f, 192f))
     val waterRangeNumber = FontObject(waterTowerData.damage.toString(), 25, Vector2(this.position.x + 135f, 192f))
@@ -78,7 +79,7 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
         if (coins>0 && lastTile != null ) {
             coinsText.text = (-- coins).toString()
             towerToBeSpawned = type
-            val reduxTowerModel = Redux.gameStatus!!.availableTowers.getTower(type)
+            val reduxTowerModel = RoundManager.gameStatus!!.availableTowers.getTower(type)
             val towerModel = TowerModel(towerToBeSpawned, reduxTowerModel.level, lastTile!!.tileModel.coordinate, reduxTowerModel.range!!, reduxTowerModel.damage!!)
             val towerController = PlanningTowerController(towerModel)
             spawnedTowers.add(towerController)

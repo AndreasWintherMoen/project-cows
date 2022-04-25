@@ -45,11 +45,14 @@ class HUDManager(): GameStateSubscriber() {
         }
     }
 
-    fun showWinText() {
+    fun showWinUI() {
+        println("HUDManager::showWinUI")
         winText.hide = false
     }
 
-    fun showLoseText() {
+    fun showLoseUI() {
+        println("HUDManager::showLoseUI")
         loseText.hide = false
+        healthIndicator?.let { it.health -= 1 }
     }
 }

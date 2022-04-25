@@ -3,6 +3,7 @@ package com.cows.game.hud
 import com.badlogic.gdx.math.Vector2
 import com.cows.game.Redux
 import com.cows.game.enums.UnitType
+import com.cows.game.managers.RoundManager
 import com.cows.game.serverConnection.ServerConnection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -12,7 +13,7 @@ class PlanningAttackActionPanel() : PlanningActionPanel() {
     val unitCounterPanel = UnitCounterPanel(10)
 
     // FIRE UNIT🔥
-    private val fireUnitData = Redux.gameStatus!!.availableUnits.fireUnit
+    private val fireUnitData = RoundManager.gameStatus!!.availableUnits.fireUnit
     val fireUnitBackground = SmartObject("Cards/banner-fire-attack.png", Vector2(this.position.x+32f, 323f), 1f)
     val fireHealthNumber = FontObject(fireUnitData.health.toString(), 25, Vector2(this.position.x + 70f, 439f))
     val fireMovementSpeedNumber = FontObject(fireUnitData.movementSpeed.toString(), 25, Vector2(this.position.x + 135f, 439f))
@@ -21,7 +22,7 @@ class PlanningAttackActionPanel() : PlanningActionPanel() {
     val fireUnitButton = Button("Cards/"+getUnitName(UnitType.FIRE, fireUnitData.level)+".png", Vector2(this.position.x , 330f))
 
     // GRASS UNIT🌿
-    private val grassUnitData = Redux.gameStatus!!.availableUnits.grassUnit
+    private val grassUnitData = RoundManager.gameStatus!!.availableUnits.grassUnit
     val grassUnitBackground = SmartObject("Cards/banner-grass-attack.png", Vector2(this.position.x+32f , 199f), 1f)
     val grassHealthNumber = FontObject(grassUnitData.health.toString(), 25, Vector2(this.position.x + 70f, 315f))
     val grassMovementSpeedNumber = FontObject(grassUnitData.movementSpeed.toString(), 25, Vector2(this.position.x + 135f, 315f))
@@ -30,7 +31,7 @@ class PlanningAttackActionPanel() : PlanningActionPanel() {
     val grassUnitButton = Button("Cards/"+getUnitName(UnitType.GRASS, grassUnitData.level)+".png", Vector2(this.position.x, 206f))
 
     // WATER UNIT💧
-    private val waterUnitData = Redux.gameStatus!!.availableUnits.waterUnit
+    private val waterUnitData = RoundManager.gameStatus!!.availableUnits.waterUnit
     val waterUnitBackground = SmartObject("Cards/banner-water-attack.png", Vector2(this.position.x+32f, 75f), 1f)
     val waterHealthNumber = FontObject(waterUnitData.health.toString(), 25, Vector2(this.position.x + 70f, 192f))
     val waterMovementSpeedNumber = FontObject(waterUnitData.movementSpeed.toString(), 25, Vector2(this.position.x + 135f, 192f))
