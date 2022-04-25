@@ -8,7 +8,7 @@ import projectcows.rawJsonData.JsonUnit
 object UnitStatsMapper {
     fun getTowerRange(type: UnitType, level: Int): Int {
         when (type) {
-            UnitType.NONE -> return 1
+            UnitType.NONE -> return 2
             UnitType.FIRE -> return when (level) {
                 0 -> 2
                 1 -> 3
@@ -22,10 +22,10 @@ object UnitStatsMapper {
                 else -> 2
             }
             UnitType.GRASS -> return when (level) {
-                0 -> 1
+                0 -> 2
                 1 -> 2
                 2 -> 3
-                else -> 1
+                else -> 2
             }
         }
     }
@@ -61,48 +61,48 @@ object UnitStatsMapper {
 
     private fun getTowerDamage(type: UnitType, level: Int): Int {
         when (type) {
-            UnitType.NONE -> return 10
+            UnitType.NONE -> return 5
             UnitType.FIRE -> return when (level) {
-                0 -> 10
-                1 -> 15
-                2 -> 20
-                else -> 10
+                0 -> 5
+                1 -> 7
+                2 -> 10
+                else -> 5
             }
             UnitType.WATER -> return when (level) {
-                0 -> 8
-                1 -> 12
-                2 -> 16
-                else -> 8
+                0 -> 4
+                1 -> 6
+                2 -> 8
+                else -> 4
             }
             UnitType.GRASS -> return when (level) {
-                0 -> 15
-                1 -> 20
-                2 -> 25
-                else -> 15
+                0 -> 7
+                1 -> 10
+                2 -> 12
+                else -> 7
             }
         }
     }
 
     fun getUnitHealth(type: UnitType, level: Int): Int {
         when (type) {
-            UnitType.NONE -> return 20
+            UnitType.NONE -> return 30
             UnitType.FIRE -> return when (level) {
-                0 -> 20
-                1 -> 40
+                0 -> 30
+                1 -> 45
                 2 -> 80
-                else -> 20
+                else -> 30
             }
             UnitType.WATER -> return when (level) {
-                0 -> 30
-                1 -> 50
+                0 -> 35
+                1 -> 55
                 2 -> 99
-                else -> 10
+                else -> 35
             }
             UnitType.GRASS -> return when (level) {
-                0 -> 15
-                1 -> 25
-                2 -> 70
-                else -> 15
+                0 -> 22
+                1 -> 35
+                2 -> 75
+                else -> 55
             }
         }
     }
