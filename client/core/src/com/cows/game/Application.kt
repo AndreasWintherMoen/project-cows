@@ -13,6 +13,7 @@ import com.cows.game.roundSimulation.rawJsonData.JsonRoundSimulation
 import com.cows.game.serverConnection.ServerConnection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ktx.async.KtxAsync
 
@@ -24,7 +25,6 @@ class Application : ApplicationAdapter()  {
     val tickDuration = 0.2f // in seconds
     private var gameTickProcessor: GameTickProcessor? = null
     private lateinit var hudManager: HUDManager
-    private var playerIsAttacker = false
 
     override fun create() {
         KtxAsync.initiate()
@@ -42,11 +42,7 @@ class Application : ApplicationAdapter()  {
     }
 
     override fun render() {
-        Redux.jsonRoundSimulation?.let {
-            startGame(it);
-            RoundManager.reloadReduxValues()
-            Redux.jsonRoundSimulation = null
-        }
+        loadReduxValues()
 
         val deltaTime = Gdx.graphics.deltaTime
         val tickAdjustedDeltaTime = deltaTime / tickDuration
@@ -65,6 +61,18 @@ class Application : ApplicationAdapter()  {
         Renderer.dispose()
     }
 
+    private fun loadReduxValues() {
+        Redux.jsonRoundSimulation?.let {
+            startGame(it);
+            RoundManager.reloadReduxValues()
+            Redux.jsonRoundSimulation = null
+        }
+        Redux.playerCreatedGame?.let {
+            RoundManager.playerCreatedGame = it
+            Redux.playerCreatedGame = null
+        }
+    }
+
     private fun startGame(roundSimulation: JsonRoundSimulation) {
         if (GameStateManager.currentGameState == GameState.ACTIVE_GAME) return
         println("startGame")
@@ -80,8 +88,8 @@ class Application : ApplicationAdapter()  {
             if (playerWon) hudManager.showWinUI()
             else hudManager.showLoseUI()
         }
-        println("Hei")
         GlobalScope.launch(Dispatchers.IO) {
+            delay(2000)
             println("Starting coroutine context")
             RoundManager.gameStatus = ServerConnection.getGameStatus()
             gameTickProcessor = null

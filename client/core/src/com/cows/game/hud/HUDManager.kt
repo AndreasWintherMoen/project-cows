@@ -10,12 +10,14 @@ import com.cows.game.map.Map
 class HUDManager(): GameStateSubscriber() {
     private var actionPanel: ActionPanel? = null
     private var menuController: MenuController? = null
-    private val winText = SmartObject("HUD/start-button.png", Vector2(200f, 300f), 1f)
-    private val loseText = SmartObject("HUD/cancel-button.png", Vector2(200f, 300f), 1f)
+    private val winText = SmartObject("HUD/win.png", Vector2(200f, 0f), 1f)
+    private val loseText = SmartObject("HUD/lose.png", Vector2(200f, 0f), 1f)
     private var healthIndicator: HealthIndicator? = null
 
     init {
         hideTexts()
+        winText.zIndex = 10
+        loseText.zIndex = 10
     }
 
     private fun hideTexts() {

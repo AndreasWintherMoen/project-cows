@@ -2,6 +2,7 @@ package com.cows.game.controllers
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Vector2
+import com.cows.game.Redux
 import com.cows.game.enums.GameState
 import com.cows.game.hud.*
 import com.cows.game.managers.GameStateManager
@@ -50,6 +51,7 @@ class MenuController {
             RoundManager.gameStatus = ServerConnection.getGameStatus()
             println(RoundManager.gameStatus)
             GameStateManager.setGameStateAsync(GameState.PLANNING_ATTACK)
+            Redux.playerCreatedGame = true
         }
         createMenu = CreateGameMenu({showStartMenu()})
     }
@@ -69,6 +71,7 @@ class MenuController {
               ServerConnection.joinGame(joinCode)
               RoundManager.gameStatus = ServerConnection.getGameStatus()
               println(RoundManager.gameStatus)
+              Redux.playerCreatedGame = false
               GameStateManager.setGameStateAsync(GameState.PLANNING_DEFENSE)
             }
             userResponse?.dispose()

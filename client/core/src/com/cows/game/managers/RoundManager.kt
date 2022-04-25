@@ -10,6 +10,7 @@ object RoundManager: GameStateSubscriber() {
     var playerIsAttacker = false
     var roundSimulation: JsonRoundSimulation? = null
     var gameStatus: GameStatus? = null
+    var playerCreatedGame: Boolean? = null
 
     fun init() {}
 
