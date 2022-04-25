@@ -15,3 +15,25 @@ This is a project for **TDT4240 - Software Architecture** at NTNU.
 3. Configure environment variables on the Game State Server (located in the folder named _server_). Similar to the client, a sample file named _env.example_ is provided, located in _src/main/resources_. If you want to use our public API, use the endpoint _https://api.winthermoen.no/ss-cows_.
 4. Run the Game State Server. This one can either be run in Android studio with a default Kotlin configuration and Application.Kt as the main class, or by building the project using ```./gradlew shadowJar``` (Mac & Linux) or ```gradlew.bat shadowJar``` (Windows), and then running the compiled .jar file located in build/libs with ```java -jar server-0.0.1-all.jar```.
 5. Run the Simulation Server. This one doesn't need environment variables, and can also be run either as a default Kotlin configuration in the IDE with Application.Kt as the main class, or as a built version using the same commands as the Game State Server. The built jar file is named _simulationserver-0.0.1-all.jar_.
+
+## Folder Structure
+Overview of the folder structure.
+
+### client
+Contains the "frontend" of the application. The main functionallity is found in _/core/src/com/cows/game_. This folder then consists of the sub-folders who are named according to what functionallity they introduce. 
+* controllers
+* enums
+* gameState
+* hud
+* map
+* models
+* roundSimulation
+* serverConnection
+* views
+
+### server
+Contains the 
+
+
+### simulation_server
+Contains the server that is responsible for 
