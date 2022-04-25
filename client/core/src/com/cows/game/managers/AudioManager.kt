@@ -38,7 +38,7 @@ object AudioManager: GameStateSubscriber() {
         stopSoundEffect()
     }
 
-    private fun playMusic(filePath: String, volume: Float = 1f, isLooping: Boolean = true) {
+    fun playMusic(filePath: String, volume: Float = 1f, isLooping: Boolean = true) {
         if (mute) return
         backgroundMusic?.stop()
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal(filePath))
@@ -60,16 +60,16 @@ object AudioManager: GameStateSubscriber() {
     override fun onChangeGameState(oldGameState: GameState, newGameState: GameState) {
         when (newGameState) {
             GameState.ACTIVE_GAME -> {
-                playMusic("Sound/battle.mp3")
+                playMusic("Sound/battle.mp3", 0.5f)
             }
             GameState.PLANNING_ATTACK -> {
-                playMusic("Sound/planning.mp3")
+                playMusic("Sound/planning.mp3", 0.5f)
             }
             GameState.PLANNING_DEFENSE -> {
-                playMusic("Sound/planning.mp3")
+                playMusic("Sound/planning.mp3", 0.5f)
             }
             GameState.START_MENU -> {
-                playMusic("Sound/intro.mp3")
+                playMusic("Sound/intro.mp3", 0.5f)
             }
             else -> { println("Could not find game state $newGameState in AudioManager::onChangeGameState") }
         }
