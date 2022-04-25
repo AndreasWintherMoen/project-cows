@@ -1,7 +1,6 @@
 package com.cows.game.hud
 
 import com.badlogic.gdx.math.Vector2
-import com.cows.game.Application
 import com.cows.game.ClickSubscriber
 import com.cows.game.Redux
 import com.cows.game.controllers.PlanningTowerController
@@ -17,7 +16,6 @@ import com.cows.game.serverConnection.ServerConnection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlin.math.cosh
 
 class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
     private val removeSelectedTower = Button("Buttons/remove-btn.png", Vector2(this.position.x, 0f)) { removeTower() }
@@ -38,21 +36,21 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
     private val fireTowerData = RoundManager.gameStatus!!.availableTowers.fireTower
     val fireTowerBackground = SmartObject("Cards/banner-fire-defence.png", Vector2(this.position.x+32f, 323f), 1f)
     val fireDamageNumber = FontObject(fireTowerData.damage.toString(), 25, Vector2(this.position.x + 70f, 439f))
-    val fireRangeNumber = FontObject(fireTowerData.damage.toString(), 25, Vector2(this.position.x + 135f, 439f))
+    val fireRangeNumber = FontObject(fireTowerData.range.toString(), 25, Vector2(this.position.x + 135f, 439f))
     val fireTowerButton = Button("Cards/"+getUnitName(UnitType.FIRE, fireTowerData.level)+".png", Vector2(this.position.x, 330f))
 
     // GRASS TOWER🌿
     private val grassTowerData = RoundManager.gameStatus!!.availableTowers.grassTower
     val grassTowerBackground = SmartObject("Cards/banner-grass-defence.png", Vector2(this.position.x+32f , 199f), 1f)
     val grassDamageNumber = FontObject(grassTowerData.damage.toString(), 25, Vector2(this.position.x + 70f, 315f))
-    val grassRangeNumber = FontObject(grassTowerData.damage.toString(), 25, Vector2(this.position.x + 135f, 315f))
+    val grassRangeNumber = FontObject(grassTowerData.range.toString(), 25, Vector2(this.position.x + 135f, 315f))
     val grassTowerButton = Button("Cards/"+getUnitName(UnitType.GRASS, grassTowerData.level)+".png", Vector2(this.position.x, 206f))
 
     // WATER TOWER💧
     private val waterTowerData = RoundManager.gameStatus!!.availableTowers.waterTower
     val waterTowerBackground = SmartObject("Cards/banner-water-defence.png", Vector2(this.position.x+32f, 75f), 1f)
     val waterDamageNumber = FontObject(waterTowerData.damage.toString(), 25, Vector2(this.position.x + 70f, 192f))
-    val waterRangeNumber = FontObject(waterTowerData.damage.toString(), 25, Vector2(this.position.x + 135f, 192f))
+    val waterRangeNumber = FontObject(waterTowerData.range.toString(), 25, Vector2(this.position.x + 135f, 192f))
     val waterTowerButton = Button("Cards/"+getUnitName(UnitType.WATER, waterTowerData.level)+".png", Vector2(this.position.x , 83f))
 
 
