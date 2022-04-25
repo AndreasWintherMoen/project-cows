@@ -11,6 +11,7 @@ object RoundManager: GameStateSubscriber() {
     var roundSimulation: JsonRoundSimulation? = null
     var gameStatus: GameStatus? = null
     var playerCreatedGame: Boolean? = null
+    var useFastForward = false
 
     fun init() {}
 

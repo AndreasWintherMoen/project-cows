@@ -22,7 +22,6 @@ class Application : ApplicationAdapter()  {
         const val WIDTH = Map.WIDTH * TileModel.WIDTH + ActionPanel.WIDTH
         const val HEIGHT = Map.HEIGHT * TileModel.HEIGHT
     }
-    val tickDuration = 0.2f // in seconds
     private var gameTickProcessor: GameTickProcessor? = null
     private lateinit var hudManager: HUDManager
 
@@ -44,6 +43,7 @@ class Application : ApplicationAdapter()  {
     override fun render() {
         loadReduxValues()
 
+        val tickDuration = if (RoundManager.useFastForward) 0.05f else 0.2f
         val deltaTime = Gdx.graphics.deltaTime
         val tickAdjustedDeltaTime = deltaTime / tickDuration
 
