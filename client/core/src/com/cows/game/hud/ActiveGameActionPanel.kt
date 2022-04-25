@@ -13,13 +13,14 @@ import com.cows.game.roundSimulation.rawJsonData.JsonTower
 class ActiveGameActionPanel:ActionPanel(), ClickSubscriber {
     private var coins = UnitCounterPanel.calculateAvailableUnits()
     private var coinsText = FontObject(coins.toString(), 60, Vector2(this.position.x+68f, 500f))
-    private val speedupButton = Button("Buttons/speedup-button.png", Vector2(this.position.x, 0f)) { toggleSpeed() }
+    private var speedupButton = Button("Buttons/fast-forward.png", Vector2(this.position.x, 0f)) { toggleSpeed() }
     private var selectedTowerRadius: SmartObject? = null
 
     init {
         coinsText.zIndex = 3
         speedupButton.zIndex = 3
         subscribeToClickEvents()
+        speedupButton.texture = if (RoundManager.useFastForward) Texture("Buttons/slow-down.png") else Texture("Buttons/fast-forward.png")
     }
 
     private fun toggleSpeed() {
@@ -29,12 +30,12 @@ class ActiveGameActionPanel:ActionPanel(), ClickSubscriber {
 
     private fun speedup() {
         RoundManager.useFastForward = true
-        speedupButton.texture = Texture("Buttons/speedup-button-clicked.png")
+        speedupButton.texture = Texture("Buttons/slow-down.png")
     }
 
     private fun normalspeed() {
         RoundManager.useFastForward = false
-        speedupButton.texture = Texture("Buttons/speedup-button.png")
+        speedupButton.texture = Texture("Buttons/fast-forward.png")
     }
 
     override fun die() {
