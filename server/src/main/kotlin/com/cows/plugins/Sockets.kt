@@ -17,7 +17,6 @@ import com.cows.services.simulation.models.json.JsonRoundSimulation
 import projectcows.rawJsonData.JsonTower
 import projectcows.rawJsonData.JsonUnit
 import java.util.*
-import com.cows.map.Map
 
 private var connectionMap: MutableMap<ClientConnection, DefaultWebSocketSession> = Collections.synchronizedMap(mutableMapOf())
 private val gson = GsonBuilder().setPrettyPrinting().create()
