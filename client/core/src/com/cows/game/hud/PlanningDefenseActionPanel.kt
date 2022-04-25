@@ -1,13 +1,13 @@
 package com.cows.game.hud
 
 import com.badlogic.gdx.math.Vector2
-import com.cows.game.Application
 import com.cows.game.ClickSubscriber
 import com.cows.game.Redux
 import com.cows.game.controllers.PlanningTowerController
 import com.cows.game.controllers.TileController
 import com.cows.game.enums.TileType
 import com.cows.game.enums.UnitType
+import com.cows.game.managers.RoundManager
 import com.cows.game.map.Coordinate
 import com.cows.game.models.TileModel
 import com.cows.game.models.TowerModel
@@ -26,10 +26,38 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
     private var lastTile: TileController? = null
     private var selectedTowerRadius: SmartObject? = null
     private var lastOccupiedTile: TileController? = null;
-    private var coins = 10
+    private var coins = UnitCounterPanel.calculateAvailableUnits()
     private var coinsText = FontObject(coins.toString(), 60, Vector2(this.position.x+68f, 500f))
 
+    private val costPerDefenseTower = 3
+
+
+    // FIRE TOWER🔥
+    private val fireTowerData = RoundManager.gameStatus!!.availableTowers.fireTower
+    val fireTowerBackground = SmartObject("Cards/banner-fire-defence.png", Vector2(this.position.x+32f, 323f), 1f)
+    val fireDamageNumber = FontObject(fireTowerData.damage.toString(), 25, Vector2(this.position.x + 70f, 439f))
+    val fireRangeNumber = FontObject(fireTowerData.range.toString(), 25, Vector2(this.position.x + 135f, 439f))
+    val fireTowerButton = Button("Cards/"+getUnitName(UnitType.FIRE, fireTowerData.level)+".png", Vector2(this.position.x, 330f))
+
+    // GRASS TOWER🌿
+    private val grassTowerData = RoundManager.gameStatus!!.availableTowers.grassTower
+    val grassTowerBackground = SmartObject("Cards/banner-grass-defence.png", Vector2(this.position.x+32f , 199f), 1f)
+    val grassDamageNumber = FontObject(grassTowerData.damage.toString(), 25, Vector2(this.position.x + 70f, 315f))
+    val grassRangeNumber = FontObject(grassTowerData.range.toString(), 25, Vector2(this.position.x + 135f, 315f))
+    val grassTowerButton = Button("Cards/"+getUnitName(UnitType.GRASS, grassTowerData.level)+".png", Vector2(this.position.x, 206f))
+
+    // WATER TOWER💧
+    private val waterTowerData = RoundManager.gameStatus!!.availableTowers.waterTower
+    val waterTowerBackground = SmartObject("Cards/banner-water-defence.png", Vector2(this.position.x+32f, 75f), 1f)
+    val waterDamageNumber = FontObject(waterTowerData.damage.toString(), 25, Vector2(this.position.x + 70f, 192f))
+    val waterRangeNumber = FontObject(waterTowerData.range.toString(), 25, Vector2(this.position.x + 135f, 192f))
+    val waterTowerButton = Button("Cards/"+getUnitName(UnitType.WATER, waterTowerData.level)+".png", Vector2(this.position.x , 83f))
+
+
     init {
+        fireTowerButton.position.x += ActionPanel.WIDTH/2 - fireTowerButton.texture.width/2
+        waterTowerButton.position.x += ActionPanel.WIDTH/2 - waterTowerButton.texture.width/2
+        grassTowerButton.position.x += ActionPanel.WIDTH/2 - grassTowerButton.texture.width/2
         selectTileText.hide = false
         removeSelectedTower.hide = true
         fireTowerButton.onClick =  { spawnTower(UnitType.FIRE)}
@@ -38,6 +66,25 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
         readyButton.onClick = { onStartButtonClicked() }
         subscribeToClickEvents()
         hideUI(true)
+
+        coinsText.zIndex = 3
+        removeSelectedTower.zIndex = 3
+        selectTileText.zIndex = 3
+
+        fireTowerBackground.zIndex = 3
+        fireDamageNumber.zIndex = 3
+        fireRangeNumber.zIndex = 3
+        fireTowerButton.zIndex = 3
+
+        grassTowerBackground.zIndex = 3
+        grassDamageNumber.zIndex = 3
+        grassRangeNumber.zIndex = 3
+        grassTowerButton.zIndex = 3
+
+        waterTowerBackground.zIndex = 3
+        waterDamageNumber.zIndex = 3
+        waterRangeNumber.zIndex = 3
+        waterTowerButton.zIndex = 3
     }
 
     private fun removeTower() {
@@ -45,14 +92,16 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
         val tower = spawnedTowers.first { tower -> tower.model.tileCoordinate == lastTile!!.tileModel.coordinate }
         spawnedTowers.remove(tower)
         tower.view.die()
-        coinsText.text = (++ coins).toString()
+        coins += costPerDefenseTower
+        coinsText.text = coins.toString()
     }
 
     fun spawnTower(type: UnitType) {
-        if (coins>0 && lastTile != null ) {
-            coinsText.text = (-- coins).toString()
+        if (coins>costPerDefenseTower && lastTile != null ) {
+            coins -= costPerDefenseTower
+            coinsText.text = coins.toString()
             towerToBeSpawned = type
-            val reduxTowerModel = Redux.gameStatus!!.availableTowers.getTower(type)
+            val reduxTowerModel = RoundManager.gameStatus!!.availableTowers.getTower(type)
             val towerModel = TowerModel(towerToBeSpawned, reduxTowerModel.level, lastTile!!.tileModel.coordinate, reduxTowerModel.range!!, reduxTowerModel.damage!!)
             val towerController = PlanningTowerController(towerModel)
             spawnedTowers.add(towerController)
@@ -85,7 +134,9 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
         selectTileText.hide = true
         lastTile = tile
         tile.tileView.showHighlight = true
-        selectedTowerRadius = SmartObject("Towers/attackRadius.png", tile.tileModel.coordinate.toVector2(), 1f)
+        val clickedTower = getTowerAtTile(tile)
+        selectedTowerRadius = SmartObject("Towers/attackRadius.png", tile.tileModel.coordinate.toVector2(), 0.25f + clickedTower!!.model.range * 0.5f)
+        selectedTowerRadius!!.zIndex = 9
         selectedTowerRadius!!.sprite.setPosition(tile.tileModel.coordinate.toVector2().x - selectedTowerRadius!!.sprite.width/2 + TileModel.WIDTH/2, tile.tileModel.coordinate.toVector2().y - selectedTowerRadius!!.sprite.height/2 + TileModel.HEIGHT/2)
         removeSelectedTower.hide = false
         readyButton.hide = true
@@ -98,7 +149,7 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
         lastTile?.let { it.tileView.showHighlight = false }
         lastOccupiedTile?.let { it.tileView.showHighlight = false }
         selectedTowerRadius?.let { it.die() }
-        if(coins <= 0){
+        if(coins < costPerDefenseTower){
             hideUI(true)
         }
         if (tile == null){
@@ -120,26 +171,39 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
         return spawnedTowers.any { it.model.tileCoordinate == position }
     }
 
+    private fun getTowerAtTile(tile: TileController): PlanningTowerController? {
+        return spawnedTowers.find { it.model.tileCoordinate == tile.tileModel.coordinate }
+    }
+
     override fun die() {
         super.die()
         removeSelectedTower.die()
         spawnedTowers.forEach { it.view.die() }
         spawnedTowers.clear()
         towerToBeSpawned = UnitType.NONE
+        fireDamageNumber.die()
+        fireRangeNumber.die()
+        fireTowerBackground.die()
+        grassDamageNumber.die()
+        grassRangeNumber.die()
+        grassTowerBackground.die()
+        waterDamageNumber.die()
+        waterRangeNumber.die()
+        waterTowerBackground.die()
     }
 
     override fun hideUI(hide: Boolean) {
-        fireTowerButton.hide = hide
-        waterTowerButton.hide = hide
-        grassTowerButton.hide = hide
-        fireTowerBackground.hide = hide
-        grassTowerBackground.hide = hide
-        waterTowerBackground.hide = hide
         fireDamageNumber.hide = hide
         fireRangeNumber.hide = hide
+        fireTowerBackground.hide = hide
+        fireTowerButton.hide = hide
         grassDamageNumber.hide = hide
         grassRangeNumber.hide = hide
+        grassTowerBackground.hide = hide
+        grassTowerButton.hide = hide
         waterDamageNumber.hide = hide
         waterRangeNumber.hide = hide
+        waterTowerBackground.hide = hide
+        waterTowerButton.hide = hide
     }
 }

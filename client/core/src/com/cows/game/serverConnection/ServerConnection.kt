@@ -34,7 +34,8 @@ data class GameSession (
 object ServerConnection {
 
     val dotenv:Dotenv = dotenv {
-        filename = "./assets/env"
+        directory = "./assets"
+        filename = "env"
     }
 
     val httpApiBase: String = dotenv["HTTP_API_BASE"] ?: "http://127.0.0.1:8080/cows"

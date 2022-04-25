@@ -1,9 +1,9 @@
 package com.cows.game.map
 
 import com.badlogic.gdx.math.Vector2
-import com.cows.game.Redux
 import com.cows.game.controllers.TileController
 import com.cows.game.enums.TileType
+import com.cows.game.managers.RoundManager
 import com.cows.game.models.TileModel
 
 object Map {
@@ -14,7 +14,7 @@ object Map {
     private var tiles: Array<Array<TileController>>? = null
 
     fun init() {
-        loadMap(intArrayListToCoordinateList(Redux.gameStatus!!.path))
+        loadMap(intArrayListToCoordinateList(RoundManager.gameStatus!!.path))
     }
 
     private fun intArrayListToCoordinateList(intArrayList: List<IntArray>): List<Coordinate> =

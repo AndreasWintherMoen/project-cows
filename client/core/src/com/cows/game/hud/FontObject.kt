@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.math.Vector2
 import com.cows.game.Application
-import com.cows.game.Redux
 import com.cows.game.enums.UnitType
 import com.cows.game.roundSimulation.rawJsonData.JsonUnit
 import com.cows.game.views.Renderable
@@ -31,7 +30,9 @@ class FontObject(var text:String, fontSize:Int, var position:Vector2):Renderable
     var generator: FreeTypeFontGenerator = FreeTypeFontGenerator(Gdx.files.internal("Fonts/pokemon_pixel_font.ttf"))
     var headerParameter: FreeTypeFontGenerator.FreeTypeFontParameter
     var font: BitmapFont
+
     private var layout: GlyphLayout = GlyphLayout()
+
 
     init {
         headerParameter = FreeTypeFontGenerator.FreeTypeFontParameter()

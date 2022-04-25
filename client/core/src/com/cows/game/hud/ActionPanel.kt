@@ -19,6 +19,10 @@ abstract class ActionPanel(): Renderable() {
         const val UNIT_MARGIN = 12f
     }
 
+    init {
+        zIndex = 3
+    }
+
     override fun render(batch: SpriteBatch, deltaTime: Float) {
         batch.draw(texture, position.x, position.y)
     }
