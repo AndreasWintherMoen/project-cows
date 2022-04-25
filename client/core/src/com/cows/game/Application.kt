@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx
 import com.cows.game.enums.GameState
 import com.cows.game.hud.ActionPanel
 import com.cows.game.hud.HUDManager
+import com.cows.game.hud.WinScreen
 import com.cows.game.managers.*
 import com.cows.game.map.Map
 import com.cows.game.models.TileModel
@@ -24,6 +25,8 @@ class Application : ApplicationAdapter()  {
     }
     private var gameTickProcessor: GameTickProcessor? = null
     private lateinit var hudManager: HUDManager
+    private var gameOver = false
+    private var winScreen: WinScreen? = null
 
     override fun create() {
         KtxAsync.initiate()
@@ -41,6 +44,10 @@ class Application : ApplicationAdapter()  {
     }
 
     override fun render() {
+        if (gameOver) {
+            handleGameOver()
+        }
+
         loadReduxValues()
 
         val tickDuration = if (RoundManager.useFastForward) 0.05f else 0.2f
@@ -103,8 +110,13 @@ class Application : ApplicationAdapter()  {
         GlobalScope.launch(Dispatchers.IO) {
             delay(5000)
             println("Starting coroutine context")
-            RoundManager.gameStatus = ServerConnection.getGameStatus()
+            val gameStatus = ServerConnection.getGameStatus()
             gameTickProcessor = null
+            if (gameStatus.playerStates.first.health <= 0 || gameStatus.playerStates.second.health <= 0) {
+                gameOver = true
+                return@launch
+            }
+            RoundManager.gameStatus = gameStatus
             if (RoundManager.playerIsAttacker) {
                 GameStateManager.setGameStateAsync(GameState.PLANNING_DEFENSE)
             }
@@ -112,6 +124,13 @@ class Application : ApplicationAdapter()  {
                 GameStateManager.setGameStateAsync(GameState.PLANNING_ATTACK)
             }
         }
+    }
+
+    private fun handleGameOver() {
+        winScreen ?: run {
+                println("Game finished")
+                winScreen = WinScreen()
+            }
     }
 
 }
