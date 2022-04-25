@@ -12,6 +12,8 @@ import kotlinx.coroutines.launch
 class PlanningAttackActionPanel() : PlanningActionPanel() {
     val unitCounterPanel = UnitCounterPanel()
 
+    private val peekPanel = PeekPanel()
+
     // FIRE UNIT🔥
     private val fireUnitData = RoundManager.gameStatus!!.availableUnits.fireUnit
     val fireUnitBackground = SmartObject("Cards/banner-fire-attack.png", Vector2(this.position.x+32f, 323f), 1f)
@@ -45,6 +47,28 @@ class PlanningAttackActionPanel() : PlanningActionPanel() {
         fireUnitButton.position.x += ActionPanel.WIDTH/2 - fireUnitButton.texture.width/2
         waterUnitButton.position.x += ActionPanel.WIDTH/2 - waterUnitButton.texture.width/2
         grassUnitButton.position.x += ActionPanel.WIDTH/2 - grassUnitButton.texture.width/2
+
+        fireUnitButton.zIndex = 3
+        fireUnitBackground.zIndex = 3
+        fireHealthNumber.zIndex = 3
+        fireMovementSpeedNumber.zIndex = 3
+        addFireUnitButton.zIndex = 3
+        removeFireUnitButton.zIndex = 3
+
+        grassUnitButton.zIndex = 3
+        grassUnitBackground.zIndex = 3
+        grassHealthNumber.zIndex = 3
+        grassMovementSpeedNumber.zIndex = 3
+        addGrassUnitButton.zIndex = 3
+        removeGrassUnitButton.zIndex = 3
+
+        waterUnitButton.zIndex = 3
+        waterUnitBackground.zIndex = 3
+        waterHealthNumber.zIndex = 3
+        waterMovementSpeedNumber.zIndex = 3
+        addWaterUnitButton.zIndex = 3
+        removeWaterUnitButton.zIndex = 3
+
     }
 
     private fun onStartButtonClicked() {
@@ -60,6 +84,8 @@ class PlanningAttackActionPanel() : PlanningActionPanel() {
 
     override fun die() {
         super.die()
+
+        peekPanel.die()
 
         unitCounterPanel.die()
 

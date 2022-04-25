@@ -9,6 +9,11 @@ class ActiveGameActionPanel:ActionPanel() {
     private var coinsText = FontObject(coins.toString(), 60, Vector2(this.position.x+68f, 500f))
     private val speedupButton = Button("Buttons/speedup-button.png", Vector2(this.position.x, 0f)) { toggleSpeed() }
 
+    init {
+        coinsText.zIndex = 3
+        speedupButton.zIndex = 3
+    }
+
     private fun toggleSpeed() {
         if (RoundManager.useFastForward) normalspeed()
         else speedup()

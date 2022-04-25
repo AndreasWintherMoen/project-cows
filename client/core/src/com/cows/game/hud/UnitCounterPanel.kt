@@ -23,6 +23,10 @@ class UnitCounterPanel():Renderable() {
 
     var hideUnits = false
 
+    init {
+        zIndex = 3
+    }
+
     companion object {
         fun calculateAvailableUnits(): Int {
             if (RoundManager.playerCreatedGame == null || RoundManager.gameStatus == null) {

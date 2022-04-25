@@ -19,6 +19,7 @@ abstract class PlanningActionPanel(): ActionPanel() {
 
     init {
         Map.init()
+        readyButton.zIndex = 3
     }
 
     override fun die() {

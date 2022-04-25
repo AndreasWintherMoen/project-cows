@@ -66,6 +66,25 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
         readyButton.onClick = { onStartButtonClicked() }
         subscribeToClickEvents()
         hideUI(true)
+
+        coinsText.zIndex = 3
+        removeSelectedTower.zIndex = 3
+        selectTileText.zIndex = 3
+
+        fireTowerBackground.zIndex = 3
+        fireDamageNumber.zIndex = 3
+        fireRangeNumber.zIndex = 3
+        fireTowerButton.zIndex = 3
+
+        grassTowerBackground.zIndex = 3
+        grassDamageNumber.zIndex = 3
+        grassRangeNumber.zIndex = 3
+        grassTowerButton.zIndex = 3
+
+        waterTowerBackground.zIndex = 3
+        waterDamageNumber.zIndex = 3
+        waterRangeNumber.zIndex = 3
+        waterTowerButton.zIndex = 3
     }
 
     private fun removeTower() {
