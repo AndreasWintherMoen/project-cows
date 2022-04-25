@@ -115,7 +115,9 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
         selectTileText.hide = true
         lastTile = tile
         tile.tileView.showHighlight = true
-        selectedTowerRadius = SmartObject("Towers/attackRadius.png", tile.tileModel.coordinate.toVector2(), 1f)
+        val clickedTower = getTowerAtTile(tile)
+        selectedTowerRadius = SmartObject("Towers/attackRadius.png", tile.tileModel.coordinate.toVector2(), 0.25f + clickedTower!!.model.range * 0.5f)
+        selectedTowerRadius!!.zIndex = 9
         selectedTowerRadius!!.sprite.setPosition(tile.tileModel.coordinate.toVector2().x - selectedTowerRadius!!.sprite.width/2 + TileModel.WIDTH/2, tile.tileModel.coordinate.toVector2().y - selectedTowerRadius!!.sprite.height/2 + TileModel.HEIGHT/2)
         removeSelectedTower.hide = false
         readyButton.hide = true
@@ -148,6 +150,10 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
 
     private fun checkIfTileIsOccupied(position: Coordinate): Boolean {
         return spawnedTowers.any { it.model.tileCoordinate == position }
+    }
+
+    private fun getTowerAtTile(tile: TileController): PlanningTowerController? {
+        return spawnedTowers.find { it.model.tileCoordinate == tile.tileModel.coordinate }
     }
 
     override fun die() {
