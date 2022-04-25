@@ -50,7 +50,9 @@ class Game(
 
     suspend fun addAttackInstructions(unitList: List<JsonUnit>): JsonRoundSimulation? {
         gameState.attackInstructions = unitList
-        gameState.playerStates.first.coins -= unitList.size
+        if (firstPlayerIsAttacker) gameState.playerStates.first.coins -= unitList.size
+        else gameState.playerStates.second.coins -= unitList.size
+
         if (gameState.defendInstructions != null) {
             val roundSimulation = simulateRound()
             nextRound(roundSimulation)
@@ -62,7 +64,9 @@ class Game(
 
     suspend fun addDefendInstructions(towerList: List<JsonTower>): JsonRoundSimulation? {
         gameState.defendInstructions = towerList
-        gameState.playerStates.first.coins -= towerList.size * 3
+        if (firstPlayerIsAttacker) gameState.playerStates.second.coins -= towerList.size * 3
+        else gameState.playerStates.first.coins -= towerList.size * 3
+
         if (gameState.attackInstructions != null) {
             val roundSimulation = simulateRound()
             nextRound(roundSimulation)
