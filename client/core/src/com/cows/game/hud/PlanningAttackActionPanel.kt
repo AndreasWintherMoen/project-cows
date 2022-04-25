@@ -10,7 +10,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class PlanningAttackActionPanel() : PlanningActionPanel() {
-    val unitCounterPanel = UnitCounterPanel(10)
+    val unitCounterPanel = UnitCounterPanel()
 
     // FIRE UNIT🔥
     private val fireUnitData = RoundManager.gameStatus!!.availableUnits.fireUnit

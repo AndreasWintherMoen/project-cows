@@ -36,7 +36,7 @@ class GameTickProcessor (private val roundSimulation: JsonRoundSimulation, priva
                 return
             }
             val tick = eventLog.remove()
-            println("processing tick $tick")
+//            println("processing tick $tick")
             processTick(tick)
         }
     }

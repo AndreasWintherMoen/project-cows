@@ -68,6 +68,7 @@ class Application : ApplicationAdapter()  {
             Redux.jsonRoundSimulation = null
         }
         Redux.playerCreatedGame?.let {
+            println("Setting playerCreatedGame to $it")
             RoundManager.playerCreatedGame = it
             Redux.playerCreatedGame = null
         }
@@ -85,11 +86,18 @@ class Application : ApplicationAdapter()  {
         gameTickProcessor?.killAllUnits()
         RoundManager.roundSimulation?.let {
             val playerWon = !it.attackerWon.xor(RoundManager.playerIsAttacker)
-            if (playerWon) hudManager.showWinUI()
-            else hudManager.showLoseUI()
+            if (playerWon) {
+                hudManager.showWinUI()
+                AudioManager.playMusic("Sound/victory.mp3")
+            }
+            else {
+                hudManager.showLoseUI()
+                // TODO: Add lose sound
+                AudioManager.playMusic("Sound/victory.mp3")
+            }
         }
         GlobalScope.launch(Dispatchers.IO) {
-            delay(2000)
+            delay(5000)
             println("Starting coroutine context")
             RoundManager.gameStatus = ServerConnection.getGameStatus()
             gameTickProcessor = null

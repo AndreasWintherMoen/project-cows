@@ -56,23 +56,14 @@ class MenuController {
         createMenu = CreateGameMenu({showStartMenu()})
     }
 
-    fun die() {
-        joinMenu?.die()
-        joinMenu = null
-        createMenu?.die()
-        createMenu = null
-        startMenu?.die()
-        startMenu = null
-    }
-
     private fun joinGame(joinCode: String) {
         try {
-            runBlocking {
+            GlobalScope.launch(Dispatchers.IO) {
               ServerConnection.joinGame(joinCode)
               RoundManager.gameStatus = ServerConnection.getGameStatus()
               println(RoundManager.gameStatus)
-              Redux.playerCreatedGame = false
               GameStateManager.setGameStateAsync(GameState.PLANNING_DEFENSE)
+              Redux.playerCreatedGame = false
             }
             userResponse?.dispose()
         }
@@ -83,5 +74,15 @@ class MenuController {
             userResponse!!.position = Vector2((Gdx.graphics.width/2 - userResponse!!.getFontWidth()/2),125f)
         }
     }
+
+    fun die() {
+        joinMenu?.die()
+        joinMenu = null
+        createMenu?.die()
+        createMenu = null
+        startMenu?.die()
+        startMenu = null
+    }
+
 
 }

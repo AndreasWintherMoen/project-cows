@@ -17,6 +17,7 @@ import com.cows.game.serverConnection.ServerConnection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlin.math.cosh
 
 class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
     private val removeSelectedTower = Button("Buttons/remove-btn.png", Vector2(this.position.x, 0f)) { removeTower() }
@@ -27,8 +28,10 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
     private var lastTile: TileController? = null
     private var selectedTowerRadius: SmartObject? = null
     private var lastOccupiedTile: TileController? = null;
-    private var coins = 10
+    private var coins = UnitCounterPanel.calculateAvailableUnits()
     private var coinsText = FontObject(coins.toString(), 60, Vector2(this.position.x+68f, 500f))
+
+    private val costPerDefenseTower = 3
 
 
     // FIRE TOWER🔥
@@ -72,12 +75,14 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
         val tower = spawnedTowers.first { tower -> tower.model.tileCoordinate == lastTile!!.tileModel.coordinate }
         spawnedTowers.remove(tower)
         tower.view.die()
-        coinsText.text = (++ coins).toString()
+        coins += costPerDefenseTower
+        coinsText.text = coins.toString()
     }
 
     fun spawnTower(type: UnitType) {
-        if (coins>0 && lastTile != null ) {
-            coinsText.text = (-- coins).toString()
+        if (coins>costPerDefenseTower && lastTile != null ) {
+            coins -= costPerDefenseTower
+            coinsText.text = coins.toString()
             towerToBeSpawned = type
             val reduxTowerModel = RoundManager.gameStatus!!.availableTowers.getTower(type)
             val towerModel = TowerModel(towerToBeSpawned, reduxTowerModel.level, lastTile!!.tileModel.coordinate, reduxTowerModel.range!!, reduxTowerModel.damage!!)
@@ -125,7 +130,7 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
         lastTile?.let { it.tileView.showHighlight = false }
         lastOccupiedTile?.let { it.tileView.showHighlight = false }
         selectedTowerRadius?.let { it.die() }
-        if(coins <= 0){
+        if(coins < costPerDefenseTower){
             hideUI(true)
         }
         if (tile == null){
