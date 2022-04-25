@@ -79,4 +79,8 @@ class HUDManager(): GameStateSubscriber() {
         unmuteButton.hide = true
     }
 
+    fun onError(message: String) {
+        menuController?.showError(message)
+    }
+
 }

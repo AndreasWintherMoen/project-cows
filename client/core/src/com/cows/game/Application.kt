@@ -72,6 +72,10 @@ class Application : ApplicationAdapter()  {
             RoundManager.playerCreatedGame = it
             Redux.playerCreatedGame = null
         }
+        Redux.errorMessage?.let {
+            hudManager.onError(it)
+            Redux.errorMessage = null
+        }
     }
 
     private fun startGame(roundSimulation: JsonRoundSimulation) {

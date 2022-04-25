@@ -14,6 +14,7 @@ import kotlinx.coroutines.runBlocking
 class JoinGameMenu(private val onJoinGame: (code: String) -> Unit, private val onBackButton: () -> Unit): Renderable(){
     private val backgroundImg = Sprite(Texture("HUD/StartScreen/background-clean.png"))
     private var submitGameCodeBtn: Button? = Button("Buttons/enter-btn.png", Vector2(813f, 221f)){joinGame()}
+    private var waitingeBtn: Button = Button("Buttons/waiting-button.png", Vector2(813f, 221f))
     private var goBackBtn: Button? = Button("Buttons/back-btn.png", Vector2(17f, 221f)){onBackButton.invoke()}
     private var gameCodeXPosition = listOf<Float>(313f, 403f, 493f,  583f, 673f, 763f , 583f, 943f, 1033f, 1123f)
     private var gameCodeYPosition = listOf<Float>(Application.HEIGHT-159f, 133f)
@@ -37,6 +38,10 @@ class JoinGameMenu(private val onJoinGame: (code: String) -> Unit, private val o
         Button("HUD/StartScreen/arrow-down.png", Vector2(gameCodeXPosition[3], gameCodeYPosition[1])){ decrement(3) },
         Button("HUD/StartScreen/arrow-down.png", Vector2(gameCodeXPosition[4], gameCodeYPosition[1])){ decrement(4) }
     )
+
+    init {
+        waitingeBtn.hide = true
+    }
 
     fun increment(index:Int){
         numbers[index] = (numbers[index] + 11) % 10
@@ -74,7 +79,14 @@ class JoinGameMenu(private val onJoinGame: (code: String) -> Unit, private val o
     }
 
     private fun joinGame() {
+        waitingeBtn.hide = false
+        submitGameCodeBtn?.hide = true
         val joinCode = numbers.joinToString("")
         onJoinGame.invoke(joinCode)
+    }
+
+    fun onWrongCode() {
+        waitingeBtn.hide = true
+        submitGameCodeBtn?.hide = false
     }
 }
