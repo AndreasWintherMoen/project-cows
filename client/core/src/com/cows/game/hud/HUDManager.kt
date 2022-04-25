@@ -5,6 +5,7 @@ import com.cows.game.controllers.MenuController
 import com.cows.game.enums.GameState
 import com.cows.game.gameState.GameStateSubscriber
 import com.cows.game.managers.AudioManager
+import com.cows.game.managers.RoundManager
 import com.cows.game.map.Map
 
 
@@ -47,6 +48,7 @@ class HUDManager(): GameStateSubscriber() {
 
         actionPanel?.let {
             it.die()
+            actionPanel = null
         }
         if (oldGameState == GameState.START_MENU) {
             menuController?.die()
@@ -70,7 +72,7 @@ class HUDManager(): GameStateSubscriber() {
     fun showLoseUI() {
         println("HUDManager::showLoseUI")
         loseText.hide = false
-        healthIndicator?.let { it.health -= 1 }
+        healthIndicator?.let { if (!RoundManager.playerIsAttacker) it.health -= 1 }
     }
 
     private fun onMuteButtonClicked() {

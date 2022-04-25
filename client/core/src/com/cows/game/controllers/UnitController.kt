@@ -7,7 +7,7 @@ import com.cows.game.views.UnitView
 
 
 class UnitController(val model: UnitModel): Updatable() {
-    private lateinit var view: UnitView
+    private var view: UnitView? = null
     private var target = Vector2();
     var currentPathIndex = 0;
     var hasSpawned = false
@@ -49,7 +49,7 @@ class UnitController(val model: UnitModel): Updatable() {
 
         model.currentDirection = newTarget - currentTarget
 
-        if (hasSpawned) view.updateSprite()
+        if (hasSpawned) view?.updateSprite()
 
         target = newTarget.toVector2()
     }
@@ -63,7 +63,7 @@ class UnitController(val model: UnitModel): Updatable() {
         super.die()
 
         model.isDead = true;
-        view.die()
+        view?.die()
     }
 
     fun win() {

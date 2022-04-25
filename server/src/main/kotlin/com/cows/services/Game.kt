@@ -80,9 +80,10 @@ class Game(
     }
 
     private suspend fun nextRound(roundSimulation: JsonRoundSimulation) {
-        val firstPlayerWon = !firstPlayerIsAttacker.xor(roundSimulation.attackerWon)
-        if (firstPlayerWon) gameState.playerStates.first.health--
-        else gameState.playerStates.second.health--
+        if (roundSimulation.attackerWon) {
+            if (firstPlayerIsAttacker) gameState.playerStates.first.health--
+            else gameState.playerStates.second.health--
+        }
 
         generateAvailableUnitsAndTowers()
 
@@ -90,8 +91,8 @@ class Game(
 
         gameState.path = map.getPathCoordinates()
 
-        gameState.playerStates.first.coins += 5
-        gameState.playerStates.second.coins += 5
+        gameState.playerStates.first.coins += 10
+        gameState.playerStates.second.coins += 10
 
         gameState.attackInstructions = null
         gameState.defendInstructions = null

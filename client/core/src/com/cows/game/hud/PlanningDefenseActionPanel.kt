@@ -5,8 +5,10 @@ import com.cows.game.ClickSubscriber
 import com.cows.game.Redux
 import com.cows.game.controllers.PlanningTowerController
 import com.cows.game.controllers.TileController
+import com.cows.game.enums.GameState
 import com.cows.game.enums.TileType
 import com.cows.game.enums.UnitType
+import com.cows.game.managers.GameStateManager
 import com.cows.game.managers.RoundManager
 import com.cows.game.map.Coordinate
 import com.cows.game.models.TileModel
@@ -22,7 +24,6 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
     private val selectTileText = SmartObject("HUD/SelectTileText.png", Vector2(this.position.x, 201f), 1f)
     private var towerToBeSpawned = UnitType.NONE
     val spawnedTowers = mutableListOf<PlanningTowerController>()
-    private var onSpawnTower: (() -> Unit)? = null
     private var lastTile: TileController? = null
     private var selectedTowerRadius: SmartObject? = null
     private var lastOccupiedTile: TileController? = null;
@@ -88,6 +89,7 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
     }
 
     private fun removeTower() {
+        if (GameStateManager.currentGameState != GameState.PLANNING_DEFENSE) return
         removeSelectedTower.hide = true
         val tower = spawnedTowers.first { tower -> tower.model.tileCoordinate == lastTile!!.tileModel.coordinate }
         spawnedTowers.remove(tower)
@@ -97,11 +99,11 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
     }
 
     fun spawnTower(type: UnitType) {
+        if (GameStateManager.currentGameState != GameState.PLANNING_DEFENSE) return
         if (coins>costPerDefenseTower && lastTile != null ) {
             coins -= costPerDefenseTower
             coinsText.text = coins.toString()
             towerToBeSpawned = type
-            onSpawnTower?.invoke()
             hideUI(true)
             val reduxTowerModel = RoundManager.gameStatus?.availableTowers?.getTower(type)
             reduxTowerModel?.let {
@@ -115,6 +117,7 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
     }
 
     private fun onStartButtonClicked() {
+        if (GameStateManager.currentGameState != GameState.PLANNING_DEFENSE) return
         readyButton.hide = true
         waitingButton.hide = false
         val towers = spawnedTowers
@@ -128,6 +131,7 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
     }
 
     fun clickTile(tile:TileController){
+        if (GameStateManager.currentGameState != GameState.PLANNING_DEFENSE) return
         selectTileText.hide = true
         lastTile = tile
         tile.tileView.showHighlight = true
@@ -135,6 +139,7 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
     }
 
     fun clickOccupiedTile(tile:TileController){
+        if (GameStateManager.currentGameState != GameState.PLANNING_DEFENSE) return
         selectTileText.hide = true
         lastTile = tile
         tile.tileView.showHighlight = true
@@ -148,6 +153,7 @@ class PlanningDefenseActionPanel(): PlanningActionPanel(), ClickSubscriber {
     }
 
     override fun click(position: Vector2, tile: TileController?) {
+        if (GameStateManager.currentGameState != GameState.PLANNING_DEFENSE) return
         selectTileText.hide = false
         readyButton.hide = false
         lastTile?.let { it.tileView.showHighlight = false }
