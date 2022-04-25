@@ -32,8 +32,10 @@ Contains the "frontend" of the application. The main functionallity is found in 
 * views
 
 ### server
-Contains the 
+
+Contains overview of current games,functionnality for creating new games and connecting two players together. Key files are _/plugins/Routing.kt_ , which brings end-points for the client to connect to, and classes found inside _/services/shared_ and _/services/simulation_ that serialise and deserialise data. 
 
 
 ### simulation_server
-Contains the server that is responsible for 
+
+Contains the server that is responsible for simulating each round. Important files include _/simulationModels/RoundSimulator.kt_  that simulates the entire round, using _/simulationModels/TowerSimulationModel.kt_ and _simulationModels/TowerSimulationModel.kt_ to simulate the more specific actions of Units and Towers.
