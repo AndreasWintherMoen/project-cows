@@ -39,6 +39,8 @@ object Renderer {
         renderablesToBeAdded.clear()
         renderablesToBeRemoved.forEach { renderables.remove(it) }
         renderablesToBeRemoved.clear()
+
+        renderables.sortBy { it.zIndex }
     }
 
     fun dispose() {

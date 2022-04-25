@@ -25,6 +25,7 @@ class GameTickProcessor (private val roundSimulation: JsonRoundSimulation, priva
     fun update(deltaTime: Float, tickDuration: Float) {
         if (gameIsFinished) return
 
+
         tickTimer += deltaTime
         if (tickTimer >= tickDuration) {
             tickTimer -= tickDuration
@@ -35,7 +36,7 @@ class GameTickProcessor (private val roundSimulation: JsonRoundSimulation, priva
                 return
             }
             val tick = eventLog.remove()
-            println("processing tick $tick")
+//            println("processing tick $tick")
             processTick(tick)
         }
     }

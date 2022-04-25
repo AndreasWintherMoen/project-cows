@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.math.Vector2
 import com.cows.game.Application
-import com.cows.game.Redux
 import com.cows.game.enums.UnitType
 import com.cows.game.roundSimulation.rawJsonData.JsonUnit
 import com.cows.game.views.Renderable

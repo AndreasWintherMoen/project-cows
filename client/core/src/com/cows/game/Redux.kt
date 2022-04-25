@@ -8,4 +8,5 @@ object Redux {
 
     var jsonRoundSimulation: JsonRoundSimulation? = null
     var gameStatus: GameStatus? = null
+    var playerCreatedGame: Boolean? = null
 }

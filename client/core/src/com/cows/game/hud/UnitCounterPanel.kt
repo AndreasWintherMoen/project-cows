@@ -5,14 +5,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.cows.game.Application
-import com.cows.game.Redux
 import com.cows.game.enums.UnitType
-import com.cows.game.managers.FunctionDelayer
+import com.cows.game.managers.RoundManager
 import com.cows.game.roundSimulation.rawJsonData.JsonUnit
 import com.cows.game.views.Renderable
 
-class UnitCounterPanel(availableUnits:Int):Renderable(){
-    private val availableUnitCounter = UnitCounter(UnitType.NONE, availableUnits)
+class UnitCounterPanel():Renderable() {
+    private val availableUnitCounter = UnitCounter(UnitType.NONE, calculateAvailableUnits())
     private val fireUnitCounter = UnitCounter(UnitType.FIRE, 0)
     private val waterUnitCounter = UnitCounter(UnitType.WATER, 0)
     private val grassUnitCounter = UnitCounter(UnitType.GRASS, 0)
@@ -24,6 +23,19 @@ class UnitCounterPanel(availableUnits:Int):Renderable(){
 
     var hideUnits = false
 
+    companion object {
+        fun calculateAvailableUnits(): Int {
+            if (RoundManager.playerCreatedGame == null || RoundManager.gameStatus == null) {
+                println("This shouldn't happen")
+                println(RoundManager.playerCreatedGame)
+                println(RoundManager.gameStatus)
+                return 10
+            }
+            return if (RoundManager.playerCreatedGame!!) RoundManager.gameStatus!!.playerStates.first.coins
+            else RoundManager.gameStatus!!.playerStates.second.coins
+        }
+    }
+
     init {
         headerParameter = FreeTypeFontGenerator.FreeTypeFontParameter()
         headerParameter.size = 60
@@ -34,9 +46,9 @@ class UnitCounterPanel(availableUnits:Int):Renderable(){
     }
 
     fun getJsonUnitList(): List<JsonUnit> {
-        val fireUnit = Redux.gameStatus!!.availableUnits.fireUnit
-        val waterUnit = Redux.gameStatus!!.availableUnits.waterUnit
-        val grassUnit = Redux.gameStatus!!.availableUnits.grassUnit
+        val fireUnit = RoundManager.gameStatus!!.availableUnits.fireUnit
+        val waterUnit = RoundManager.gameStatus!!.availableUnits.waterUnit
+        val grassUnit = RoundManager.gameStatus!!.availableUnits.grassUnit
         val units = mutableListOf<JsonUnit>()
         repeat(fireUnitCounter.count) { units.add(JsonUnit(null, UnitType.FIRE, fireUnit.level, fireUnit.movementSpeed, fireUnit.health )) }
         repeat(waterUnitCounter.count) { units.add(JsonUnit(null, UnitType.WATER, waterUnit.level, waterUnit.movementSpeed, waterUnit.health )) }

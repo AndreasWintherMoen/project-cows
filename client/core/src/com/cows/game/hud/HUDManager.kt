@@ -10,11 +10,14 @@ import com.cows.game.map.Map
 class HUDManager(): GameStateSubscriber() {
     private var actionPanel: ActionPanel? = null
     private var menuController: MenuController? = null
-    private val winText = SmartObject("HUD/start-button.png", Vector2(200f, 300f), 1f)
-    private val loseText = SmartObject("HUD/cancel-button.png", Vector2(200f, 300f), 1f)
+    private val winText = SmartObject("HUD/win.png", Vector2(200f, 0f), 1f)
+    private val loseText = SmartObject("HUD/lose.png", Vector2(200f, 0f), 1f)
+    private var healthIndicator: HealthIndicator? = null
 
     init {
         hideTexts()
+        winText.zIndex = 10
+        loseText.zIndex = 10
     }
 
     private fun hideTexts() {
@@ -31,10 +34,9 @@ class HUDManager(): GameStateSubscriber() {
             it.die()
         }
         if (oldGameState == GameState.START_MENU) {
-            // Initializing map here in HUDManager seems like a bad choice, but we'll have to change how we load
-            // the map, since we're going to get it from the API somehow, so let's just keep it here for now
             menuController?.die()
             menuController = null
+            healthIndicator = HealthIndicator()
         }
         when (newGameState) {
             GameState.ACTIVE_GAME -> actionPanel = ActiveGameActionPanel()
@@ -45,11 +47,14 @@ class HUDManager(): GameStateSubscriber() {
         }
     }
 
-    fun showWinText() {
+    fun showWinUI() {
+        println("HUDManager::showWinUI")
         winText.hide = false
     }
 
-    fun showLoseText() {
+    fun showLoseUI() {
+        println("HUDManager::showLoseUI")
         loseText.hide = false
+        healthIndicator?.let { it.health -= 1 }
     }
 }

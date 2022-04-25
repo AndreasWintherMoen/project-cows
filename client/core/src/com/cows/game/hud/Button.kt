@@ -19,7 +19,7 @@ class Button(textureFilePath: String, var position: Vector2, var onClick: () -> 
 
     var disabled = false
 
-    var sound: String = "Sound/defualt-button.wav"
+    var sound: String = "Sound/click.ogg"
 
     init {
         subscribeToClickEvents()

@@ -28,4 +28,8 @@ class SmartObject(textureFilePath: String, var position: Vector2, var scale: Flo
         sprite.texture.dispose()
     }
 
+    fun setTextureFilePath(newFilePath: String) {
+        sprite.texture = Texture(newFilePath)
+    }
+
 }

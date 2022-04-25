@@ -2,23 +2,19 @@ package com.cows.game
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.audio.Music
-import com.badlogic.gdx.audio.Sound
 import com.cows.game.enums.GameState
 import com.cows.game.hud.ActionPanel
 import com.cows.game.hud.HUDManager
-import com.cows.game.hud.PlanningAttackActionPanel
 import com.cows.game.managers.*
 import com.cows.game.map.Map
 import com.cows.game.models.TileModel
 import com.cows.game.roundSimulation.GameTickProcessor
-import com.cows.game.roundSimulation.RoundSimulationDeserializer
 import com.cows.game.roundSimulation.rawJsonData.JsonRoundSimulation
 import com.cows.game.serverConnection.ServerConnection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.io.File
 import ktx.async.KtxAsync
 
 class Application : ApplicationAdapter()  {
@@ -26,10 +22,8 @@ class Application : ApplicationAdapter()  {
         const val WIDTH = Map.WIDTH * TileModel.WIDTH + ActionPanel.WIDTH
         const val HEIGHT = Map.HEIGHT * TileModel.HEIGHT
     }
-    val tickDuration = 0.2f // in seconds
     private var gameTickProcessor: GameTickProcessor? = null
     private lateinit var hudManager: HUDManager
-    private var playerIsAttacker = false
 
     override fun create() {
         KtxAsync.initiate()
@@ -47,8 +41,9 @@ class Application : ApplicationAdapter()  {
     }
 
     override fun render() {
-        Redux.jsonRoundSimulation?.let { println("json round simulation is not null"); startGame(it); Redux.jsonRoundSimulation = null }
+        loadReduxValues()
 
+        val tickDuration = if (RoundManager.useFastForward) 0.05f else 0.2f
         val deltaTime = Gdx.graphics.deltaTime
         val tickAdjustedDeltaTime = deltaTime / tickDuration
 
@@ -66,6 +61,19 @@ class Application : ApplicationAdapter()  {
         Renderer.dispose()
     }
 
+    private fun loadReduxValues() {
+        Redux.jsonRoundSimulation?.let {
+            startGame(it);
+            RoundManager.reloadReduxValues()
+            Redux.jsonRoundSimulation = null
+        }
+        Redux.playerCreatedGame?.let {
+            println("Setting playerCreatedGame to $it")
+            RoundManager.playerCreatedGame = it
+            Redux.playerCreatedGame = null
+        }
+    }
+
     private fun startGame(roundSimulation: JsonRoundSimulation) {
         if (GameStateManager.currentGameState == GameState.ACTIVE_GAME) return
         println("startGame")
@@ -76,16 +84,22 @@ class Application : ApplicationAdapter()  {
     private fun finishGame() {
         println("Application::finishGame")
         gameTickProcessor?.killAllUnits()
-        Redux.jsonRoundSimulation?.let {
+        RoundManager.roundSimulation?.let {
             val playerWon = !it.attackerWon.xor(RoundManager.playerIsAttacker)
-            if (playerWon) hudManager.showWinText()
-            else hudManager.showLoseText()
+            if (playerWon) {
+                hudManager.showWinUI()
+                AudioManager.playMusic("Sound/victory.mp3")
+            }
+            else {
+                hudManager.showLoseUI()
+                // TODO: Add lose sound
+                AudioManager.playMusic("Sound/victory.mp3")
+            }
         }
-        println("Hei")
         GlobalScope.launch(Dispatchers.IO) {
+            delay(5000)
             println("Starting coroutine context")
-            Redux.gameStatus = ServerConnection.getGameStatus()
-            println(Redux.gameStatus)
+            RoundManager.gameStatus = ServerConnection.getGameStatus()
             gameTickProcessor = null
             if (RoundManager.playerIsAttacker) {
                 GameStateManager.setGameStateAsync(GameState.PLANNING_DEFENSE)
