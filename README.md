@@ -5,6 +5,8 @@
 **W**ar
 **S**imulator
 
+## AKA Pokemon Tower Defence
+
 This is a project for **TDT4240 - Software Architecture** at NTNU.
 
 ## How to run
