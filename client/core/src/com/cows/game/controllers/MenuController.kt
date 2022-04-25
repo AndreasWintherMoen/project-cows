@@ -45,13 +45,19 @@ class MenuController {
         showCreateGameMenu()
         startGameJob?.cancel()
         startGameJob = GlobalScope.launch(Dispatchers.IO) {
-            val joinCode = ServerConnection.createGame()
-            createMenu?.setGameCode(joinCode)
-            ServerConnection.connectToActiveGame()
-            RoundManager.gameStatus = ServerConnection.getGameStatus()
-            println(RoundManager.gameStatus)
-            GameStateManager.setGameStateAsync(GameState.PLANNING_ATTACK)
-            Redux.playerCreatedGame = true
+            try {
+                val joinCode = ServerConnection.createGame()
+                createMenu?.setGameCode(joinCode)
+                ServerConnection.connectToActiveGame()
+                RoundManager.gameStatus = ServerConnection.getGameStatus()
+                println(RoundManager.gameStatus)
+                GameStateManager.setGameStateAsync(GameState.PLANNING_ATTACK)
+                Redux.playerCreatedGame = true
+            } catch (error: ClientRequestException) {
+                System.err.println("Error creating game")
+                println(error)
+                Redux.errorMessage = error.message
+            }
         }
         createMenu = CreateGameMenu({showStartMenu()})
     }

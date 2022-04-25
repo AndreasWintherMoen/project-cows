@@ -17,8 +17,12 @@ fun Application.configureRouting() {
     routing {
         get("/cows/game/create"){
             val user = ClientConnection()
-            val gameSetup = ConnectionMapper.createGameCode(user)
-            call.respondText(gson.toJson(GameCreateResponse(user.id, gameSetup.gameJoinCode, gameSetup.gameCodeUUID)), ContentType.Application.Json, HttpStatusCode.OK)
+            if (ConnectionMapper.isServerOverloaded()) {
+                call.respond(HttpStatusCode.ServiceUnavailable, "Server capacity reached")
+            } else {
+                val gameSetup = ConnectionMapper.createGameCode(user)
+                call.respondText(gson.toJson(GameCreateResponse(user.id, gameSetup.gameJoinCode, gameSetup.gameCodeUUID)), ContentType.Application.Json, HttpStatusCode.OK)
+            }
         }
 
         get("/cows/game/join/{gameJoinCode}"){

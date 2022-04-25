@@ -59,5 +59,4 @@ class CreateGameMenu(private val onBackButton: () -> Unit): Renderable() {
         goBackBtn = null
     }
 
-
 }
